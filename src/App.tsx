@@ -10,8 +10,10 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="relative min-h-screen bg-black text-white font-inter">
-      <MatrixBackground />
+    <div className="relative min-h-screen text-white font-inter">
+      <div className="matrix-bg">
+        <div className="matrix-overlay"></div>
+      </div>
       <Header />
       
       <main>
