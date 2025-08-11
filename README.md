@@ -1,1 +1,1 @@
-bolt-portfolio
+my-portfolio
