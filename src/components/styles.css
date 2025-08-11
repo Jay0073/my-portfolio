@@ -1,0 +1,88 @@
+/* Quote Card Styles */
+.quote-card {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 320px;
+  z-index: 999;
+  animation: slideInQuote 0.8s ease-out;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.quote-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.quote-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.quote-close {
+  background: none;
+  border: none;
+  color: #BBBBBB;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.quote-content {
+  line-height: 1.5;
+}
+
+.quote-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #EEEEEE;
+  font-style: italic;
+  margin: 0 0 0.5rem 0;
+}
+
+.quote-author {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: #BBBBBB;
+  text-align: right;
+  margin: 0;
+}
+
+@keyframes slideInQuote {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-card {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+}

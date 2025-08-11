@@ -15,16 +15,16 @@ const Header: React.FC = () => {
   }, []);
 
   const socialIcons = [
-    { icon: Github, href: 'https://github.com/[username]', label: 'Open GitHub profile' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/[username]', label: 'Open LinkedIn profile' },
-    { icon: Mail, href: 'mailto:your.email@example.com', label: 'Send email' },
+    { icon: Github, href: 'https://github.com/Jay0073', label: 'Open GitHub profile' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: 'Open LinkedIn profile' },
+    { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Send email' },
     { icon: Twitter, href: 'https://twitter.com/[username]', label: 'Open Twitter profile' },
     { icon: Instagram, href: 'https://instagram.com/[username]', label: 'Open Instagram profile' },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`transition-all duration-300 ${
         isScrolled ? 'bg-[#1A1A1A]' : 'bg-transparent'
       }`}
     >

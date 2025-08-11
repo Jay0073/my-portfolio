@@ -1,5 +1,4 @@
 import React from 'react';
-import MatrixBackground from './components/MatrixBackground';
 import Header from './components/Header';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
@@ -7,6 +6,7 @@ import Projects from './components/sections/Projects';
 import Experience from './components/sections/Experience';
 import Skills from './components/sections/Skills';
 import Footer from './components/Footer';
+import QuoteCard from './components/QuoteCard';
 
 function App() {
   return (
@@ -19,11 +19,11 @@ function App() {
       <main>
         <Hero />
         <About />
-        <Projects />
         <Experience />
+        <Projects />
         <Skills />
       </main>
-      
+      <QuoteCard />
       <Footer />
     </div>
   );

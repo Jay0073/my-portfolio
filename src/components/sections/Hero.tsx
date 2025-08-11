@@ -1,51 +1,103 @@
-import React, { useEffect, useState } from 'react';
-import Button from '../common/Button';
-import { ChevronDown } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import Button from "../common/Button";
+import './commonCss.css';
+import { ChevronDown } from "lucide-react";
 
 const Hero: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const [currentPhrase, setCurrentPhrase] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [showIndicator, setShowIndicator] = useState(true);
+
+  const phrases = [
+    "Web Developer & ML Explorer.",
+    "Crafting Interfaces with Flair.",
+    "Automating the Mundane, One Script at a Time.",
+  ];
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+      setParallax({ x: dx * 10, y: dy * 10 });
+    };
+    const onScroll = () => setShowIndicator(window.scrollY < 40);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!mq.matches) window.addEventListener('mousemove', onMove);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
 
   useEffect(() => {
     setIsVisible(true);
-    
+
     const handleScroll = () => {
       setShowScrollIndicator(window.scrollY < 100);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const currentPhraseText = phrases[currentPhrase];
+    let index = 0;
+
+    const typeInterval = setInterval(() => {
+      if (index < currentPhraseText.length) {
+        setDisplayText(currentPhraseText.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(typeInterval);
+        setTimeout(() => {
+          setIsTyping(false);
+          setTimeout(() => {
+            setCurrentPhrase((prev) => (prev + 1) % phrases.length);
+            setDisplayText("");
+            setIsTyping(true);
+          }, 1000);
+        }, 2000);
+      }
+    }, 100);
+
+    return () => clearInterval(typeInterval);
+  }, [currentPhrase]);
+
   const handleExploreClick = () => {
-    const aboutSection = document.getElementById('about');
+    const aboutSection = document.getElementById("about");
     if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
+      aboutSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <section className="min-h-screen flex items-center justify-center text-center px-8 relative">
-      <div className="max-w-4xl mx-auto">
-        <h1 
-          className={`font-poppins font-bold text-4xl md:text-6xl text-white mb-6 transition-all duration-800 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
+      <div className="max-w-4xl mx-auto mb-32">
+        <h1
+          className={`text-5xl md:text-7xl font-poppins font-bold text-white mb-4 transition-all duration-100 animate-fade-in ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+           }`}
+          style={{ transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)` }}
         >
-          Voutla Jayendra
+          Hi!&nbsp; I'm Voutla Jayendra
         </h1>
-        
-        <p 
-          className={`font-inter text-xl md:text-2xl text-[#BBBBBB] mb-8 transition-all duration-800 delay-200 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          MERN Stack Developer | Machine Learning Enthusiast
-        </p>
-        
-        <div 
+
+        <div className="text-[#BBBBBB] mb-8 text-xl font-semibold">
+          <span className="typing-text">{displayText}</span>
+          <span className={`cursor ${isTyping ? "blink" : ""}`}>|</span>
+        </div>
+
+        <div
           className={`transition-all duration-800 delay-400 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
           <Button
@@ -55,19 +107,26 @@ const Hero: React.FC = () => {
           />
         </div>
       </div>
-      
-      {/* Scroll Indicator */}
+
       <div
+        className="down-indicator"
+        onClick={handleExploreClick}
+      >
+        <div className="down-arrow"></div>
+      </div>
+
+      {/* Scroll Indicator */}
+      {/* <div
         className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-500 ${
-          showScrollIndicator ? 'opacity-100' : 'opacity-0'
+          showScrollIndicator ? "opacity-100" : "opacity-0"
         }`}
       >
-        <ChevronDown 
-          size={32} 
+        <ChevronDown
+          size={32}
           className="text-[#BBBBBB] animate-bounce cursor-pointer hover:text-white transition-colors"
           onClick={handleExploreClick}
         />
-      </div>
+      </div> */}
     </section>
   );
 };

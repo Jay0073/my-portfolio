@@ -19,7 +19,7 @@ const IconList: React.FC<IconListProps> = ({ icons, className = '' }) => {
           href={item.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white hover:text-[#BBBBBB] transition-all duration-300 hover:scale-105 p-2 rounded-full hover:bg-white/10"
+          className="text-white hover:text-[#AAAAAA] transition-all duration-300 hover:scale-105 p-2"
           aria-label={item.label}
         >
           <item.icon size={24} />
