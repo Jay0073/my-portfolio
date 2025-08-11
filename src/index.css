@@ -4,6 +4,7 @@
 
 html {
   scroll-behavior: smooth;
+  caret-color: transparent;
 }
 
 /* Matrix Background */
@@ -123,4 +124,12 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #FFFFFF;
+}
+
+/* cursor line is disabled for title */
+.mytitle-cursor {
+  /* user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none; */
 }
