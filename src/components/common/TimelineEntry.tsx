@@ -66,7 +66,6 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
   const Indicator = (
     <div className="relative hidden md:block">
       <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-[#BBBBBB]" />
-      <div className="absolute left-1/2 -translate-x-1/2 top-8 w-4 h-4 rounded-full bg-white border-4 border-[#1A1A1A]" />
     </div>
   );
 

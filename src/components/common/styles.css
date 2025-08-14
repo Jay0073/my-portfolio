@@ -1,0 +1,11 @@
+.section-title {
+  animation: slideUp 0.8s ease-out;
+}
+
+.title-underline {
+  width: 100px;
+  height: 4px;
+  background: #bbbbbb;
+  margin: 0 auto;
+  animation: expandWidth 1s ease-out 0.5s both;
+}

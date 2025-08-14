@@ -1,21 +1,47 @@
-import React from 'react';
-import SectionWrapper from '../common/SectionWrapper';
-import Button from '../common/Button';
-import IconList from '../common/IconList';
-import { Github, Linkedin, Mail, Twitter, Instagram, Award, Code, Users } from 'lucide-react';
+import React from "react";
+import SectionWrapper from "../common/SectionWrapper";
+import Button from "../common/Button";
+import IconList from "../common/IconList";
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Twitter,
+  Instagram,
+  Award,
+  Code,
+  Users,
+} from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const About: React.FC = () => {
   const socialIcons = [
-    { icon: Github, href: 'https://github.com/[username]', label: 'Open GitHub profile' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/[username]', label: 'Open LinkedIn profile' },
-    { icon: Mail, href: 'mailto:your.email@example.com', label: 'Send email' },
-    { icon: Twitter, href: 'https://twitter.com/[username]', label: 'Open Twitter profile' },
-    { icon: Instagram, href: 'https://instagram.com/[username]', label: 'Open Instagram profile' },
+    {
+      icon: Github,
+      href: "https://github.com/[username]",
+      label: "Open GitHub profile",
+    },
+    {
+      icon: Linkedin,
+      href: "https://linkedin.com/in/[username]",
+      label: "Open LinkedIn profile",
+    },
+    { icon: Mail, href: "mailto:your.email@example.com", label: "Send email" },
+    {
+      icon: Twitter,
+      href: "https://twitter.com/[username]",
+      label: "Open Twitter profile",
+    },
+    {
+      icon: Instagram,
+      href: "https://instagram.com/[username]",
+      label: "Open Instagram profile",
+    },
   ];
 
   const handleResumeDownload = () => {
     // Replace with actual resume URL
-    window.open('/path-to-resume.pdf', '_blank');
+    window.open("/path-to-resume.pdf", "_blank");
   };
 
   return (
@@ -25,23 +51,20 @@ const About: React.FC = () => {
       subtitle="Professional Background and Expertise"
     >
       <div className="grid md:grid-cols-2 gap-12 items-center">
-        {/* Profile Image */}
-        <div className="flex justify-center">
-          <div className="relative group">
-            <img
-              src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=400"
-              alt="Voutla Jayendra"
-              className="w-64 h-64 rounded-full border-4 border-white shadow-2xl transition-transform duration-300 group-hover:rotate-3"
-            />
-          </div>
-        </div>
-
+        <DotLottieReact
+          src="https://lottie.host/ec4e92c1-e225-456f-baf2-4c22c8e3744e/7l9Gqmco8d.lottie"
+          loop
+          autoplay
+        />{" "}
         {/* Content */}
         <div className="space-y-8">
           {/* Introduction */}
           <div>
             <p className="font-inter text-lg text-[#EEEEEE] leading-relaxed">
-              I am Voutla Jayendra, a MERN stack developer with experience in building web applications and exploring machine learning solutions. My work focuses on efficient, scalable software development.
+              I am Voutla Jayendra, a MERN stack developer with experience in
+              building web applications and exploring machine learning
+              solutions. My work focuses on efficient, scalable software
+              development.
             </p>
           </div>
 
@@ -66,12 +89,14 @@ const About: React.FC = () => {
 
           {/* Professional Values */}
           <div>
-            <h3 className="font-poppins font-semibold text-xl text-white mb-4">Professional Values</h3>
+            <h3 className="font-poppins font-semibold text-xl text-white mb-4">
+              Professional Values
+            </h3>
             <ul className="space-y-2">
               {[
-                'Proficient in full-stack development',
-                'Committed to clean, maintainable code',
-                'Experienced in team collaboration'
+                "Proficient in full-stack development",
+                "Committed to clean, maintainable code",
+                "Experienced in team collaboration",
               ].map((value, index) => (
                 <li key={index} className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-white rounded-full"></div>

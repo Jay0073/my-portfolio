@@ -16,13 +16,19 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   className = '',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !hasAnimated) {
           setIsVisible(true);
+          setHasAnimated(true);
+        } else if (!entry.isIntersecting && hasAnimated) {
+          // Reset animation when section is out of view
+          setIsVisible(false);
+          setHasAnimated(false);
         }
       },
       { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
@@ -33,7 +39,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [hasAnimated]);
 
   return (
     <section
@@ -49,15 +55,21 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
             }`}
           >
             {title && (
-              <h2 className="font-poppins font-bold text-3xl md:text-4xl text-white mb-4">
-                {title}
-              </h2>
+              <div className="relative inline-block">
+                <h2 className="font-poppins font-bold text-3xl md:text-4xl text-white mb-3">
+                  {title}
+                </h2>
+                <div 
+                  className={`rounded mx-auto h-2 bg-white transition-all duration-500 ease-out ${
+                    isVisible ? 'w-[80%]' : 'w-0'
+                  }`}
+                  style={{
+                    transitionDelay: isVisible ? '0.3s' : '0s'
+                  }}
+                />
+              </div>
             )}
-            {subtitle && (
-              <p className="text-[#BBBBBB] text-lg md:text-xl font-inter max-w-2xl mx-auto">
-                {subtitle}
-              </p>
-            )}
+
           </div>
         )}
         <div className={isVisible ? 'animate-fade-in-up' : 'opacity-0'}>
