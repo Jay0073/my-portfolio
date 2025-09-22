@@ -63,7 +63,12 @@ const Experience: React.FC = () => {
     >
       <div className="relative">
         {/* Timeline line */}
-        <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-[#BBBBBB]"></div>
+        <div
+          className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-[#BBBBBB]"
+          style={{
+            filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)",
+          }}
+        ></div>
 
         {/* Timeline entries */}
         <div className="space-y-8">

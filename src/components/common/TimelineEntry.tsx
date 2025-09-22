@@ -64,7 +64,12 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
   );
 
   const Indicator = (
-    <div className="relative hidden md:block">
+    <div
+      className="relative hidden md:block"
+      style={{
+        filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)",
+      }}
+    >
       <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-[#BBBBBB]" />
     </div>
   );
@@ -87,9 +92,12 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
             />
             <span
               className={[
-                "pointer-events-none absolute top-1/2 -translate-y-1/2 block h-px bg-[#BBBBBB]",
+                "pointer-events-none absolute top-1/2 -translate-y-1/2 block h-[2px] bg-[#BBBBBB]",
                 isLeft ? "right-full mr-8 w-16" : "left-full ml-8 w-16",
               ].join(" ")}
+              style={{
+                filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)",
+              }}
             />
           </div>
         )}

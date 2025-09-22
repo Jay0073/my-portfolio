@@ -6,6 +6,7 @@ interface SectionWrapperProps {
   subtitle?: string;
   children: React.ReactNode;
   className?: string;
+  headingClass?: string;
 }
 
 const SectionWrapper: React.FC<SectionWrapperProps> = ({
@@ -14,6 +15,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   subtitle,
   children,
   className = '',
+  headingClass = '',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -50,7 +52,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
       <div className="max-w-6xl mx-auto">
         {(title || subtitle) && (
           <div
-            className={`text-center mb-16 ${
+            className={`text-center mb-16 ${headingClass} ${
               isVisible ? 'animate-fade-in-up' : 'opacity-0'
             }`}
           >

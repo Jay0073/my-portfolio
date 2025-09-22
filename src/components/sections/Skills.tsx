@@ -1,178 +1,145 @@
-import React, { useState } from 'react';
-import SectionWrapper from '../common/SectionWrapper';
-import Card from '../common/Card';
-import ProficiencyIndicator from '../common/ProficiencyIndicator';
+import React, { useEffect, useState } from "react";
+import * as d3 from "d3";
+import SectionWrapper from "../common/SectionWrapper";
+import { FaReact, FaNodeJs, FaPython, FaDocker, FaCloud } from "react-icons/fa";
+import {
+  SiMongodb,
+  SiTensorflow,
+  SiTailwindcss,
+  SiExpress,
+  SiHtml5,
+  SiCss3,
+  SiJavascript,
+  SiMysql,
+  SiGit,
+} from "react-icons/si";
 
-const Skills: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState('All');
-
-  const categories = ['All', 'Frontend', 'Backend', 'Machine Learning', 'DevOps', 'Others'];
-
+const SkillsBubbles: React.FC = () => {
+  const width = 900;
+  const height = 800;
+  const [nodes, setNodes] = useState<any[]>([]);
   const skills = [
-    {
-      name: 'React',
-      category: 'Frontend',
-      level: 'Advanced' as const,
-      description: 'Building reusable components for dynamic UIs.',
-      projects: 'Crowd-Funding, Language Translator'
-    },
-    {
-      name: 'Express.js',
-      category: 'Backend',
-      level: 'Expert' as const,
-      description: 'Efficient routing and API development.',
-      projects: 'Hacker News Scraper'
-    },
-    {
-      name: 'TensorFlow',
-      category: 'Machine Learning',
-      level: 'Advanced' as const,
-      description: 'Implementing neural networks for data analysis.',
-      projects: 'Students Performance Indicator'
-    },
-    {
-      name: 'Docker',
-      category: 'DevOps',
-      level: 'Intermediate' as const,
-      description: 'Containerization for consistent deployments.',
-      projects: 'Workelate Projects'
-    },
-    {
-      name: 'TailwindCSS',
-      category: 'Frontend',
-      level: 'Expert' as const,
-      description: 'Rapid styling with utility classes.',
-      projects: 'Motion Cut, Portfolio UI'
-    },
-    {
-      name: 'MongoDB',
-      category: 'Backend',
-      level: 'Advanced' as const,
-      description: 'NoSQL database management.',
-      projects: 'Multiple projects'
-    },
-    {
-      name: 'Python',
-      category: 'Machine Learning',
-      level: 'Advanced' as const,
-      description: 'Data analysis and ML model development.',
-      projects: 'Language Translator, Students Performance'
-    },
-    {
-      name: 'Node.js',
-      category: 'Backend',
-      level: 'Expert' as const,
-      description: 'Server-side JavaScript development.',
-      projects: 'Multiple full-stack applications'
-    }
+    { name: "React", icon: FaReact, percent: 95 },
+    { name: "Node.js", icon: FaNodeJs, percent: 90 },
+    { name: "Express.js", icon: SiExpress, percent: 85 },
+    { name: "TailwindCSS", icon: SiTailwindcss, percent: 80 },
+    { name: "MongoDB", icon: SiMongodb, percent: 70 },
+    { name: "Python", icon: FaPython, percent: 90 },
+    { name: "TensorFlow", icon: SiTensorflow, percent: 75 },
+    { name: "Docker", icon: FaDocker, percent: 65 },
+    { name: "", icon: SiMysql, percent: 60 },
+    { name: "Git", icon: SiGit, percent: 80 },
+    { name: "Cloud", icon: FaCloud, percent: 60 },
+    { name: "HTML", icon: SiHtml5, percent: 85 },
+    { name: "CSS", icon: SiCss3, percent: 80 },
+    { name: "JavaScript", icon: SiJavascript, percent: 90 },
   ];
 
-  const secondaryTools = [
-    'Git', 'MySQL', 'Figma', 'Streamlit', 'OpenCV', 'Pandas', 'AWS', 'Jupyter'
-  ];
+  // Find the largest bubble (highest percent)
+  const maxPercent = Math.max(...skills.map((s) => s.percent));
+  const centerIndex = skills.findIndex((s) => s.percent === maxPercent);
 
-  const filteredSkills = skills.filter(skill => 
-    activeCategory === 'All' || skill.category === activeCategory
-  );
+  useEffect(() => {
+    const radiusScale = d3.scaleLinear().domain([50, 100]).range([35, 100]);
+    // Place the largest bubble at the center
+    const initialNodes = skills.map((s, i) => ({
+      ...s,
+      radius: radiusScale(s.percent),
+      x: width / 2,
+      y: height / 2,
+      fx: i === centerIndex ? width / 2 : undefined,
+      fy: i === centerIndex ? height / 2 : undefined,
+      index: i,
+    }));
+
+    const simulation = d3
+      .forceSimulation(initialNodes as any)
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force(
+        "collision",
+        d3.forceCollide().radius((d: any) => d.radius + 6)
+      )
+      .force(
+        "radial",
+        d3
+          .forceRadial(
+            180, // distance from center
+            width / 2,
+            height / 2
+          )
+          .strength((d: any) => (d.index === centerIndex ? 0 : 0.4))
+      )
+      .alpha(1)
+      .alphaDecay(0.03)
+      .on("tick", () => {
+        setNodes([...initialNodes]);
+      });
+
+    return () => simulation.stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SectionWrapper
       id="skills"
       title="Skills & Technologies"
-      subtitle="Core Competencies and Tools"
+      subtitle="Floating Bubble Cluster"
+      className="mb-0"
+      headingClass="mb-8"
     >
-      {/* Category Tabs */}
-      <div className="flex flex-wrap justify-center gap-4 mb-12">
-        {categories.map(category => (
-          <button
-            key={category}
-            onClick={() => setActiveCategory(category)}
-            className={`px-6 py-2 rounded-full border transition-all duration-300 ${
-              activeCategory === category
-                ? 'bg-white text-[#1A1A1A] border-white'
-                : 'bg-transparent text-[#BBBBBB] border-[#BBBBBB] hover:text-white hover:border-white'
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      {/* Skill Cards */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        {filteredSkills.map((skill, index) => (
-          <div key={index} className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-poppins font-semibold text-lg text-white">
-                {skill.name}
-              </h3>
-              <span className="px-2 py-1 text-xs bg-[#BBBBBB]/20 text-[#BBBBBB] rounded">
-                {skill.category}
-              </span>
-            </div>
-            
-            <p className="text-[#BBBBBB] text-sm mb-4 leading-relaxed">
-              {skill.description}
-            </p>
-            
-            <div className="mb-4">
-              <ProficiencyIndicator level={skill.level} />
-            </div>
-            
-            <div className="text-xs text-[#BBBBBB]">
-              <strong>Used in:</strong> {skill.projects}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Tool Belt Carousel */}
-      <div className="mb-12">
-        <h3 className="font-poppins font-semibold text-xl text-white text-center mb-8">
-          Additional Tools & Technologies
-        </h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {secondaryTools.map((tool, index) => (
-            <span
-              key={index}
-              className="px-4 py-2 bg-[#1A1A1A] text-[#BBBBBB] rounded-full border border-[#BBBBBB]/20 hover:text-white hover:border-white/20 transition-all duration-300"
-            >
-              {tool}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Skill Matrix */}
-      <div className="bg-[#1A1A1A] rounded-lg p-6 overflow-x-auto">
-        <h3 className="font-poppins font-semibold text-xl text-white mb-6 text-center">
-          Skill Application Matrix
-        </h3>
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-[#BBBBBB]/20">
-              <th className="text-white font-semibold py-3 px-4">Skill</th>
-              <th className="text-white font-semibold py-3 px-4">Projects Used In</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-[#BBBBBB]/10">
-              <td className="text-[#BBBBBB] py-3 px-4">React</td>
-              <td className="text-[#BBBBBB] py-3 px-4">Crowd-Funding, Language Translator</td>
-            </tr>
-            <tr className="border-b border-[#BBBBBB]/10">
-              <td className="text-[#BBBBBB] py-3 px-4">Keras</td>
-              <td className="text-[#BBBBBB] py-3 px-4">Students Performance Indicator</td>
-            </tr>
-            <tr>
-              <td className="text-[#BBBBBB] py-3 px-4">TailwindCSS</td>
-              <td className="text-[#BBBBBB] py-3 px-4">Motion Cut, Portfolio UI</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="flex justify-center">
+        <svg width={width} height={height} style={{ maxWidth: "100%" }}>
+          {nodes.map((node, i) => {
+            const Icon = node.icon;
+            return (
+              <g
+                key={node.name}
+                transform={`translate(${node.x},${node.y})`}
+                style={{ cursor: "pointer" }}
+              >
+                <circle
+                  r={node.radius}
+                  fill="#1A1A1A"
+                  stroke="#b0b0b0"
+                  strokeWidth={2}
+                  style={{
+                    filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)",
+                  }}
+                />
+                <foreignObject
+                  x={-node.radius}
+                  y={-node.radius}
+                  width={node.radius * 2}
+                  height={node.radius * 2}
+                  style={{ pointerEvents: "none" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                      height: "100%",
+                      color: "white",
+                      fontSize: 12,
+                      textAlign: "center",
+                      userSelect: "none",
+                    }}
+                  >
+                    <span style={{ fontSize: node.radius * 0.7 }}>
+                      {Icon && <Icon />}
+                    </span>
+                    <span style={{ marginTop: 4 }}>{node.name}</span>
+                  </div>
+                </foreignObject>
+              </g>
+            );
+          })}
+        </svg>
       </div>
     </SectionWrapper>
   );
 };
 
-export default Skills;
+export default SkillsBubbles;
