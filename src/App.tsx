@@ -7,6 +7,7 @@ import Experience from './components/sections/Experience';
 import Skills from './components/sections/Skills';
 import Footer from './components/Footer';
 import QuoteCard from './components/QuoteCard';
+import Education from './components/sections/Education';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Experience />
         <Projects />
         <Skills />
+        <Education />
       </main>
       <QuoteCard />
       <Footer />

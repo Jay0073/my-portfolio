@@ -47,7 +47,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
     <section
       id={id}
       ref={sectionRef}
-      className={`py-16 md:py-24 px-8 ${className}`}
+      className={`py-16 px-8 ${className}`}
     >
       <div className="max-w-6xl mx-auto">
         {(title || subtitle) && (

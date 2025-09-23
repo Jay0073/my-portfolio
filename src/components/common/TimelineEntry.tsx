@@ -92,7 +92,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
             />
             <span
               className={[
-                "pointer-events-none absolute top-1/2 -translate-y-1/2 block h-[2px] bg-[#BBBBBB]",
+                "pointer-events-none absolute top-1/2 -translate-y-1/2 block h-[2.5px] rounded-sm bg-[#BBBBBB]",
                 isLeft ? "right-full mr-8 w-16" : "left-full ml-8 w-16",
               ].join(" ")}
               style={{
