@@ -1,77 +1,100 @@
 import React from "react";
 import SectionWrapper from "../common/SectionWrapper";
-import { FaSchool, FaUserGraduate } from "react-icons/fa";
+import { FaUserTie, FaUserGraduate } from "react-icons/fa6";
 import { MdEngineering } from "react-icons/md";
+import firstArrow from "../assets/firstArrow.svg";
+import secondArrow from "../assets/secondArrow.svg";
 
 const educationData = [
   {
     year: "2026",
     institution: "Siddartha Institute of Technology and Sciences",
     course: "Bachelor of Technology in Computer Science (expected)",
-    icon: <MdEngineering className="text-7xl text-white opacity-70" />,
+    icon: MdEngineering,
   },
   {
     year: "2023",
     institution: "Mahaveer Institute of Science and Technology",
     course: "Diploma in Electrical and Electronic Engineering",
-    icon: <FaUserGraduate className="text-7xl text-white opacity-70" />,
+    icon: FaUserGraduate,
   },
   {
     year: "2020",
     institution: "St. Mary's High School",
     course: "10th standard",
-    icon: <FaSchool className="text-7xl text-white opacity-70" />,
+    icon: FaUserTie,
   },
 ];
 
-const Education: React.FC = () => {
+const EducationWatermarkInCard: React.FC = () => {
   return (
     <SectionWrapper
       id="education"
       title="Education"
       subtitle="Academic Journey & Milestones"
     >
+      <img
+        style={{
+          position: "absolute",
+          top: "50px",
+          right: "670px",
+          width: "40%",
+          height: "40%",
+          pointerEvents: "none",
+        }}
+        src={firstArrow}
+        alt="First Arrow"
+      />
+      <img
+        style={{
+          position: "absolute",
+          top: "222px",
+          right: "690px",
+          transform: "scalex(-1)",
+          width: "40%",
+          height: "40%",
+          pointerEvents: "none",
+        }}
+        src={firstArrow}
+        alt="First Arrow"
+      />
+
       <div className="relative flex flex-col gap-16 max-w-[820px] mx-auto">
-        <svg xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", top: "75px", right: "145px", width: "100%", height: "100%", pointerEvents: "none" }} viewBox="0 0 800 600" fill="none">
-  <path d="M80 10c-130 180 210 -80 80 180" stroke="rgba(255,255,255,0.25)" fill="none"/>
-</svg>
-
-
-        {/* Cards */}
-        {educationData.map((edu) => (
-          <div
-            key={edu.year}
-            className="flex items-center gap-6"
-            style={{
-              flexDirection: "row-reverse",
-              justifyContent: "flex-end",
-            }}
-          >
-            {/* Card */}
-            <div className="flex items-center gap-6 bg-[#181818] rounded-lg px-6 py-6 shadow-lg animate-fade-in-up flex-1">
+        {educationData.map((edu) => {
+          const Icon = edu.icon;
+          const iconSize =
+            edu.year === "2026"
+              ? "text-[120px] bottom-[-14px] right-0 "
+              : "text-[90px] bottom-0 right-7";
+          return (
+            <div key={edu.year} className="flex items-center gap-6 relative">
               {/* Year */}
-              <div className="text-4xl md:text-5xl font-bold text-white min-w-[70px] text-left leading-none">
+              <div className="min-w-[90px] text-5xl md:text-6xl font-bold text-white flex items-center justify-center">
                 {edu.year}
               </div>
 
-              {/* Text */}
-              <div className="flex flex-col justify-center text-left">
-                <div className="text-lg md:text-xl font-semibold text-white mb-1">
+              {/* Card */}
+              <div className="relative flex flex-col gap-2 bg-[#181818] rounded-lg px-6 py-6 shadow-lg animate-fade-in-up flex-1 overflow-hidden">
+                <div className="text-lg md:text-xl font-semibold text-white relative z-10">
                   {edu.institution}
                 </div>
-                <div className="text-base text-[#BBBBBB] font-medium">
+                <div className="text-base text-[#BBBBBB] font-medium relative z-10">
                   {edu.course}
+                </div>
+
+                {/* Transparent Icon in card */}
+                <div
+                  className={`absolute ${iconSize} text-white/5 pointer-events-none select-none`}
+                >
+                  <Icon />
                 </div>
               </div>
             </div>
-
-            {/* Icon */}
-            <div className="relative w-28">{edu.icon}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </SectionWrapper>
   );
 };
 
-export default Education;
+export default EducationWatermarkInCard;
