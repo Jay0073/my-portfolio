@@ -24,9 +24,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`transition-all duration-300 ${
-        isScrolled ? 'bg-[#1A1A1A]' : 'bg-transparent'
-      }`}
+      className="transition-all duration-300 bg-transparent"
     >
       <div className="flex justify-end items-center h-16 px-8">
         <IconList icons={socialIcons} />
