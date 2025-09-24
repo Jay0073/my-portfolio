@@ -67,6 +67,11 @@
   margin: 0;
 }
 
+#certificate-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 30px rgba(97, 218, 251, 0.3);
+}
+
 @keyframes slideInQuote {
   from {
     opacity: 0;

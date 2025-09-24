@@ -2,8 +2,7 @@ import React from "react";
 import SectionWrapper from "../common/SectionWrapper";
 import { FaUserTie, FaUserGraduate } from "react-icons/fa6";
 import { MdEngineering } from "react-icons/md";
-import firstArrow from "../assets/firstArrow.svg";
-import secondArrow from "../assets/secondArrow.svg";
+import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
 
 const educationData = [
   {
@@ -33,33 +32,18 @@ const EducationWatermarkInCard: React.FC = () => {
       title="Education"
       subtitle="Academic Journey & Milestones"
     >
-      <img
-        style={{
-          position: "absolute",
-          top: "50px",
-          right: "670px",
-          width: "40%",
-          height: "40%",
-          pointerEvents: "none",
-        }}
-        src={firstArrow}
-        alt="First Arrow"
+      <MdOutlineKeyboardDoubleArrowUp
+        size={56}
+        style={{ filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)" }}
+        className="absolute top-[26%] left-[19%] text-3xl text-white/70 animate-bounce"
       />
-      <img
-        style={{
-          position: "absolute",
-          top: "222px",
-          right: "690px",
-          transform: "scalex(-1)",
-          width: "40%",
-          height: "40%",
-          pointerEvents: "none",
-        }}
-        src={firstArrow}
-        alt="First Arrow"
+      <MdOutlineKeyboardDoubleArrowUp
+        size={56}
+        style={{ filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)" }}
+        className="absolute top-[66%] left-[19%] text-3xl text-white/70 animate-bounce"
       />
 
-      <div className="relative flex flex-col gap-16 max-w-[820px] mx-auto">
+      <div className="relative flex flex-col gap-12 max-w-[820px] mx-auto">
         {educationData.map((edu) => {
           const Icon = edu.icon;
           const iconSize =
