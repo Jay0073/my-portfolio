@@ -12,20 +12,12 @@ import Button from "./common/Button";
 
 const Footer: React.FC = () => {
   const socialIcons = [
-    { icon: Github, href: "https://github.com/Jay0073", label: "Open GitHub" },
-    {
-      icon: Linkedin,
-      href: "https://linkedin.com/in/voutla-jayendra",
-      label: "Open LinkedIn",
-    },
-    { icon: Mail, href: "mailto:voutlajay8765@gmail.com", label: "Send Email" },
-    { icon: Twitter, href: "https://twitter.com/[username]", label: "Twitter" },
-    {
-      icon: Instagram,
-      href: "https://instagram.com/[username]",
-      label: "Instagram",
-    },
-  ];
+      { icon: Github, href: 'https://github.com/Jay0073', label: 'My code vault' },
+      { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: "Let's get Professional" },
+      { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Inbox open 24/7' },
+      { icon: Twitter, href: 'https://twitter.com/[username]', label: 'Memes and more' },
+      { icon: Instagram, href: 'https://instagram.com/__nameisjay_', label: 'Nothing to look here!' },
+    ];
 
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);

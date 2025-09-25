@@ -23,8 +23,6 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
   logoAlt = "",
   stickyTop = 270,
 }) => {
-  console.log(logo, company);
-
   const Card = (
     <div className="flex-1">
       <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg">

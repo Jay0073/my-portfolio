@@ -15,11 +15,11 @@ const Header: React.FC = () => {
   }, []);
 
   const socialIcons = [
-    { icon: Github, href: 'https://github.com/Jay0073', label: 'Open GitHub profile' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: 'Open LinkedIn profile' },
-    { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Send email' },
-    { icon: Twitter, href: 'https://twitter.com/[username]', label: 'Open Twitter profile' },
-    { icon: Instagram, href: 'https://instagram.com/[username]', label: 'Open Instagram profile' },
+    { icon: Github, href: 'https://github.com/Jay0073', label: 'My code vault' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: "Let's get Professional" },
+    { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Inbox open 24/7' },
+    { icon: Twitter, href: 'https://twitter.com/[username]', label: 'Memes and more' },
+    { icon: Instagram, href: 'https://instagram.com/__nameisjay_', label: 'Nothing to look here!' },
   ];
 
   return (
