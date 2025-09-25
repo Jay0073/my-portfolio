@@ -27,12 +27,27 @@ const Footer: React.FC = () => {
     },
   ];
 
-  const [likeCount, setLikeCount] = useState(0);
+  const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
-  const handleLike = () => {
-    setLiked(!liked);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
+  useEffect(() => {
+    fetch("/api/like")
+      .then((res) => res.json())
+      .then((data) => setLikes(data.count))
+      .catch(console.error);
+  }, []);
+
+  const handleLike = async () => {
+    if (liked) return;
+    setLiked(true);
+
+    try {
+      const res = await fetch("/api/like", { method: "POST" });
+      const data = await res.json();
+      setLikes(data.count);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // heading animation
@@ -120,7 +135,7 @@ const Footer: React.FC = () => {
                 />
               </button>
               <span className="text-[#BBBBBB] font-inter text-base">
-                {likeCount} {likeCount === 1 ? "Like" : "Likes"}
+                {likes} {likes === 1 ? "Like" : "Likes"}
               </span>
             </div>
           </div>
