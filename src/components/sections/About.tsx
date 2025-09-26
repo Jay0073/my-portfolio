@@ -98,7 +98,7 @@ const About: React.FC = () => {
                 "Committed to clean, maintainable code",
                 "Experienced in team collaboration",
               ].map((value, index) => (
-                <li key={index} className="flex items-center gap-3">
+                <li key={index} className="flex items-center gap-3 ml-2">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
                   <span className="text-[#BBBBBB] font-inter">{value}</span>
                 </li>

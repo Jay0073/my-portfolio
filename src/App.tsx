@@ -12,6 +12,7 @@ import Certificates, {
   certificates as certificatesList,
   CertificateType,
 } from "./components/sections/Certificates";
+import ClickSpark from "./components/items/ClickSpark";
 
 const CertificateModal: React.FC<{
   open: boolean;
@@ -67,28 +68,36 @@ function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white font-inter">
-      <div className="matrix-bg">
-        <div className="matrix-overlay"></div>
+    <ClickSpark
+      sparkColor="#fff"
+      sparkSize={10}
+      sparkRadius={15}
+      sparkCount={8}
+      duration={400}
+    >
+      <div className="relative min-h-screen text-white font-inter">
+        <div className="matrix-bg">
+          <div className="matrix-overlay"></div>
+        </div>
+        <Header />
+        <main>
+          <Hero />
+          <About />
+          <Experience />
+          <Projects />
+          <Skills />
+          <Education />
+          <Certificates onCertClick={handleCertClick} />
+        </main>
+        <QuoteCard />
+        <Footer />
+        <CertificateModal
+          open={modalOpen}
+          cert={modalCert}
+          onClose={handleModalClose}
+        />
       </div>
-      <Header />
-      <main>
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Education />
-        <Certificates onCertClick={handleCertClick} />
-      </main>
-      <QuoteCard />
-      <Footer />
-      <CertificateModal
-        open={modalOpen}
-        cert={modalCert}
-        onClose={handleModalClose}
-      />
-    </div>
+    </ClickSpark>
   );
 }
 
