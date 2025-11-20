@@ -11,35 +11,37 @@ import IconList from "./common/IconList";
 import Button from "./common/Button";
 import CountUp from "./items/CountUp";
 
-const Footer: React.FC = () => {
-  const socialIcons = [
-    {
-      icon: Github,
-      href: "https://github.com/Jay0073",
-      label: "My code vault",
-    },
-    {
-      icon: Linkedin,
-      href: "https://linkedin.com/in/voutla-jayendra",
-      label: "Let's get Professional",
-    },
-    {
-      icon: Mail,
-      href: "mailto:voutlajay8765@gmail.com",
-      label: "Inbox open 24/7",
-    },
-    {
-      icon: Twitter,
-      href: "https://twitter.com/[username]",
-      label: "Memes and more",
-    },
-    {
-      icon: Instagram,
-      href: "https://instagram.com/__nameisjay_",
-      label: "Nothing to look here!",
-    },
-  ];
+// --- FIX: Moved OUTSIDE the component ---
+// This ensures the array reference never changes, so Tippy doesn't reset.
+const socialIcons = [
+  {
+    icon: Github,
+    href: "https://github.com/Jay0073",
+    label: "My code vault",
+  },
+  {
+    icon: Linkedin,
+    href: "https://linkedin.com/in/voutla-jayendra",
+    label: "Let's get Professional",
+  },
+  {
+    icon: Mail,
+    href: "mailto:voutlajay8765@gmail.com",
+    label: "Inbox open 24/7",
+  },
+  {
+    icon: Twitter,
+    href: "https://twitter.com/[username]",
+    label: "Memes and more",
+  },
+  {
+    icon: Instagram,
+    href: "https://instagram.com/__nameisjay_",
+    label: "Nothing to look here!",
+  },
+];
 
+const Footer: React.FC = () => {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
@@ -117,7 +119,9 @@ const Footer: React.FC = () => {
               Whether it’s code, coffee, or conversation - I’m just one click
               away.
             </p>
+            
             <IconList icons={socialIcons} className="justify-start gap-6" />
+            
             <div className="mt-4">
               <Button
                 text="Say Hello"
@@ -138,7 +142,6 @@ const Footer: React.FC = () => {
             <p className="text-white font-poppins text-4xl italic leading-relaxed">
               “Behind every great UI is a sleepless night and a stubborn
               developer.”
-              {/* <span className="text-[12px] ml-5">(If this made you smile, tap that like ❤️)</span> */}
             </p>
             <div className="flex items-center gap-2 mt-4 ml-1">
               <button
@@ -161,8 +164,8 @@ const Footer: React.FC = () => {
                   to={likes}
                   separator=","
                   direction="up"
-                  duration={3}
-                  delay={2}
+                  duration={2}
+                  delay={1}
                   className="count-up-text"
                 />{" "}
                 {likes === 1 ? "Like" : "Likes"}

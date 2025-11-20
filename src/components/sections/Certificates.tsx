@@ -1,5 +1,12 @@
 import React from "react";
 import SectionWrapper from "../common/SectionWrapper";
+import cybersecurity from "../assets/cisco-cybersecurity.jpg";
+import ethicalHack from "../assets/cisco-ethicalHack.jpg";
+import iirs from "../assets/iirs.jpg";
+import jetking from "../assets/jetking-python.jpg";
+import diffusion from "../assets/nvidia-diffusion.png";
+import dp from "../assets/nvidia-dp.png";
+import transformer from "../assets/nvidia-transformer.png";
 
 export type CertificateType = {
   src: string;
@@ -10,34 +17,46 @@ export type CertificateType = {
 
 const certificates: CertificateType[] = [
   {
-    src: "https://media.licdn.com/dms/image/v2/D562DAQHZDH-polWUTA/profile-treasury-document-images_800/B56ZT.I9veGoAo-/1/1739430551567?e=1759363200&v=beta&t=m4LwHwME-Hfx2NfDwdtXH1_YSZru383pceSVPcG15OY",
+    src: dp,
     name: "Getting Started with Deep Learning",
     issuer: "NVIDIA",
     year: "2024",
   },
   {
-    src: "https://media.licdn.com/dms/image/v2/D562DAQGYuq4960jL2Q/profile-treasury-document-images_1280/B56ZUpzaOFHoAY-/1/1740163104939?e=1759363200&v=beta&t=8eyg_QkNjHt1_Im4KJ5rchw8TmrTpjuurXGbsTCc_kI",
+    src: cybersecurity,
     name: "Introduction to Cybersecurity",
     issuer: "Cisco Networking Academy",
     year: "2024",
   },
   {
-    src: "https://media.licdn.com/dms/image/v2/D562DAQFPc_cmIvXstQ/profile-treasury-document-images_1280/B56ZWblaMZHQAY-/1/1742072032923?e=1759363200&v=beta&t=ipv8UyHPT_gx4fCm_sH8sEWrXKy0VdNYW3AIAJY4E2c",
+    src: ethicalHack,
+    name: "Ethical Hacker",
+    issuer: "Cisco Networking Academy",
+    year: "2025",
+  },
+  {
+    src: iirs,
     name: "Geo-Data Sharing and Cyber Security",
     issuer: "IIRS",
     year: "2025",
   },
   {
-    src: "https://media.licdn.com/dms/image/v2/D562DAQF7VwYphM5xmA/profile-treasury-document-images_800/profile-treasury-document-images_800/1/1738999317197?e=1759363200&v=beta&t=1jXD2gCquA9AFt1WEYSN0dotbVbFNY-ofs1CNs4i6f8",
+    src: jetking,
+    name: "Python Workshop",
+    issuer: "Jetking ECIL",
+    year: "2023",
+  },
+  {
+    src: diffusion,
     name: "Generative AI with Diffusion Models",
     issuer: "NVIDIA",
     year: "2025",
   },
   {
-    src: "https://media.licdn.com/dms/image/v2/D562DAQGoSU5vmFIGpw/profile-treasury-document-images_1280/B56ZVTksWLHsAY-/1/1740863884325?e=1759363200&v=beta&t=zzYTVM2tCBBUx6h_gSn3hLpdzl4dMAGvqBgIKNndru8",
+    src: transformer,
     name: "Introduction to Transformer-Based Natural Language Processing",
     issuer: "NVIDIA",
-    year: "2025",
+    year: "2024",
   },
 ];
 

@@ -58,7 +58,7 @@ const EducationWatermarkInCard: React.FC = () => {
               </div>
 
               {/* Card */}
-              <div className="relative flex flex-col gap-2 bg-[#181818] rounded-lg px-6 py-6 shadow-lg animate-fade-in-up flex-1 overflow-hidden">
+              <div className="relative flex flex-col gap-2 bg-[#1a1a1a] rounded-lg px-6 py-6 shadow-lg animate-fade-in-up flex-1 overflow-hidden">
                 <div className="text-lg md:text-xl font-semibold text-white relative z-10">
                   {edu.institution}
                 </div>

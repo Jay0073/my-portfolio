@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface SectionWrapperProps {
   id?: string;
@@ -7,6 +7,7 @@ interface SectionWrapperProps {
   children: React.ReactNode;
   className?: string;
   headingClass?: string;
+  sectionPadding?: string;
 }
 
 const SectionWrapper: React.FC<SectionWrapperProps> = ({
@@ -14,8 +15,9 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   title,
   subtitle,
   children,
-  className = '',
-  headingClass = '',
+  className = "",
+  sectionPadding = "",
+  headingClass = "mb-16",
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -33,7 +35,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
           setHasAnimated(false);
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
     );
 
     if (sectionRef.current) {
@@ -44,16 +46,12 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   }, [hasAnimated]);
 
   return (
-    <section
-      id={id}
-      ref={sectionRef}
-      className={`py-16 px-8 ${className}`}
-    >
-      <div className="max-w-6xl mx-auto">
+    <section id={id} ref={sectionRef} className={`py-16 px-8 ${className}`}>
+      <div className={`max-w-6xl mx-auto ${sectionPadding}`}>
         {(title || subtitle) && (
           <div
-            className={`text-center mb-16 ${headingClass} ${
-              isVisible ? 'animate-fade-in-up' : 'opacity-0'
+            className={`text-center ${headingClass} ${
+              isVisible ? "animate-fade-in-up" : "opacity-0"
             }`}
           >
             {title && (
@@ -61,20 +59,19 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
                 <h2 className="font-poppins font-bold text-3xl md:text-4xl text-white mb-3">
                   {title}
                 </h2>
-                <div 
+                <div
                   className={`rounded mx-auto h-2 bg-white transition-all duration-500 ease-out ${
-                    isVisible ? 'w-[80%]' : 'w-0'
+                    isVisible ? "w-[80%]" : "w-0"
                   }`}
                   style={{
-                    transitionDelay: isVisible ? '0.3s' : '0s'
+                    transitionDelay: isVisible ? "0.3s" : "0s",
                   }}
                 />
               </div>
             )}
-
           </div>
         )}
-        <div className={isVisible ? 'animate-fade-in-up' : 'opacity-0'}>
+        <div className={isVisible ? "animate-fade-in-up" : "opacity-0"}>
           {children}
         </div>
       </div>

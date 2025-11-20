@@ -16,32 +16,15 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const About: React.FC = () => {
   const socialIcons = [
-    {
-      icon: Github,
-      href: "https://github.com/[username]",
-      label: "Open GitHub profile",
-    },
-    {
-      icon: Linkedin,
-      href: "https://linkedin.com/in/[username]",
-      label: "Open LinkedIn profile",
-    },
-    { icon: Mail, href: "mailto:your.email@example.com", label: "Send email" },
-    {
-      icon: Twitter,
-      href: "https://twitter.com/[username]",
-      label: "Open Twitter profile",
-    },
-    {
-      icon: Instagram,
-      href: "https://instagram.com/[username]",
-      label: "Open Instagram profile",
-    },
-  ];
+      { icon: Github, href: 'https://github.com/Jay0073', label: 'My code vault' },
+      { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: "Let's get Professional" },
+      { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Inbox open 24/7' },
+      { icon: Twitter, href: 'https://twitter.com/[username]', label: 'Memes and more' },
+      { icon: Instagram, href: 'https://instagram.com/__nameisjay_', label: 'Nothing to look here!' },
+    ];
 
   const handleResumeDownload = () => {
-    // Replace with actual resume URL
-    window.open("/path-to-resume.pdf", "_blank");
+    window.open("https://drive.google.com/file/d/1xld6QHhyoDQxZqKAnfFqL2Kk1xgGrnmx/view?usp=drive_link", "_blank");
   };
 
   return (
@@ -61,10 +44,7 @@ const About: React.FC = () => {
           {/* Introduction */}
           <div>
             <p className="font-inter text-lg text-[#EEEEEE] leading-relaxed">
-              I am Voutla Jayendra, a MERN stack developer with experience in
-              building web applications and exploring machine learning
-              solutions. My work focuses on efficient, scalable software
-              development.
+              I’m Voutla Jayendra, a full‑stack developer passionate about engineering scalable web applications and exploring AI solutions. My focus is on building efficient systems with clean design and lasting impact.
             </p>
           </div>
 
@@ -78,12 +58,12 @@ const About: React.FC = () => {
             <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
               <Award className="mx-auto mb-2 text-white" size={24} />
               <p className="text-white font-semibold">10+ Projects</p>
-              <p className="text-[#BBBBBB] text-sm">MERN Completed</p>
+              <p className="text-[#BBBBBB] text-sm">Full‑Stack Delivered</p>
             </div>
             <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
               <Users className="mx-auto mb-2 text-white" size={24} />
               <p className="text-white font-semibold">5+ Certifications</p>
-              <p className="text-[#BBBBBB] text-sm">Earned</p>
+              <p className="text-[#BBBBBB] text-sm">Across AI & Cloud</p>
             </div>
           </div>
 
@@ -94,9 +74,9 @@ const About: React.FC = () => {
             </h3>
             <ul className="space-y-2">
               {[
-                "Proficient in full-stack development",
-                "Committed to clean, maintainable code",
-                "Experienced in team collaboration",
+                "Skilled in full‑stack engineering",
+                "Dedicated to clean, reliable code", 
+                "Collaborative and growth‑oriented",
               ].map((value, index) => (
                 <li key={index} className="flex items-center gap-3 ml-2">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
