@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import Header from "./components/Header";
 import Hero from "./components/sections/Hero";
 import About from "./components/sections/About";
@@ -57,6 +59,29 @@ const CertificateModal: React.FC<{
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalCert, setModalCert] = useState<CertificateType | null>(null);
+
+  useEffect(() => {
+    // Initialize Lenis
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true, // Enable smooth scrolling for mouse wheel
+      gestureDirection: 'vertical',
+    });
+
+    // Create the animation loop
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Cleanup
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   const handleCertClick = (cert: CertificateType) => {
     setModalCert(cert);

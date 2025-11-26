@@ -9,8 +9,8 @@ const Experience: React.FC = () => {
     {
       company: "Workelate",
       logo: "https://www.workelate.com/images/header/workelate-logo.svg",
-      role: "Web Developer Intern",
-      dates: "May 2025 – Sept 2025",
+      role: "Full Stack Developer Intern",
+      dates: "Apr 2025 – Sept 2025",
       description:
         "Played a key role in shaping core products - TaskNetic, FormNetic, and xNetic - within a dynamic startup ecosystem. Migrated outdated codebases to modern stacks, resolving version conflicts and upgrading dependencies to ensure long‑term scalability. Delivered collaborative Kanban workflows in TaskNetic and dynamic form experiences in FormNetic, features that significantly improved user engagement and reduced bounce rates. Partnered with leadership to refine UI/UX across products, optimized backend media handling with AWS S3, and consistently delivered enhancements with 90% post‑release stability. Recognized by the co‑founder for combining technical rigor with user‑centric design in a fast‑moving product ecosystem.",
       skills: [
@@ -54,7 +54,7 @@ const Experience: React.FC = () => {
   ];
 
   const handleLinkedInClick = () => {
-    window.open("https://linkedin.com/in/[username]", "_blank");
+    window.open("https://www.linkedin.com/in/voutla-jayendra/", "_blank");
   };
 
   return (

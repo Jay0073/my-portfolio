@@ -109,11 +109,11 @@ const TextContent = ({
       <div className="flex flex-wrap gap-2 mb-5">
         {project.tags.map((tag, index) => (
           <span
-              key={index}
-              className="px-3 py-1 text-sm bg-white/10 text-white rounded-full"
-            >
-              {tag}
-            </span>
+            key={index}
+            className="px-3 py-1 text-sm bg-white/10 text-white rounded-full"
+          >
+            {tag}
+          </span>
         ))}
       </div>
       <h3 className="text-2xl md:text-4xl font-bold text-white mb-4 font-poppins tracking-tighter">
@@ -123,30 +123,34 @@ const TextContent = ({
         {project.description}
       </p>
       <div className="flex gap-4">
-        {project.links?.demo && <Button
-          text={
-            <span className="flex items-center gap-2">
-              <ExternalLink size={16} /> Demo
-            </span>
-          }
-          onClick={() =>
-            project.links?.demo && window.open(project.links.demo, "_blank")
-          }
-          style="primary"
-          className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
-        />}
-        {project.links?.repo && <Button
-          text={
-            <span className="flex items-center gap-2">
-              <Github size={16} /> Code
-            </span>
-          }
-          onClick={() =>
-            project.links?.repo && window.open(project.links.repo, "_blank")
-          }
-          style="secondary"
-          className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
-        />}
+        {project.links?.demo && (
+          <Button
+            text={
+              <span className="flex items-center gap-2">
+                <ExternalLink size={16} /> Demo
+              </span>
+            }
+            onClick={() =>
+              project.links?.demo && window.open(project.links.demo, "_blank")
+            }
+            style="primary"
+            className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
+          />
+        )}
+        {project.links?.repo && (
+          <Button
+            text={
+              <span className="flex items-center gap-2">
+                <Github size={16} /> Code
+              </span>
+            }
+            onClick={() =>
+              project.links?.repo && window.open(project.links.repo, "_blank")
+            }
+            style="secondary"
+            className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
+          />
+        )}
       </div>
     </div>
     {/* Project Number at bottom left */}
@@ -189,65 +193,78 @@ const ImageContent = ({ project }: { project: Project }) => (
 // --- MAIN COMPONENT ---
 const ProjectsBook: React.FC = () => {
   const projects: Project[] = [
-  {
-    title: "CrowdFund",
-    description:
-      "A secure, full-stack crowdfunding platform where fundraisers launch campaigns and receive donations via Stripe. Built with React, Node.js, and JWT authentication, it ensures smooth user flows and robust security. Real-time dashboards track donations and campaign progress. Designed for scalability and optimized load times, it handles 500+ concurrent API requests, supports 1,000+ active sessions, and processes 200+ transactions per hour with modular architecture.",
-    image:
-      "https://images.pexels.com/photos/1591060/pexels-photo-1591060.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    tags: ["React", "Node.js", "Stripe", "JWT", "MongoDB"],
-    links: {
-      demo: "https://crowdfund-eo0d.onrender.com",
-      repo: "https://github.com/Jay0073/CrowdFund",
+    {
+      title: "CrowdFund",
+      description:
+        "A secure, full-stack crowdfunding platform where fundraisers launch campaigns and receive donations via Stripe. Built with React, Node.js, and JWT authentication, it ensures smooth user flows and robust security. Real-time dashboards track donations and campaign progress. Designed for scalability and optimized load times, it handles 500+ concurrent API requests, supports 1,000+ active sessions, and processes 200+ transactions per hour with modular architecture.",
+      image:
+        "https://images.pexels.com/photos/1591060/pexels-photo-1591060.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      tags: ["React", "Node.js", "Stripe", "JWT", "MongoDB"],
+      links: {
+        demo: "https://crowdfund-eo0d.onrender.com",
+        repo: "https://github.com/Jay0073/CrowdFund",
+      },
     },
-  },
-  {
-    title: "Waste Classifier",
-    description:
-      "An AI-powered image classification tool that identifies recyclable vs non-recyclable waste. Trained on 22,000+ images using 3 layer Convolutional Neural Networks, it achieves 92% accuracy. The training pipeline included regularization, early stopping, and learning rate scheduling to ensure robust performance under noisy environments. Built to support sustainability efforts through smart waste sorting.",
-    image:
-      "https://images.pexels.com/photos/590020/pexels-photo-590020.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    tags: ["Python", "CNN", "TensorFlow", "OpenCV", "Transfer Learning", "AI"],
-    links: {
-      demo: "https://github.com/Jay0073/Waste-Classifier",
-      repo: "https://github.com/Jay0073/Waste-Classifier",
+    {
+      title: "Waste Classifier",
+      description:
+        "An AI-powered image classification tool that identifies recyclable vs non-recyclable waste. Trained on 22,000+ images using 3 layer Convolutional Neural Networks, it achieves 92% accuracy. The training pipeline included regularization, early stopping, and learning rate scheduling to ensure robust performance under noisy environments. Built to support sustainability efforts through smart waste sorting.",
+      image:
+        "https://images.pexels.com/photos/590020/pexels-photo-590020.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      tags: [
+        "Python",
+        "CNN",
+        "TensorFlow",
+        "OpenCV",
+        "Transfer Learning",
+        "AI",
+      ],
+      links: {
+        demo: "https://github.com/Jay0073/Waste-Classifier",
+        repo: "https://github.com/Jay0073/Waste-Classifier",
+      },
     },
-  },
-  {
-    title: "QuickBill",
-    description:
-      "A lightning-fast billing system tailored for business owners and cashiers. Users input items and prices, and the app instantly generates bills with all necessary details. Sales data and customer orders are visualized in a unified dashboard for easy analysis. Built for speed and efficiency, it streamlines billing and decision-making in real time.",
-    image:
-      "https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    tags: ["React", "Express", "MongoDB", "Chart.js", "Automation"],
-    links: {
-      demo: "https://github.com/Jay0073/Quick-Bill",
-      repo: "https://github.com/Jay0073/Quick-Bill",
+    {
+      title: "QuickBill",
+      description:
+        "A lightning-fast billing system tailored for business owners and cashiers. Users input items and prices, and the app instantly generates bills with all necessary details. Sales data and customer orders are visualized in a unified dashboard for easy analysis. Built for speed and efficiency, it streamlines billing and decision-making in real time.",
+      image:
+        "https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      tags: ["React", "Express", "MongoDB", "Chart.js", "Automation"],
+      links: {
+        demo: "https://github.com/Jay0073/Quick-Bill",
+        repo: "https://github.com/Jay0073/Quick-Bill",
+      },
     },
-  },
-  {
-    title: "Lifease",
-    description:
-      "An accessibility suite designed for differently abled users including the blind, deaf, and speech-impaired. Offers voice, gesture, and text-based interactions to support daily tasks and communication. Built with inclusive design principles and modular onboarding flows. The app aims to bridge digital gaps and empower users with adaptive tech.",
-    image:
-      "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    tags: ["React Native", "Accessibility", "Firebase", "UX Design"],
-    links: {
-      repo: "https://github.com/Jay0073/Lifease",
+    {
+      title: "Lifease",
+      description:
+        "An accessibility suite designed for differently abled users including the blind, deaf, and speech-impaired. Offers voice, gesture, and text-based interactions to support daily tasks and communication. Built with inclusive design principles and modular onboarding flows. The app aims to bridge digital gaps and empower users with adaptive tech.",
+      image:
+        "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      tags: ["React Native", "Accessibility", "Firebase", "UX Design"],
+      links: {
+        repo: "https://github.com/Jay0073/Lifease",
+      },
     },
-  },
-  {
-    title: "Pigeon Feed",
-    description:
-      "A Telegram-based job and tech digest engine that fetches high-quality listings from multiple platforms and delivers them within hours of posting. Users receive personalized job alerts and curated tech news digests, helping them stay ahead without the noise of traditional platforms. The system processes and dispatches updates in under 30 minutes, ensuring relevance and speed.",
-    image:
-      "https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    tags: ["Python", "Telegram Bot", "Job Aggregation", "Scheduling", "Automation"],
-    links: {
-      demo: "https://t.me/P_gieon_bot",
+    { 
+      title: "Pigeon Feed",
+      description:
+        "A Telegram-based job and tech digest engine that fetches high-quality listings from multiple platforms and delivers them within hours of posting. Users receive personalized job alerts and curated tech news digests, helping them stay ahead without the noise of traditional platforms. The system processes and dispatches updates in under 30 minutes, ensuring relevance and speed.",
+      image:
+        "https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      tags: [
+        "Python",
+        "Telegram Bot",
+        "Job Aggregation",
+        "Scheduling",
+        "Automation",
+      ],
+      links: {
+        demo: "https://t.me/P_gieon_bot",
+      },
     },
-  },
-];
+  ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
@@ -307,10 +324,10 @@ const ProjectsBook: React.FC = () => {
       id="projects"
       title="Projects"
       subtitle="Featured Works"
-      className="overflow-hidden"
+      className="overflow-hidden pb-0"
       headingClass="mb-0"
     >
-      <div className="w-full min-h-[700px] flex flex-col items-center justify-center perspective-[2000px] py-10">
+      <div className="w-full min-h-[700px] flex flex-col items-center justify-center perspective-[2000px] pt-10 overflow-hidden relative">
         {/* MAIN BOOK CONTAINER */}
         <div className="relative flex items-center justify-center z-10 h-[450px] md:h-[600px] w-full max-w-6xl">
           {/* === STATIC LEFT PAGE === */}
@@ -417,7 +434,7 @@ const ProjectsBook: React.FC = () => {
         </div>
 
         {/* --- CONTROLS --- */}
-        <div className="absolute -bottom-4 md:-bottom-8 flex gap-6 z-50">
+        <div className="mt-8 md:mt-10 mb-2 flex gap-6 z-50">
           <Button
             text={<ChevronLeft size={24} />}
             onClick={handlePrev}
