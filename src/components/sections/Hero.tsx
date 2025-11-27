@@ -79,8 +79,8 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center text-center px-8 relative">
-      <div className="max-w-4xl mx-auto mb-32">
+    <section className="min-h-screen flex items-center justify-center text-center px-4 md:px-8 relative">
+      <div className="max-w-4xl mx-auto mb-16 md:mb-32">
         <AnimatedContent
           distance={200}
           direction="vertical"
@@ -93,20 +93,23 @@ const Hero: React.FC = () => {
           threshold={0.1}
         >
           <h1
-            className={`mytitle-cursor text-5xl md:text-7xl font-poppins font-bold text-white mb-4 transition-all duration-100 animate-fade-in ${isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4"
-              }`}
+            className={`mytitle-cursor text-4xl md:text-7xl font-poppins font-bold text-white mb-4 transition-all duration-100 animate-fade-in ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
+            }`}
             style={{
               transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
             }}
           >
-            Hi!&nbsp; I'm Voutla Jayendra
+            Hi!&nbsp; I'm <br className="md:hidden"/> Voutla Jayendra
           </h1>
 
-          <div className="text-[#BBBBBB] mb-8 text-xl font-semibold">
-            <span className="typing-text mytitle-cursor">{displayText}</span>
-            <span className={`cursor ${isTyping ? "blink" : ""}`}>|</span>
+          <div className="text-[#BBBBBB] mb-3 text-lg md:text-xl font-semibold min-h-[5rem] md:min-h-[3rem] flex items-start justify-center">
+            <span className="w-full">
+              <span className="typing-text mytitle-cursor">{displayText}</span>
+              <span className={`cursor ${isTyping ? "blink" : ""}`}>|</span>
+            </span>
           </div>
 
           <div
@@ -127,19 +130,6 @@ const Hero: React.FC = () => {
       <div className="down-indicator" onClick={handleExploreClick}>
         <div className="down-arrow"></div>
       </div>
-
-      {/* Scroll Indicator */}
-      {/* <div
-        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 transition-opacity duration-500 ${
-          showScrollIndicator ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <ChevronDown
-          size={32}
-          className="text-[#BBBBBB] animate-bounce cursor-pointer hover:text-white transition-colors"
-          onClick={handleExploreClick}
-        />
-      </div> */}
     </section>
   );
 };

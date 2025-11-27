@@ -34,11 +34,15 @@ const About: React.FC = () => {
       subtitle="Professional Background and Expertise"
     >
       <div className="grid md:grid-cols-2 gap-12 items-center">
+        
+        {/* Lottie: EXACTLY as provided (Hidden on mobile, block on md) */}
         <DotLottieReact
+        className="hidden md:block"
           src="https://lottie.host/ec4e92c1-e225-456f-baf2-4c22c8e3744e/7l9Gqmco8d.lottie"
           loop
           autoplay
-        />{" "}
+        />
+        
         {/* Content */}
         <div className="space-y-8">
           {/* Introduction */}
@@ -48,8 +52,10 @@ const About: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* === STATS SECTION === */}
+          
+          {/* 1. Laptop View: The Original Cards (Hidden on Mobile) */}
+          <div className="hidden md:grid grid-cols-3 gap-4">
             <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
               <Code className="mx-auto mb-2 text-white" size={24} />
               <p className="text-white font-semibold">2+ Years</p>
@@ -65,6 +71,22 @@ const About: React.FC = () => {
               <p className="text-white font-semibold">5+ Certifications</p>
               <p className="text-[#BBBBBB] text-sm">Across AI & Cloud</p>
             </div>
+          </div>
+
+          {/* 2. Mobile View: "Tech Status Bar" (Visible only on Mobile) */}
+          <div className="flex flex-col gap-3 md:hidden py-4 border-y border-[#333] border-dashed">
+             <div className="flex items-center gap-3">
+                <Code size={18} className="text-white min-w-[20px]" />
+                <span className="text-[#BBBBBB] text-sm"><span className="text-white font-semibold">2+ Years</span> in Development</span>
+             </div>
+             <div className="flex items-center gap-3">
+                <Award size={18} className="text-white min-w-[20px]" />
+                <span className="text-[#BBBBBB] text-sm"><span className="text-white font-semibold">10+ Projects</span> Delivered</span>
+             </div>
+             <div className="flex items-center gap-3">
+                <Users size={18} className="text-white min-w-[20px]" />
+                <span className="text-[#BBBBBB] text-sm"><span className="text-white font-semibold">5+ Certifications</span> Achieved</span>
+             </div>
           </div>
 
           {/* Professional Values */}
@@ -86,16 +108,23 @@ const About: React.FC = () => {
             </ul>
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              text="Download Resume"
-              onClick={handleResumeDownload}
-              style="secondary"
-            />
-            <div className="flex justify-center sm:justify-start">
+          {/* Actions: Button & Icons (Mobile Optimized) */}
+          <div className="flex flex-col md:flex-row gap-6 md:items-center">
+            
+            {/* Button Wrapper: Mobile Full Width */}
+            <div className="w-full md:w-auto [&>button]:w-full [&>button]:md:w-auto">
+              <Button
+                text="Download Resume"
+                onClick={handleResumeDownload}
+                style="secondary"
+              />
+            </div>
+
+            {/* Icons Wrapper: Mobile Centered */}
+            <div className="flex justify-center md:justify-start w-full md:w-auto">
               <IconList icons={socialIcons} />
             </div>
+
           </div>
         </div>
       </div>

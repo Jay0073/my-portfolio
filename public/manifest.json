@@ -1,0 +1,22 @@
+{
+  "name": "Voutla Jayendra Portfolio",
+  "short_name": "Jayendra",
+  "description": "Portfolio of Voutla Jayendra — Full Stack Developer with expertise in MERN, Cloud, and AI/ML.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
