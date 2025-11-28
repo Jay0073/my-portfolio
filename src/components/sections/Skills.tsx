@@ -19,14 +19,10 @@ import {
   SiRedux,
   SiGithubactions,
   SiJavascript,
-  SiMysql,
   SiGit,
   SiTypescript,
-  SiNextdotjs,
   SiRedis,
-  SiGraphql,
-  SiJest,
-  SiPandas, // specific icon, or use generic
+  SiPandas,
 } from "react-icons/si";
 
 const SkillsBubbles: React.FC = () => {
@@ -35,139 +31,37 @@ const SkillsBubbles: React.FC = () => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [nodes, setNodes] = useState<any[]>([]);
 
+  // Ref to store positions between re-renders to prevent "reset"
+  const nodesRef = useRef<any[]>([]);
+
   const simulationRef = useRef<d3.Simulation<
     d3.SimulationNodeDatum,
     undefined
   > | null>(null);
 
-  // --- Tooltip State ---
   const [hoveredNode, setHoveredNode] = useState<any | null>(null);
 
-  // Wrap skills in useMemo
   const skills = useMemo(
     () => [
-      {
-        name: "React",
-        icon: FaReact,
-        percent: 95,
-        desc: ["Hooks", "Context", "SPA"],
-      },
-      {
-        name: "JavaScript",
-        icon: SiJavascript,
-        percent: 90,
-        desc: ["ES6+", "Async", "Event loop"],
-      },
-      {
-        name: "TypeScript",
-        icon: SiTypescript,
-        percent: 75,
-        desc: ["Interfaces", "Generics", "Types"],
-      },
-      // { name: "Next.js", icon: SiNextdotjs, percent: 85, desc: ["SSR", "SSG", "SEO Optimization"] },
-      {
-        name: "TailwindCSS",
-        icon: SiTailwindcss,
-        percent: 80,
-        desc: ["Rapid UI"],
-      },
-      {
-        name: "Redux",
-        icon: SiRedux,
-        percent: 75,
-        desc: ["Thunk", "Slices", "State Mgmt"],
-      },
-
-      {
-        name: "Node.js",
-        icon: FaNodeJs,
-        percent: 90,
-        desc: ["High Perf APIs"],
-      },
-      {
-        name: "Python",
-        icon: FaPython,
-        percent: 95,
-        desc: ["Data & ML Workflows", "Automation"],
-      },
-      {
-        name: "Express.js",
-        icon: SiExpress,
-        percent: 85,
-        desc: ["REST APIs", "Middleware"],
-      },
-      // { name: "GraphQL", icon: SiGraphql, percent: 75, desc: ["Apollo", "Schemas", "Resolvers"] },
-
-      {
-        name: "MongoDB",
-        icon: SiMongodb,
-        percent: 80,
-        desc: ["Aggregation", "Indexing"],
-      },
-      {
-        name: "Relational DBs",
-        icon: SiPostgresql,
-        percent: 75,
-        desc: ["Postgres", "MySQL"],
-      },
-      {
-        name: "Caching",
-        icon: SiRedis,
-        percent: 60,
-        desc: ["Redis", "Memcached", "Session Store"],
-      },
-
-      {
-        name: "Data Science",
-        icon: SiPandas,
-        percent: 80,
-        desc: ["ETL", "Feature Eng", "ML Pipelines"],
-      },
-      {
-        name: "Deep Learning",
-        icon: SiTensorflow,
-        percent: 75,
-        desc: ["CNNs", "Transformers", "LLMs"],
-      },
-
-      {
-        name: "Cloud",
-        icon: FaCloud,
-        percent: 65,
-        desc: ["AWS S3", "Firebase", "Oracle Cloud"],
-      },
-      {
-        name: "Docker",
-        icon: FaDocker,
-        percent: 65,
-        desc: ["Containerization"],
-      },
-      {
-        name: "CI-CD",
-        icon: SiGithubactions,
-        percent: 50,
-        desc: ["GitHub Actions", "Jenkins"],
-      },
-      {
-        name: "OS - Server",
-        icon: FaLinux,
-        percent: 70,
-        desc: ["Linux", "Nginx"],
-      },
-
-      // { name: "Testing", icon: SiJest, percent: 65, desc: ["Jest", "Cypress", "Mocha", "TDD"] },
-      {
-        name: "Security",
-        icon: FaLock,
-        percent: 65,
-        desc: ["JWT", "Bcrypt", "CORS"],
-      },
-      {
-        name: "Git",
-        icon: SiGit,
-        percent: 80,
-        desc: ["Branching", "Code Reviews", "Collab"],
-      },
+      { name: "React", icon: FaReact, percent: 95, desc: ["Hooks", "Context", "SPA"] },
+      { name: "JavaScript", icon: SiJavascript, percent: 90, desc: ["ES6+", "Async", "Event loop"] },
+      { name: "TypeScript", icon: SiTypescript, percent: 75, desc: ["Interfaces", "Generics", "Types"] },
+      { name: "TailwindCSS", icon: SiTailwindcss, percent: 80, desc: ["Rapid UI"] },
+      { name: "Redux", icon: SiRedux, percent: 75, desc: ["Thunk", "Slices", "State Mgmt"] },
+      { name: "Node.js", icon: FaNodeJs, percent: 90, desc: ["High Perf APIs"] },
+      { name: "Python", icon: FaPython, percent: 95, desc: ["Data & ML Workflows", "Automation"] },
+      { name: "Express.js", icon: SiExpress, percent: 85, desc: ["REST APIs", "Middleware"] },
+      { name: "MongoDB", icon: SiMongodb, percent: 80, desc: ["Aggregation", "Indexing"] },
+      { name: "Relational DBs", icon: SiPostgresql, percent: 75, desc: ["Postgres", "MySQL"] },
+      { name: "Caching", icon: SiRedis, percent: 60, desc: ["Redis", "Memcached", "Session Store"] },
+      { name: "Data Science", icon: SiPandas, percent: 80, desc: ["ETL", "Feature Eng", "ML Pipelines"] },
+      { name: "Deep Learning", icon: SiTensorflow, percent: 75, desc: ["CNNs", "Transformers", "LLMs"] },
+      { name: "Cloud", icon: FaCloud, percent: 65, desc: ["AWS S3", "Firebase", "Oracle Cloud"] },
+      { name: "Docker", icon: FaDocker, percent: 65, desc: ["Containerization"] },
+      { name: "CI-CD", icon: SiGithubactions, percent: 50, desc: ["GitHub Actions", "Jenkins"] },
+      { name: "OS - Server", icon: FaLinux, percent: 70, desc: ["Linux", "Nginx"] },
+      { name: "Security", icon: FaLock, percent: 65, desc: ["JWT", "Bcrypt", "CORS"] },
+      { name: "Git", icon: SiGit, percent: 80, desc: ["Branching", "Code Reviews", "Collab"] },
     ],
     []
   );
@@ -219,19 +113,29 @@ const SkillsBubbles: React.FC = () => {
       .domain([50, 100])
       .range([minRadius, maxRadius]);
 
-    const maxPercent = Math.max(...skills.map((s) => s.percent));
-    const centerIndex = skills.findIndex((s) => s.percent === maxPercent);
+    let currentNodes: any[] = [];
 
-    const initialNodes = skills.map((s, i) => ({
-      ...s,
-      radius: radiusScale(s.percent),
-      x: width / 2,
-      y: height / 2,
-      index: i,
-    }));
+    if (nodesRef.current.length === skills.length) {
+      currentNodes = skills.map((s, i) => {
+        const existingNode = nodesRef.current[i];
+        return {
+          ...existingNode,
+          ...s,
+          radius: radiusScale(s.percent),
+        };
+      });
+    } else {
+      currentNodes = skills.map((s, i) => ({
+        ...s,
+        radius: radiusScale(s.percent),
+        x: width / 2,
+        y: height / 2,
+        index: i,
+      }));
+    }
 
     const simulation = d3
-      .forceSimulation(initialNodes as any)
+      .forceSimulation(currentNodes)
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force(
         "collision",
@@ -241,21 +145,20 @@ const SkillsBubbles: React.FC = () => {
       .alphaDecay(0.03);
 
     const isLandscape = width > height;
+
     if (isLandscape) {
       simulation
         .force("x", d3.forceX(width / 2).strength(0.1))
         .force("y", d3.forceY(height / 2).strength(0.3));
     } else {
-      simulation.force(
-        "radial",
-        d3
-          .forceRadial(isMobile ? width / 3 : 180, width / 2, height / 2)
-          .strength((d: any) => (d.index === centerIndex ? 0 : 0.4))
-      );
+      simulation
+        .force("x", d3.forceX(width / 2).strength(0.3))
+        .force("y", d3.forceY(height / 2).strength(0.08));
     }
 
     simulation.on("tick", () => {
-      setNodes([...initialNodes]);
+      setNodes([...currentNodes]);
+      nodesRef.current = currentNodes;
     });
 
     simulationRef.current = simulation;
@@ -265,7 +168,6 @@ const SkillsBubbles: React.FC = () => {
     };
   }, [dimensions, drag, skills]);
 
-  // --- Handlers ---
   const handleMouseEnter = (node: any) => {
     setHoveredNode(node);
   };
@@ -279,7 +181,7 @@ const SkillsBubbles: React.FC = () => {
       id="skills"
       title="Skills & Technologies"
       subtitle="Floating Bubble Cluster"
-      className="mb-0 pb-0"
+      className="mb-0 pb-0 px-0"
       headingClass="mb-0"
       sectionPadding="max-w-full"
     >
@@ -293,6 +195,7 @@ const SkillsBubbles: React.FC = () => {
             width={dimensions.width}
             height={dimensions.height}
             style={{ cursor: "grab" }}
+            className="touch-pan-y" 
           >
             {nodes.map((node, i) => {
               const Icon = node.icon;
@@ -308,7 +211,7 @@ const SkillsBubbles: React.FC = () => {
                       s.call(drag);
                     }
                   }}
-                  className="bubble-node"
+                  className="bubble-node touch-none" 
                   transform={`translate(${node.x},${node.y})`}
                   style={{ cursor: "pointer" }}
                   onMouseEnter={() => handleMouseEnter(node)}
@@ -318,7 +221,6 @@ const SkillsBubbles: React.FC = () => {
                   }
                   onMouseUp={(e) => (e.currentTarget.style.cursor = "grab")}
                 >
-                  {/* Bubble Circle */}
                   <circle
                     r={node.radius}
                     fill="#1A1A1A"
@@ -326,20 +228,18 @@ const SkillsBubbles: React.FC = () => {
                     strokeWidth={2}
                     className="transition-all duration-300 ease-in-out"
                     style={{
-                      // Using drop-shadow filter based on hover state
                       filter: isHovered
                         ? "drop-shadow(rgb(97, 218, 251) 0px 0px 8px)"
                         : "drop-shadow(rgb(97, 218, 251) 0px 0px 3px)",
                     }}
                   />
 
-                  {/* Content Container */}
                   <foreignObject
                     x={-node.radius}
                     y={-node.radius}
                     width={node.radius * 2}
                     height={node.radius * 2}
-                    style={{ pointerEvents: "none" }} // Let clicks pass through to the <g> for drag
+                    style={{ pointerEvents: "none" }}
                   >
                     <div
                       style={{
@@ -355,7 +255,7 @@ const SkillsBubbles: React.FC = () => {
                         justifyContent: "center",
                       }}
                     >
-                      {/* 1. Default View: Icon + Name */}
+                      {/* Default View */}
                       <div
                         className="transition-opacity duration-300 absolute inset-0 flex flex-col items-center justify-center"
                         style={{
@@ -381,18 +281,18 @@ const SkillsBubbles: React.FC = () => {
                         )}
                       </div>
 
-                      {/* 2. Hover View: Description */}
+                      {/* Hover View */}
                       <div
                         className="transition-opacity duration-300 absolute inset-0 flex items-center justify-center px-2"
                         style={{
                           opacity: isHovered ? 1 : 0,
-                          transform: isHovered ? "scale(1)" : "scale(1.2)", // Slight zoom in effect
+                          transform: isHovered ? "scale(1)" : "scale(1.2)",
                           transition: "all 0.3s ease",
                         }}
                       >
                         <div
                           style={{
-                            fontSize: Math.max(11, node.radius * 0.25), // Dynamic font size for desc
+                            fontSize: Math.max(11, node.radius * 0.25),
                             fontWeight: "bold",
                             wordWrap: "break-word",
                             lineHeight: 1.2,

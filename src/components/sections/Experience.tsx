@@ -1,12 +1,13 @@
 import React from "react";
+import useMediaQuery from "../items/useMediaQuery";
+import ExperienceDesktop from "../common/ExperienceDesktop";
+import ExperienceMobile from "../common/ExperienceMobile";
 import SectionWrapper from "../common/SectionWrapper";
-import TimelineEntry from "../common/TimelineEntry";
 import Button from "../common/Button";
-import Workelate from "../assets/workelate.svg";
 
-const Experience: React.FC = () => {
-  const experiences = [
-    {
+
+const experiences = [
+  {
       company: "Workelate",
       logo: "https://www.workelate.com/images/header/workelate-logo.svg",
       role: "Full Stack Developer Intern",
@@ -53,6 +54,9 @@ const Experience: React.FC = () => {
     },
   ];
 
+const Experience: React.FC = () => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const handleLinkedInClick = () => {
     window.open("https://www.linkedin.com/in/voutla-jayendra/", "_blank");
   };
@@ -62,35 +66,16 @@ const Experience: React.FC = () => {
       id="experience"
       title="Experience"
       subtitle="Professional Roles and Contributions"
+      className=""
     >
-      <div className="relative">
-        {/* Timeline line */}
-        <div
-          className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-[#BBBBBB]"
-          style={{
-            filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)",
-          }}
-        ></div>
+      {isDesktop ? (
+        <ExperienceDesktop data={experiences} />
+      ) : (
+        <ExperienceMobile data={experiences} />
+      )}
 
-        {/* Timeline entries */}
-        <div className="space-y-8">
-          {experiences.map((exp, index) => (
-            <TimelineEntry
-              key={index}
-              logo={exp.logo}
-              company={exp.company}
-              role={exp.role}
-              dates={exp.dates}
-              description={exp.description}
-              skills={exp.skills}
-              isLeft={index % 2 === 0}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="text-center mt-16">
+      {/* Shared Bottom CTA */}
+      <div className="text-center mt-16 relative z-20">
         <Button
           text="View LinkedIn Profile"
           onClick={handleLinkedInClick}

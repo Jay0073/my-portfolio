@@ -17,7 +17,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   children,
   className = "",
   sectionPadding = "",
-  headingClass = "mb-16",
+  headingClass = "mb-6 md:mb-16",
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);

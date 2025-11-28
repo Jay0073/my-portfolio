@@ -2,6 +2,7 @@ import React from "react";
 import SectionWrapper from "../common/SectionWrapper";
 import Button from "../common/Button";
 import IconList from "../common/IconList";
+import useMediaQuery from "../items/useMediaQuery";
 import {
   Github,
   Linkedin,
@@ -27,34 +28,33 @@ const About: React.FC = () => {
     window.open("https://drive.google.com/file/d/1xld6QHhyoDQxZqKAnfFqL2Kk1xgGrnmx/view?usp=drive_link", "_blank");
   };
 
+  const isMd = useMediaQuery("(min-width: 768px)");
+
   return (
     <SectionWrapper
       id="about"
       title="About Me"
       subtitle="Professional Background and Expertise"
+      className="pb-0 md:py-16"
     >
       <div className="grid md:grid-cols-2 gap-12 items-center">
-        
-        {/* Lottie: EXACTLY as provided (Hidden on mobile, block on md) */}
-        <DotLottieReact
-        className="hidden md:block"
-          src="https://lottie.host/ec4e92c1-e225-456f-baf2-4c22c8e3744e/7l9Gqmco8d.lottie"
-          loop
-          autoplay
-        />
+        {isMd && (
+          <DotLottieReact
+            src="https://lottie.host/ec4e92c1-e225-456f-baf2-4c22c8e3744e/7l9Gqmco8d.lottie"
+            loop
+            autoplay
+          />
+        )}
         
         {/* Content */}
-        <div className="space-y-8">
-          {/* Introduction */}
+        <div className="space-y-6 md:space-y-8">
           <div>
             <p className="font-inter text-lg text-[#EEEEEE] leading-relaxed">
               I’m Voutla Jayendra, a full‑stack developer passionate about engineering scalable web applications and exploring AI solutions. My focus is on building efficient systems with clean design and lasting impact.
             </p>
           </div>
 
-          {/* === STATS SECTION === */}
           
-          {/* 1. Laptop View: The Original Cards (Hidden on Mobile) */}
           <div className="hidden md:grid grid-cols-3 gap-4">
             <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
               <Code className="mx-auto mb-2 text-white" size={24} />
@@ -73,7 +73,6 @@ const About: React.FC = () => {
             </div>
           </div>
 
-          {/* 2. Mobile View: "Tech Status Bar" (Visible only on Mobile) */}
           <div className="flex flex-col gap-3 md:hidden py-4 border-y border-[#333] border-dashed">
              <div className="flex items-center gap-3">
                 <Code size={18} className="text-white min-w-[20px]" />
@@ -89,7 +88,6 @@ const About: React.FC = () => {
              </div>
           </div>
 
-          {/* Professional Values */}
           <div>
             <h3 className="font-poppins font-semibold text-xl text-white mb-4">
               Professional Values
@@ -108,10 +106,7 @@ const About: React.FC = () => {
             </ul>
           </div>
 
-          {/* Actions: Button & Icons (Mobile Optimized) */}
           <div className="flex flex-col md:flex-row gap-6 md:items-center">
-            
-            {/* Button Wrapper: Mobile Full Width */}
             <div className="w-full md:w-auto [&>button]:w-full [&>button]:md:w-auto">
               <Button
                 text="Download Resume"
@@ -120,7 +115,6 @@ const About: React.FC = () => {
               />
             </div>
 
-            {/* Icons Wrapper: Mobile Centered */}
             <div className="flex justify-center md:justify-start w-full md:w-auto">
               <IconList icons={socialIcons} />
             </div>

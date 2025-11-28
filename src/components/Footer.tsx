@@ -10,6 +10,7 @@ import {
 import IconList from "./common/IconList";
 import Button from "./common/Button";
 import CountUp from "./items/CountUp";
+import useMediaQuery from "./items/useMediaQuery";
 
 // --- FIX: Moved OUTSIDE the component ---
 // This ensures the array reference never changes, so Tippy doesn't reset.
@@ -76,6 +77,7 @@ const Footer: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const quotefontsize = useMediaQuery("(min-width: 768px)") ? "text-4xl" : "text-2xl";
 
   useEffect(() => {
     const currentWord = words[index];
@@ -100,9 +102,9 @@ const Footer: React.FC = () => {
   }, [displayText, isDeleting, index, words]);
 
   return (
-    <footer className="bg-[rgb(26,26,26)] pt-12 pb-6">
+    <footer className="bg-[rgb(26,26,26)] pt-12 pb-3 md:pb-6">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-28 justify-between">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-28 justify-between">
           {/* Contact */}
           <div>
             <h2 className="text-white font-poppins text-3xl font-semibold mb-4">
@@ -119,9 +121,9 @@ const Footer: React.FC = () => {
               Whether it’s code, coffee, or conversation - I’m just one click
               away.
             </p>
-            
+
             <IconList icons={socialIcons} className="justify-start gap-6" />
-            
+
             <div className="mt-4">
               <Button
                 text="Say Hello"
@@ -139,7 +141,7 @@ const Footer: React.FC = () => {
 
           {/* Quote + Like */}
           <div className="flex flex-col items-start">
-            <p className="text-white font-poppins text-4xl italic leading-relaxed">
+            <p className={`text-white font-poppins ${quotefontsize} italic leading-relaxed`}>
               “Behind every great UI is a sleepless night and a stubborn
               developer.”
             </p>
@@ -175,9 +177,9 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="mt-10 pt-6 border-t border-white/10 w-full text-center">
-          <p className="text-[#999] font-inter text-sm">
-            © 2025 Voutla Jayendra · Designed to impress 👀 Debugged to
+        <div className="mt-4 pt-2 md:mt-10 md:pt-6 border-t border-white/10 w-full text-center">
+          <p className="text-[#999] font-inter text-[9px] md:text-sm">
+            © 2025 Voutla Jayendra <br className="md:hidden"/>· Designed to impress 👀 Debugged to
             perfection ✨
           </p>
         </div>

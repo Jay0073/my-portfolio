@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center text-center px-4 md:px-8 relative">
+    <section className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative">
       <div className="max-w-4xl mx-auto mb-16 md:mb-32">
         <AnimatedContent
           distance={200}
