@@ -1,133 +1,215 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-interface ExperienceMobileProps {
-  data: any[];
+interface ExperienceData {
+  company: string;
+  logo: string;
+  role: string;
+  dates: string;
+  description: string;
+  skills: string[];
 }
 
-const ExperienceMobile: React.FC<ExperienceMobileProps> = ({ data }) => {
-  // Track scroll position for moving dot
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [dotOffset, setDotOffset] = useState(0);
+interface ExperienceMobileProps {
+  data: ExperienceData[];
+}
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current) return;
-      const timelineRect = timelineRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      // Calculate scroll progress relative to timeline height
-      const timelineHeight = timelineRef.current.offsetHeight;
-      const scrollY = window.scrollY + viewportHeight / 2;
-      const timelineTop = timelineRef.current.offsetTop;
-      let progress = (scrollY - timelineTop) / timelineHeight;
-      progress = Math.max(0, Math.min(1, progress));
-      setDotOffset(progress * timelineHeight);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+// Individual card component with smooth reveal animations
+const Card: React.FC<{
+  experience: ExperienceData;
+  index: number;
+  total: number;
+  scrollProgress: any;
+}> = ({ experience, index, total, scrollProgress }) => {
+  // Calculate when this card should be active (each card gets equal portion of scroll)
+  const cardStart = index / total;
+  const cardEnd = (index + 1) / total;
+
+  // Scale: Card grows to full size when active
+  const scale = useTransform(
+    scrollProgress,
+    [
+      Math.max(0, cardStart - 0.1),
+      cardStart,
+      cardEnd,
+      Math.min(1, cardEnd + 0.1),
+    ],
+    [0.85, 1, 1, 0.85]
+  );
+
+  // Opacity: Fade in as card becomes active, fade out as it passes
+  const opacity = useTransform(
+    scrollProgress,
+    [
+      Math.max(0, cardStart - 0.15),
+      cardStart,
+      cardEnd,
+      Math.min(1, cardEnd + 0.1),
+    ],
+    [0.3, 1, 1, 0.3]
+  );
+
+  // Blur: Sharp when active, blurred when not
+  const blur = useTransform(
+    scrollProgress,
+    [
+      Math.max(0, cardStart - 0.1),
+      cardStart,
+      cardEnd,
+      Math.min(1, cardEnd + 0.1),
+    ],
+    [8, 0, 0, 8]
+  );
+
+  // Y position: Stack cards with slight offset
+  const y = useTransform(
+    scrollProgress,
+    [cardStart, cardEnd],
+    [index * 20, (index - 1) * 20]
+  );
 
   return (
-    <div className="relative flex min-h-screen pb-24">
-      {/* ------------------------------------------
-        1. STICKY TIMELINE (Left Column)
-        ------------------------------------------ */}
-      <div className="w-12 flex-shrink-0 relative" style={{ height: "100vh" }}>
-        <div ref={timelineRef} className="sticky top-0 h-full">
-          {/* The Fixed Line Track */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-[#333]"></div>
-          {/* Moving Glowing Dot */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 z-50"
-            style={{
-              top: dotOffset - 12, // center the dot (dot is 24px tall)
-              transition: "top 0.1s linear",
-            }}
-          >
-            <div className="relative w-6 h-6 rounded-full bg-[#1A1A1A] border-2 border-[#61DAFB] shadow-[0_0_16px_#61DAFB] flex items-center justify-center">
-              <div className="absolute inset-0 bg-[#61DAFB] opacity-50 blur-[4px] rounded-full animate-pulse"></div>
-              <div className="w-3 h-3 rounded-full bg-[#61DAFB]"></div>
+    <motion.div
+      style={{
+        scale,
+        opacity,
+        y,
+        filter: useTransform(blur, (b) => `blur(${b}px)`),
+        position: "sticky",
+        top: "80px",
+        zIndex: total - index,
+      }}
+      className="mb-6"
+    >
+      <div className="bg-[#1A1A1A] p-6 rounded-2xl shadow-2xl border border-white/5 backdrop-blur-sm">
+        {/* Header Section */}
+        <div className="flex items-start gap-4 mb-4">
+          {experience.logo && (
+            <div className="shrink-0">
+              <img
+                src={experience.logo}
+                alt={`${experience.company} logo`}
+                className="w-12 h-12 rounded-xl object-cover ring-2 ring-white/10"
+              />
+            </div>
+          )}
+
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-white text-xl leading-tight mb-1">
+              {experience.role}
+            </h3>
+
+            <p className="text-[#999] text-sm mb-2">{experience.company}</p>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[rgb(97,218,251)]/10 border border-[rgb(97,218,251)]/20 rounded-full">
+              <div className="w-1.5 h-1.5 rounded-full bg-[rgb(97,218,251)] animate-pulse" />
+              <p className="text-xs text-[rgb(97,218,251)] font-medium">
+                {experience.dates}
+              </p>
             </div>
           </div>
         </div>
+
+        {/* Description */}
+        <p className="text-[#BBB] text-sm leading-relaxed mb-4">
+          {experience.description}
+        </p>
+
+        {/* Skills Tags */}
+        <div className="flex flex-wrap gap-2">
+          {experience.skills.map((skill, i) => (
+            <span
+              key={i}
+              className="px-3 py-1.5 text-xs bg-white/5 text-white/90 rounded-lg font-medium border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const ExperienceMobile: React.FC<ExperienceMobileProps> = ({ data }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll progress of entire container
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end center"],
+  });
+
+  // Comet line grows from 0% to 100%
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  // Comet position (slightly ahead of line for smooth effect)
+  const cometY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full flex flex-row pb-20"
+      style={{
+        height: `${data.length * 100}vh`,
+      }}
+    >
+      {/* ==========================================
+          LEFT: The Comet Trail
+          ========================================== */}
+      <div className="w-8 flex-shrink-0 relative mr-4">
+        <div className="sticky left-0 h-screen" style={{ top: 0 }}>
+          {/* Background track */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 w-[2px] bg-white/10"
+            style={{
+              top: "80px",
+              bottom: "20%",
+            }}
+          />
+
+          {/* Animated comet trail */}
+          <motion.div
+            style={{
+              height: lineHeight,
+              top: "80px",
+            }}
+            className="absolute left-1/2 -translate-x-1/2 w-[2px] overflow-visible"
+          >
+            {/* Gradient trail */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgb(97,218,251)]/50 to-[rgb(97,218,251)] shadow-[0_0_20px_rgba(97,218,251,0.5)]" />
+
+            {/* Comet head with glow */}
+            <motion.div
+              style={{ y: cometY }}
+              className="absolute bottom-0 left-1/2 -translate-x-1/2"
+            >
+              {/* Outer glow */}
+              <div className="absolute inset-0 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[rgb(97,218,251)] opacity-30 blur-xl" />
+
+              {/* Middle glow */}
+              <div className="absolute inset-0 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[rgb(97,218,251)] opacity-60 blur-md" />
+
+              {/* Core */}
+              <div className="absolute -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[rgb(97,218,251)] shadow-[0_0_20px_rgba(97,218,251,0.8)]" />
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* ------------------------------------------
-        2. THE CARDS (Right Column)
-        ------------------------------------------ */}
-      <div className="flex-1 pr-4 pt-10">
-        {data.map((exp, index) => (
-          <div
+      {/* ==========================================
+          RIGHT: The Stacking Cards
+          ========================================== */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {data.map((experience, index) => (
+          <Card
             key={index}
-            className="sticky"
-            style={{
-              top: `calc(15vh + ${index * 3.5}rem)`,
-              zIndex: index + 10,
-              overflow: "visible", // allow overflow for longer cards
-            }}
-          >
-            <div
-              className="bg-[#121212] border border-white/10 rounded-t-2xl shadow-2xl overflow-visible"
-              style={{
-                // Remove minHeight so card height is content-based
-                backgroundColor: "#121212",
-                boxShadow: "0 -4px 20px rgba(0,0,0,0.6)",
-              }}
-            >
-              {/* Highlight line at the top for 3D edge effect */}
-              <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-              <div className="p-5">
-                {/* HEADER (Always visible when stacked) */}
-                <div className="flex items-center gap-3 mb-4 h-[3.5rem]">
-                  {exp.logo && (
-                    <div className="w-12 h-12 flex-shrink-0 rounded-lg bg-black/40 border border-white/5 p-1.5 flex items-center justify-center">
-                      <img
-                        src={exp.logo}
-                        alt={exp.company}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                  )}
-                  <div className="overflow-hidden">
-                    <h3 className="text-white font-bold text-lg leading-tight truncate">
-                      {exp.role}
-                    </h3>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <p className="text-[#61DAFB] text-xs font-medium tracking-wide">
-                        {exp.company}
-                      </p>
-                      <span className="text-[10px] text-white/40">•</span>
-                      <span className="text-[10px] text-white/50 font-mono">
-                        {exp.dates}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CONTENT BODY */}
-                <div className="mt-2 pl-1">
-                  <p className="text-[#BBBBBB] text-sm leading-relaxed mb-4 font-light">
-                    {exp.description}
-                  </p>
-
-                  {/* Skills */}
-                  <div className="flex flex-wrap gap-1.5 mt-4">
-                    {exp.skills.map((skill: string, idx: number) => (
-                      <span
-                        key={idx}
-                        className="text-[11px] text-white/80 px-2.5 py-1 bg-white/5 rounded-full border border-white/5"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            experience={experience}
+            index={index}
+            total={data.length}
+            scrollProgress={scrollYProgress}
+          />
         ))}
-        {/* Extra space at bottom to allow scrolling past the last card */}
-        <div className="h-32"></div>
       </div>
     </div>
   );
