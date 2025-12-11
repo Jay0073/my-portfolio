@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState } from "react";
 import SectionWrapper from "../common/SectionWrapper";
 import { ChevronLeft, ChevronRight, Github, ExternalLink } from "lucide-react";
 import Button from "../common/Button";
-
 // --- TYPES ---
 interface Project {
   title: string;
@@ -14,30 +13,28 @@ interface Project {
     repo?: string;
   };
 }
+// --- CONSTANTS ---
+const DESKTOP_HOLE_COUNT = 12;
+const MOBILE_HOLE_COUNT = 8;
 
-// --- CONSTANTS FOR ALIGNMENT ---
-// Shared configuration to ensure holes line up with rings exactly
-const SPACING_CONFIG = {
-  count: 12, // Reduced slightly to fit better vertically
-  gap: "gap-[14px] md:gap-5", // Responsive gap
-};
+// Independent gaps for holes and spiral lines
+const DESKTOP_HOLE_GAP = "gap-8";
+const DESKTOP_SPIRAL_GAP = "gap-5";
+const MOBILE_HOLE_GAP = "gap-10";
+const MOBILE_SPIRAL_GAP = "gap-9";
 
-// --- COMPONENT: SPIRAL SPINE ---
-const SpiralSpine: React.FC = () => {
-  const rings = Array.from({ length: SPACING_CONFIG.count });
-
+// --- COMPONENT: DESKTOP SPIRAL SPINE (Original) ---
+const DesktopSpiralSpine: React.FC = () => {
+  const rings = Array.from({ length: DESKTOP_HOLE_COUNT });
   return (
     <div className="relative z-50 w-8 md:w-10 h-full shrink-0 flex flex-col justify-center items-center select-none">
-      {/* Binding Shadow */}
       <div className="absolute inset-y-4 inset-x-3 bg-neutral-900/60 rounded-full blur-sm" />
-
-      <div className={`flex flex-col ${SPACING_CONFIG.gap} py-4`}>
+      <div className={`flex flex-col ${DESKTOP_SPIRAL_GAP} py-4`}>
         {rings.map((_, i) => (
           <div
             key={i}
-            className="relative w-full h-4 md:h-6 flex items-center justify-center"
+            className="relative w-full h-6 flex items-center justify-center"
           >
-            {/* Realistic Metal Spiral SVG */}
             <svg
               viewBox="0 0 60 20"
               className="w-[160%] h-full drop-shadow-lg"
@@ -65,108 +62,197 @@ const SpiralSpine: React.FC = () => {
     </div>
   );
 };
-
-// --- COMPONENT: PUNCH HOLES ---
-const PunchHoles: React.FC<{ position: "left" | "right" }> = ({ position }) => {
-  const holes = Array.from({ length: SPACING_CONFIG.count });
+// --- COMPONENT: MOBILE SPIRAL ---
+const MobileSpiral: React.FC = () => {
+  const rings = Array.from({ length: MOBILE_HOLE_COUNT });
 
   return (
+    <div className="absolute left-0 top-0 bottom-0 w-8 z-50 flex flex-col justify-center py-6 mt-1 pointer-events-none">
+      <div
+        className={`flex flex-col w-full h-full justify-center ${MOBILE_SPIRAL_GAP}`}
+      >
+        {rings.map((_, i) => (
+          <div
+            key={i}
+            className="relative w-full h-4 flex items-center justify-center"
+          >
+            <svg
+              viewBox="0 0 40 15"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 w-[180%] h-[40px] z-20"
+              style={{ overflow: "visible" }}
+            >
+              {/* Main Dark Stroke */}
+              <path
+                d="M 10,13 C 0,13 0,3 20,5"
+                fill="none"
+                stroke="#525252"
+                strokeWidth="4"
+                strokeLinecap="round"
+              />
+              {/* Lighter Highlight/Shadow Stroke */}
+              <path
+                d="M 10,13 C 0,13 0,3 20,5"
+                fill="none"
+                stroke="#a3a3a3"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                className="opacity-70"
+              />
+            </svg>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+// --- COMPONENT: PUNCH HOLES ---
+const PunchHoles: React.FC<{
+  position: "left" | "right";
+  isMobile?: boolean;
+}> = ({ position, isMobile = false }) => {
+  const count = isMobile ? MOBILE_HOLE_COUNT : DESKTOP_HOLE_COUNT;
+  const holes = Array.from({ length: count });
+  // Use independent gap for holes
+  const gap = isMobile ? MOBILE_HOLE_GAP : DESKTOP_HOLE_GAP;
+  return (
     <div
-      className={`absolute top-0 bottom-0 w-6 flex flex-col justify-center z-20 py-4 ${
-        position === "left" ? "left-1 md:left-2" : "right-1 md:right-2"
-      }`}
+      className={`absolute top-0 bottom-0 flex flex-col justify-center z-20 py-4 pointer-events-none ${
+        position === "left"
+          ? isMobile
+            ? "left-2"
+            : "left-1 md:left-2"
+          : "right-1 md:right-2"
+      } ${isMobile ? "w-6 py-6" : "w-6"}`}
     >
       <div
-        className={`flex flex-col gap-[14px] md:gap-[32px] ${
+        className={`flex flex-col ${gap} ${
           position === "left" ? "items-start" : "items-end"
         }`}
       >
         {holes.map((_, i) => (
           <div
             key={i}
-            className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#121212] shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]"
+            className={`
+              bg-[#121212] 
+              shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]
+              w-3 h-3 rounded-full
+              border border-neutral-800
+            `}
           />
         ))}
       </div>
     </div>
   );
 };
-
-// --- COMPONENT: CONTENT PAGES ---
-// Add projectNumber and totalProjects props for numbering
-const TextContent = ({
+// --- COMPONENT: CONTENT DISPLAY ---
+const ProjectContent = ({
   project,
   projectNumber,
   totalProjects,
+  isMobile = false,
 }: {
   project: Project;
   projectNumber: number;
   totalProjects: number;
+  isMobile?: boolean;
 }) => (
-  <div className="w-full h-full p-6 md:p-10 flex flex-col justify-center bg-[#1a1a1a] relative">
-    <div className="relative z-10">
-      {/* Project Number moved to bottom left, so removed from here */}
-      <div className="flex flex-wrap gap-2 mb-5">
-        {project.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="px-3 py-1 text-sm bg-white/10 text-white rounded-full"
-          >
-            {tag}
-          </span>
-        ))}
+  <div className="w-full h-full flex flex-col justify-center bg-[#1a1a1a] relative z-10">
+    {isMobile && (
+      <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/40 to-transparent z-10 pointer-events-none" />
+    )}
+    <div
+      className={`flex flex-col h-full ${
+        isMobile
+          ? "px-4 pl-10 py-3" // reduce vertical padding
+          : "p-10"
+      }`}
+      style={
+        isMobile
+          ? {
+              flex: 1,
+              minHeight: 0,
+              maxHeight: "100%",
+              overflow: "hidden",
+            }
+          : undefined
+      }
+    >
+      <div
+        className="flex-1 flex flex-col justify-center"
+        style={
+          isMobile
+            ? {
+                minHeight: 0,
+                maxHeight: "100%",
+                overflow: "auto",
+                WebkitOverflowScrolling: "touch",
+                paddingBottom: "0.5rem",
+              }
+            : undefined
+        }
+      >
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tags.slice(0, isMobile ? 3 : 6).map((tag, index) => (
+            <span
+              key={index}
+              className="px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-sm bg-white/10 text-white rounded-full whitespace-nowrap"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <h3 className="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4 font-poppins tracking-tighter leading-tight">
+          {project.title}
+        </h3>
+
+        <p
+          className={`text-neutral-400 text-sm md:text-base leading-relaxed md:leading-relaxed mb-6 md:mb-8 ${
+            isMobile ? "" : "line-clamp-6 md:line-clamp-none"
+          }`}
+        >
+          {project.description}
+        </p>
+        <div className="flex gap-3 md:gap-4">
+          {project.links?.demo && (
+            <Button
+              text={
+                <span className="flex items-center gap-2">
+                  <ExternalLink size={isMobile ? 14 : 16} /> Demo
+                </span>
+              }
+              onClick={() =>
+                project.links?.demo && window.open(project.links.demo, "_blank")
+              }
+              style="primary"
+              className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
+            />
+          )}
+          {project.links?.repo && (
+            <Button
+              text={
+                <span className="flex items-center gap-2">
+                  <Github size={isMobile ? 14 : 16} /> Code
+                </span>
+              }
+              onClick={() =>
+                project.links?.repo && window.open(project.links.repo, "_blank")
+              }
+              style="secondary"
+              className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
+            />
+          )}
+        </div>
       </div>
-      <h3 className="text-2xl md:text-4xl font-bold text-white mb-4 font-poppins tracking-tighter">
-        {project.title}
-      </h3>
-      <p className="text-neutral-400 text-sm md:text-base leading-relaxed mb-8 line-clamp-4 md:line-clamp-none">
-        {project.description}
-      </p>
-      <div className="flex gap-4">
-        {project.links?.demo && (
-          <Button
-            text={
-              <span className="flex items-center gap-2">
-                <ExternalLink size={16} /> Demo
-              </span>
-            }
-            onClick={() =>
-              project.links?.demo && window.open(project.links.demo, "_blank")
-            }
-            style="primary"
-            className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
-          />
-        )}
-        {project.links?.repo && (
-          <Button
-            text={
-              <span className="flex items-center gap-2">
-                <Github size={16} /> Code
-              </span>
-            }
-            onClick={() =>
-              project.links?.repo && window.open(project.links.repo, "_blank")
-            }
-            style="secondary"
-            className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
-          />
-        )}
+      <div className="mt-4 md:mt-0 md:absolute md:left-10 md:bottom-10 text-[10px] md:text-sm font-inter text-neutral-600 tracking-widest select-none">
+        {String(projectNumber).padStart(2, "0")} /{" "}
+        {String(totalProjects).padStart(2, "0")}
       </div>
     </div>
-    {/* Project Number at bottom left */}
-    <div className="absolute left-6 md:left-10 bottom-6 md:bottom-10 text-xs md:text-sm font-inter text-neutral-500 tracking-widest select-none z-20">
-      {String(projectNumber).padStart(2, "0")}/
-      {String(totalProjects).padStart(2, "0")}
-    </div>
-    <PunchHoles position="right" />
   </div>
 );
-
-// Helper to check if a file is a video
-const isVideo = (src: string) => {
-  return /\.(mp4|webm|ogg)$/i.test(src);
-};
-
+// Helper for Video/Image
+const isVideo = (src: string) => /\.(mp4|webm|ogg)$/i.test(src);
 const ImageContent = ({ project }: { project: Project }) => (
   <div className="w-full h-full relative bg-black overflow-hidden">
     {isVideo(project.image) ? (
@@ -186,10 +272,22 @@ const ImageContent = ({ project }: { project: Project }) => (
       />
     )}
     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-    <PunchHoles position="left" />
   </div>
 );
-
+// --- HOOK: useMediaQuery ---
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(query).matches : false
+  );
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia(query);
+    const listener = () => setMatches(media.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [query]);
+  return matches;
+}
 // --- MAIN COMPONENT ---
 const ProjectsBook: React.FC = () => {
   const projects: Project[] = [
@@ -247,7 +345,7 @@ const ProjectsBook: React.FC = () => {
         repo: "https://github.com/Jay0073/Lifease",
       },
     },
-    { 
+    {
       title: "Pigeon Feed",
       description:
         "A Telegram-based job and tech digest engine that fetches high-quality listings from multiple platforms and delivers them within hours of posting. Users receive personalized job alerts and curated tech news digests, helping them stay ahead without the noise of traditional platforms. The system processes and dispatches updates in under 30 minutes, ensuring relevance and speed.",
@@ -265,233 +363,426 @@ const ProjectsBook: React.FC = () => {
       },
     },
   ];
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-
+  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
   const total = projects.length;
-  const animDuration = 800;
-
+  const animDuration = 800; // ms for desktop
+  const mobileAnimDuration = 700; // slightly slower for clean swing
   const getIndex = (i: number) => (i + total) % total;
-
+  // Derived indices
+  const prevIndex = getIndex(currentIndex - 1);
+  const nextIndex = getIndex(currentIndex + 1);
   const currentProject = projects[currentIndex];
-  const nextProject = projects[getIndex(currentIndex + 1)];
-  const prevProject = projects[getIndex(currentIndex - 1)];
-
-  // --- STATIC PAGES LOGIC ---
-  // When Animating NEXT: Left shows Old Text (Static), Right shows New Image (Static revealed under flipper)
-  // When Animating PREV: Left shows New Text (Static revealed under flipper), Right shows Old Image (Static)
-  // When Idle: Left shows Current Text, Right shows Current Image
-  let leftStaticProject = currentProject;
-  let rightStaticProject = currentProject;
-
-  if (direction === "next") {
-    rightStaticProject = nextProject; // The flipper leaves this spot, revealing next
-  } else if (direction === "prev") {
-    leftStaticProject = prevProject; // The flipper leaves this spot, revealing prev
-  }
-
+  const nextProjectObj = projects[nextIndex];
+  const prevProjectObj = projects[prevIndex];
   const handleNext = () => {
     if (isAnimating) return;
     setDirection("next");
     setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => getIndex(prev + 1));
-      setIsAnimating(false);
-      setDirection(null);
-    }, animDuration);
+    setTimeout(
+      () => {
+        setCurrentIndex((prev) => getIndex(prev + 1));
+        setIsAnimating(false);
+        setDirection(null);
+      },
+      window.innerWidth < 768 ? mobileAnimDuration : animDuration
+    );
   };
-
   const handlePrev = () => {
     if (isAnimating) return;
     setDirection("prev");
     setIsAnimating(true);
+    setTimeout(
+      () => {
+        setCurrentIndex((prev) => getIndex(prev - 1));
+        setIsAnimating(false);
+        setDirection(null);
+      },
+      window.innerWidth < 768 ? mobileAnimDuration : animDuration
+    );
+  };
+  const isMd = useMediaQuery("(min-width: 768px)");
+
+  // --- Mobile Button Animation State ---
+  const [mobileLeftActive, setMobileLeftActive] = useState(false);
+  const [mobileRightActive, setMobileRightActive] = useState(false);
+
+  // --- Button Handlers ---
+  const handleMobileLeft = () => {
+    if (isAnimating) return;
+    setDirection("prev");
+    setIsAnimating(true);
+    setMobileLeftActive(true);
+    setPendingIndex(getIndex(currentIndex - 1));
     setTimeout(() => {
       setCurrentIndex((prev) => getIndex(prev - 1));
       setIsAnimating(false);
       setDirection(null);
-    }, animDuration);
+      setPendingIndex(null);
+      setMobileLeftActive(false);
+    }, mobileAnimDuration);
   };
-
-  // --- FLIPPER STYLE CALCULATIONS ---
-  // 50% of container - half of spine (16px or 24px).
-  // Using calc to stay perfectly responsive.
-  const halfSpineWidth = "16px md:24px";
+  const handleMobileRight = () => {
+    if (isAnimating) return;
+    setCurrentIndex((prev) => getIndex(prev + 1)); // update immediately for next
+    setDirection("next");
+    setIsAnimating(true);
+    setMobileRightActive(true);
+    setPendingIndex(null);
+    setTimeout(() => {
+      setIsAnimating(false);
+      setDirection(null);
+      setMobileRightActive(false);
+    }, mobileAnimDuration);
+  };
 
   return (
     <SectionWrapper
       id="projects"
       title="Projects"
       subtitle="Featured Works"
-      className="overflow-hidden pb-0"
-      headingClass="mb-0"
+      className="overflow-hidden pb-0 !pl-0 !pr-6 md:!pr-0"
+      headingClass="mb-4 md:mb-0"
     >
-      <div className="w-full min-h-[700px] flex flex-col items-center justify-center perspective-[2000px] pt-10 overflow-hidden relative">
-        {/* MAIN BOOK CONTAINER */}
-        <div className="relative flex items-center justify-center z-10 h-[450px] md:h-[600px] w-full max-w-6xl">
-          {/* === STATIC LEFT PAGE === */}
-          <div className="relative flex-1 h-full rounded-l-3xl overflow-hidden border border-white/5 bg-[#1a1a1a] shadow-2xl z-0">
-            <TextContent
-              project={leftStaticProject}
-              projectNumber={
-                getIndex(
-                  direction === "prev" ? currentIndex - 1 : currentIndex
-                ) + 1
-              }
-              totalProjects={total}
+      <div className="w-full flex flex-col items-center justify-center pt-2 md:pt-10 overflow-hidden relative">
+        {/* ==============================================
+            MOBILE VIEW (Text Page Only: Flip Behind)
+           ============================================== */}
+        <div className="flex md:hidden w-full max-w-md mx-auto h-[550px] relative z-10 pl-8 pr-2">
+          {/* Container with Perspective for 3D Page Turn */}
+          <div className="relative w-full h-full perspective-[2000px] overflow-visible">
+            {/* Mobile Spiral OUTSIDE page layers */}
+            <MobileSpiral />
+            {/* --- STATIC LAYER (Bottom: New Page) --- */}
+            <div className="absolute inset-0 bg-[#1a1a1a] rounded-r-3xl rounded-l-[4px] border border-l-0 border-white/10 overflow-hidden z-10">
+              <PunchHoles position="left" isMobile={true} />
+              <ProjectContent
+                project={currentProject}
+                projectNumber={currentIndex + 1}
+                totalProjects={total}
+                isMobile={true}
+              />
+            </div>
+            {/* --- ANIMATING LAYER (Top: Old Page Flipping Away) --- */}
+            {isAnimating && (
+              <div
+                className={`
+          absolute inset-0 bg-[#1a1a1a]
+          rounded-r-3xl rounded-l-[4px]
+          border border-l-0 border-white/10 shadow-2xl
+          origin-left z-30
+          overflow-visible
+          ${
+            direction === "next"
+              ? "animate-mobile-flip-next"
+              : "animate-mobile-flip-prev"
+          }
+        `}
+                style={{
+                  left: 0,
+                  top: 0,
+                  width: "100%",
+                  height: "100%",
+                  willChange: "transform",
+                  transformStyle: "preserve-3d",
+                  transformOrigin: "left center",
+                  zIndex: 30,
+                }}
+              >
+                {/* Front face: text content */}
+                <div
+                  className="absolute inset-0 w-full h-full backface-hidden overflow-hidden"
+                  style={{ borderRadius: "1.5rem 0.25rem 1.5rem 0.25rem" }}
+                >
+                  <PunchHoles position="left" isMobile={true} />
+                  <ProjectContent
+                    project={
+                      direction === "next"
+                        ? projects[getIndex(currentIndex - 1)] // show previous project text during next animation (old page flipping away)
+                        : currentProject // show current project text during prev animation (old page flipping away)
+                    }
+                    projectNumber={
+                      direction === "next"
+                        ? getIndex(currentIndex - 1) + 1
+                        : currentIndex + 1
+                    }
+                    totalProjects={total}
+                    isMobile={true}
+                  />
+                  <div className="absolute inset-0 bg-black/0 animate-shadow-lift pointer-events-none" />
+                </div>
+                {/* Back face: image/video content */}
+                <div
+                  className="absolute inset-0 w-full h-full backface-hidden overflow-hidden"
+                  style={{
+                    transform: "rotateY(180deg)",
+                    borderRadius: "1.5rem 0.25rem 1.5rem 0.25rem",
+                  }}
+                >
+                  <PunchHoles position="left" isMobile={true} />
+                  <ImageContent
+                    project={
+                      direction === "next"
+                        ? currentProject // after next, currentProject is already next
+                        : projects[getIndex(currentIndex - 1)] // after prev, currentProject is still old, so show previous project's image
+                    }
+                  />
+                  <div className="absolute inset-0 bg-black/50 animate-shadow-land-reverse pointer-events-none" />
+                </div>
+              </div>
+            )}
+            {/* If IDLE: Top Layer (Current) */}
+            {!isAnimating && (
+              <div className="absolute inset-0 bg-[#1a1a1a] rounded-r-3xl rounded-l-[4px] border border-l-0 border-white/10 z-20 overflow-hidden">
+                <PunchHoles position="left" isMobile={true} />
+                <ProjectContent
+                  project={currentProject}
+                  projectNumber={currentIndex + 1}
+                  totalProjects={total}
+                  isMobile={true}
+                />
+              </div>
+            )}
+            {/* DECORATIVE BACKGROUND STACK - Offset to right */}
+            <div className="absolute inset-0 bg-[#161616] rounded-r-3xl rounded-l-[4px] border border-white/5 -z-10 translate-x-2 translate-y-2 scale-[0.98]">
+              <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-white/5 bg-black/20" />
+            </div>
+          </div>
+        </div>
+        {/* ==============================================
+            DESKTOP VIEW (Double Spread: Image Left, Text Right)
+           ============================================== */}
+        <div className="hidden md:flex relative items-center justify-center z-10 h-[600px] w-full max-w-6xl perspective-[2000px]">
+          {/* Decorative Background Layer - Left Page */}
+          <div
+            className="absolute left-0 top-0 h-full w-1/2 ml-3 pointer-events-none z-0"
+            style={{ width: "calc(50% - 14px" }}
+          >
+            <div className="absolute inset-0 bg-[#161616] rounded-l-3xl overflow-hidden border border-white/5 -translate-x-3 translate-y-1.5 scale-[0.99]">
+              <div className="absolute right-0 top-0 bottom-0 w-8 border-l border-white/5 bg-black/20" />
+            </div>
+          </div>
+          {/* Decorative Background Layer - Right Page */}
+          <div
+            className="absolute right-0 top-0 h-full w-1/2 pointer-events-none mr-3 z-0"
+            style={{ width: "calc(50% - 14px)" }}
+          >
+            <div className="absolute inset-0 bg-[#161616] rounded-r-3xl overflow-hidden border border-white/5 translate-x-3 translate-y-1.5 scale-[0.99]">
+              <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-white/5 bg-black/20" />
+            </div>
+          </div>
+          {/* Static Left Page (Image) */}
+          <div className="relative flex-1 h-full rounded-l-3xl overflow-hidden border border-white/5 bg-[#1a1a1a] shadow-2xl z-10">
+            {/* Gradient shadow on right edge (towards center) */}
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/40 to-transparent z-20 pointer-events-none" />
+            <PunchHoles position="right" />
+            <ImageContent
+              project={direction === "prev" ? prevProjectObj : currentProject}
             />
-            {/* Shadow overlay when flipping PREV (page lands here) */}
             {direction === "prev" && (
               <div className="absolute inset-0 bg-black/50 animate-shadow-land" />
             )}
           </div>
-
-          {/* === SPINE === */}
-          <SpiralSpine />
-
-          {/* === STATIC RIGHT PAGE === */}
-          <div className="relative flex-1 h-full rounded-r-3xl overflow-hidden border border-white/5 bg-black shadow-2xl z-0">
-            <ImageContent project={rightStaticProject} />
-            {/* Shadow overlay when flipping NEXT (page lands here) */}
+          {/* Desktop Spine */}
+          <DesktopSpiralSpine />
+          {/* Static Right Page (Text) */}
+          <div className="relative flex-1 h-full rounded-r-3xl overflow-hidden border border-white/5 bg-black shadow-2xl z-10">
+            {/* Gradient shadow on left edge (towards center) */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/40 to-transparent z-20 pointer-events-none" />
+            <PunchHoles position="left" />
+            <ProjectContent
+              project={direction === "next" ? nextProjectObj : currentProject}
+              projectNumber={
+                (direction === "next" ? nextIndex : currentIndex) + 1
+              }
+              totalProjects={total}
+            />
             {direction === "next" && (
               <div className="absolute inset-0 bg-black/50 animate-shadow-land" />
             )}
           </div>
-
-          {/* === FLIPPER (THE MOVING PAGE) === */}
+          {/* FLIPPER */}
           {isAnimating && (
             <div
-              className="absolute top-0 bottom-0 z-50 h-full"
+              className="absolute top-0 bottom-0 z-50 h-full w-[calc(50%-20px)]"
               style={{
-                // Width is exactly half container minus spine width
-                width: `calc(50% - 16px)`,
-                // Mobile responsive calculation handled via CSS below if needed,
-                // but here we approximate the logic:
-
-                // POSITIONING & ANCHORING
                 left: direction === "next" ? "50%" : "auto",
                 right: direction === "prev" ? "50%" : "auto",
-                marginLeft: direction === "next" ? "16px" : "0", // Half spine offset
-                marginRight: direction === "prev" ? "16px" : "0", // Half spine offset
-
+                marginLeft: direction === "next" ? "20px" : "0",
+                marginRight: direction === "prev" ? "20px" : "0",
                 transformStyle: "preserve-3d",
-
-                // CRITICAL: Set pivot point to the spine edge
                 transformOrigin:
                   direction === "next" ? "center left" : "center right",
-
                 animation:
                   direction === "next"
                     ? `flipNext ${animDuration}ms cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards`
                     : `flipPrev ${animDuration}ms cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards`,
               }}
             >
-              {/* FRONT OF FLIPPER */}
-              {/* If Next: Current Image (Right side). If Prev: Current Text (Left side). */}
+              {/* Front of Flipper */}
               <div
                 className={`absolute inset-0 w-full h-full backface-hidden overflow-hidden border border-white/5 bg-[#1a1a1a] ${
-                  direction === "next" ? "rounded-r-2xl" : "rounded-l-2xl"
+                  direction === "next" ? "rounded-r-3xl" : "rounded-l-3xl"
                 }`}
               >
+                {/* Layered Depth for Front */}
                 {direction === "next" ? (
-                  <ImageContent project={currentProject} />
+                  // Right page offset (right)
+                  <div className="absolute inset-0 bg-[#161616] rounded-r-3xl overflow-hidden border border-white/5 translate-x-0.5 translate-y-2 scale-[0.99]">
+                    <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-white/5 bg-black/20" />
+                  </div>
                 ) : (
-                  <TextContent
+                  // Left page offset (left)
+                  <div className="absolute inset-0 bg-[#161616] rounded-l-3xl overflow-hidden border border-white/5 -translate-x-1 translate-y-2 scale-[0.99]">
+                    <div className="absolute right-0 top-0 bottom-0 w-8 border-l border-white/5 bg-black/20" />
+                  </div>
+                )}
+                <PunchHoles
+                  position={direction === "next" ? "left" : "right"}
+                />
+                {direction === "next" ? (
+                  <ProjectContent
                     project={currentProject}
                     projectNumber={currentIndex + 1}
                     totalProjects={total}
                   />
+                ) : (
+                  <ImageContent project={currentProject} />
                 )}
-
-                {/* Lighting: Gets darker as it lifts */}
                 <div className="absolute inset-0 bg-black/0 animate-shadow-lift pointer-events-none" />
               </div>
-
-              {/* BACK OF FLIPPER */}
-              {/* If Next: Next Text (Left side). If Prev: Prev Image (Right side). */}
+              {/* Back of Flipper */}
               <div
                 className={`absolute inset-0 w-full h-full backface-hidden overflow-hidden border border-white/5 bg-[#1a1a1a] ${
-                  direction === "next" ? "rounded-l-2xl" : "rounded-r-2xl"
+                  direction === "next" ? "rounded-l-3xl" : "rounded-r-3xl"
                 }`}
                 style={{ transform: "rotateY(180deg)" }}
               >
+                {/* Layered Depth for Back */}
                 {direction === "next" ? (
-                  <TextContent
-                    project={nextProject}
-                    projectNumber={getIndex(currentIndex + 1) + 1}
+                  // Left page offset (left)
+                  <div className="absolute inset-0 bg-[#161616] rounded-l-3xl overflow-hidden border border-white/5 -translate-x-1 translate-y-1 scale-[0.99]">
+                    <div className="absolute right-0 top-0 bottom-0 w-8 border-l border-white/5 bg-black/20" />
+                  </div>
+                ) : (
+                  // Right page offset (right)
+                  <div className="absolute inset-0 bg-[#161616] rounded-r-3xl overflow-hidden border border-white/5 translate-x-0.5 translate-y-1 scale-[0.99]">
+                    <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-white/5 bg-black/20" />
+                  </div>
+                )}
+                <PunchHoles
+                  position={direction === "next" ? "right" : "left"}
+                />
+                {direction === "next" ? (
+                  <ImageContent project={nextProjectObj} />
+                ) : (
+                  <ProjectContent
+                    project={prevProjectObj}
+                    projectNumber={prevIndex + 1}
                     totalProjects={total}
                   />
-                ) : (
-                  <ImageContent project={prevProject} />
                 )}
-
-                {/* Lighting: Starts dark, gets brighter as it lands */}
                 <div className="absolute inset-0 bg-black/50 animate-shadow-land-reverse pointer-events-none" />
               </div>
             </div>
           )}
         </div>
-
         {/* --- CONTROLS --- */}
-        <div className="mt-8 md:mt-10 mb-2 flex gap-6 z-50">
+        <div className="mt-8 mb-6 flex gap-6 z-50">
           <Button
             text={<ChevronLeft size={24} />}
-            onClick={handlePrev}
+            onClick={isMd ? handlePrev : handleMobileLeft}
             style="secondary"
-            className="!p-4 !rounded-full !border !border-white/10 !text-white !bg-transparent hover:!bg-white hover:!text-[#1A1A1A] hover:!scale-110 transition-all disabled:opacity-30"
+            className={
+              isMd
+                ? "!p-3 md:!p-4 !rounded-full !border !border-white/10 !text-white !bg-transparent hover:!bg-white hover:!text-[#1A1A1A] hover:!scale-110 active:!bg-white active:!text-[#1A1A1A] active:!scale-110 transition-all disabled:opacity-30"
+                : `!p-3 !rounded-full !border !border-white/10 !text-white !bg-transparent transition-all disabled:opacity-30
+                  ${
+                    mobileLeftActive
+                      ? "!bg-white !text-[#1A1A1A] !scale-110"
+                      : ""
+                  }
+                `
+            }
             disabled={isAnimating}
           />
           <Button
             text={<ChevronRight size={24} />}
-            onClick={handleNext}
+            onClick={isMd ? handleNext : handleMobileRight}
             style="secondary"
-            className="!p-4 !rounded-full !border !border-white/10 !text-white !bg-transparent hover:!bg-white hover:!text-[#1A1A1A] hover:!scale-110 transition-all disabled:opacity-30"
+            className={
+              isMd
+                ? "!p-3 md:!p-4 !rounded-full !border !border-white/10 !text-white !bg-transparent hover:!bg-white hover:!text-[#1A1A1A] hover:!scale-110 active:!bg-white active:!text-[#1A1A1A] active:!scale-110 transition-all disabled:opacity-30"
+                : `!p-3 !rounded-full !border !border-white/10 !text-white !bg-transparent transition-all disabled:opacity-30
+                  ${
+                    mobileRightActive
+                      ? "!bg-white !text-[#1A1A1A] !scale-110"
+                      : ""
+                  }
+                `
+            }
             disabled={isAnimating}
           />
         </div>
-
         <style>{`
-          .backface-hidden {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-          }
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* DESKTOP ANIMATIONS (Unchanged) */
+  @keyframes flipNext { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(-180deg); } }
+  @keyframes flipPrev { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(180deg); } }
 
-          /* NEXT: Rotate from 0 (Right) to -180 (Left) */
-          @keyframes flipNext {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(-180deg); }
-          }
-          
-          /* PREV: Rotate from 0 (Left) to 180 (Right) */
-          @keyframes flipPrev {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(180deg); }
-          }
+  /* MOBILE ANIMATIONS: 270-Degree Flip Behind */
+  
+  /* NEXT: Flip from flat (0) to tucked behind (-270) */
+  @keyframes mobileFlipNext {
+    0% { 
+      transform: rotateY(0deg); 
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    50% { 
+      box-shadow: 20px 0 50px rgba(0,0,0,0.5); /* Shadow peaks mid-turn */
+    }
+    100% { 
+      transform: rotateY(-270deg); 
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+  }
 
-          /* SHADOWS */
-          /* Lift: Transparent -> Dark (as page turns 90deg) */
-          @keyframes shadowLift {
-            0% { background-color: rgba(0,0,0,0); }
-            50% { background-color: rgba(0,0,0,0.4); }
-            100% { background-color: rgba(0,0,0,0.8); }
-          }
+  /* PREV: Flip from tucked behind (-270) back to flat (0) */
+  @keyframes mobileFlipPrev {
+    0% { 
+      transform: rotateY(-270deg); 
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    50% { 
+      box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+    }
+    100% { 
+      transform: rotateY(0deg); 
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+  }
 
-          /* Land: Dark -> Transparent */
-          @keyframes shadowLandReverse {
-             0% { background-color: rgba(0,0,0,0.8); }
-             50% { background-color: rgba(0,0,0,0.4); }
-             100% { background-color: rgba(0,0,0,0); }
-          }
-          
-          /* Mobile adjustment for spine calculation if needed */
-          @media (min-width: 768px) {
-             .flipper-width { width: calc(50% - 24px); }
-          }
-        `}</style>
+  .animate-mobile-flip-next {
+    animation: mobileFlipNext 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards;
+  }
+  
+  .animate-mobile-flip-prev {
+    animation: mobileFlipPrev 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000) forwards;
+  }
+
+  /* SHARED SHADOWS */
+  @keyframes shadowLift { 0% { background-color: rgba(0,0,0,0); } 50% { background-color: rgba(0,0,0,0.4); } 100% { background-color: rgba(0,0,0,0.6); } }
+  @keyframes shadowLandReverse { 0% { background-color: rgba(0,0,0,0.8); } 50% { background-color: rgba(0,0,0,0.4); } 100% { background-color: rgba(0,0,0,0); } }
+  @keyframes shadowLand { 0% { background-color: rgba(0,0,0,0.8); } 100% { background-color: rgba(0,0,0,0); } }
+`}</style>
       </div>
     </SectionWrapper>
   );
 };
-
 export default ProjectsBook;

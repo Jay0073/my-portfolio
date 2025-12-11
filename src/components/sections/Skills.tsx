@@ -181,7 +181,7 @@ const SkillsBubbles: React.FC = () => {
       id="skills"
       title="Skills & Technologies"
       subtitle="Floating Bubble Cluster"
-      className="mb-0 pb-0 px-0"
+      className="mb-0 !pb-0 !px-0"
       headingClass="mb-0"
       sectionPadding="max-w-full"
     >
