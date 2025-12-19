@@ -67,7 +67,7 @@ const MobileSpiral: React.FC = () => {
   const rings = Array.from({ length: MOBILE_HOLE_COUNT });
 
   return (
-    <div className="absolute left-0 top-0 bottom-0 w-8 z-50 flex flex-col justify-center py-6 mt-1 pointer-events-none">
+    <div className="absolute left-0 top-0 bottom-0 w-8 z-50 flex flex-col justify-center py-6 mt-2 pointer-events-none">
       <div
         className={`flex flex-col w-full h-full justify-center ${MOBILE_SPIRAL_GAP}`}
       >
@@ -195,7 +195,7 @@ const ProjectContent = ({
           {project.tags.slice(0, isMobile ? 3 : 6).map((tag, index) => (
             <span
               key={index}
-              className="px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-sm bg-white/10 text-white rounded-full whitespace-nowrap"
+              className="px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-sm bg-white/5 text-white rounded-full whitespace-nowrap"
             >
               {tag}
             </span>
@@ -443,7 +443,7 @@ const ProjectsBook: React.FC = () => {
       id="projects"
       title="Projects"
       subtitle="Featured Works"
-      className="overflow-hidden pb-0 !pl-0 !pr-6 md:!pr-0"
+      className="overflow-hidden pb-0 !pl-0 !pr-4 md:!pr-0"
       headingClass="mb-4 md:mb-0"
     >
       <div className="w-full flex flex-col items-center justify-center pt-2 md:pt-10 overflow-hidden relative">

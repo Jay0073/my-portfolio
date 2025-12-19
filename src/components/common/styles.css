@@ -9,3 +9,19 @@
   margin: 0 auto;
   animation: expandWidth 1s ease-out 0.5s both;
 }
+
+.responsive-ml {
+  margin-left: 0 !important;
+}
+
+@media (min-width: 1100px) and (max-width: 1199px) {
+  .responsive-ml {
+    margin-left: 1rem !important; /* ml-4 */
+  }
+}
+
+@media (min-width: 1200px) {
+  .responsive-ml {
+    margin-left: 2rem !important; /* ml-8 */
+  }
+}

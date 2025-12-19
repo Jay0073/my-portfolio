@@ -66,7 +66,7 @@ const Experience: React.FC = () => {
       id="experience"
       title="Experience"
       subtitle="Professional Roles and Contributions"
-      className="px-0 md:px-8"
+      className="!px-2 md:px-8"
     >
       {isDesktop ? (
         <ExperienceDesktop data={experiences} />

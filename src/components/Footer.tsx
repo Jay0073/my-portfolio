@@ -12,8 +12,11 @@ import Button from "./common/Button";
 import CountUp from "./items/CountUp";
 import useMediaQuery from "./items/useMediaQuery";
 
-// --- FIX: Moved OUTSIDE the component ---
-// This ensures the array reference never changes, so Tippy doesn't reset.
+// Configuration for Storage
+const STORAGE_KEY = "portfolio_like_status";
+const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+// Social Icons Data
 const socialIcons = [
   {
     icon: Github,
@@ -32,7 +35,7 @@ const socialIcons = [
   },
   {
     icon: Twitter,
-    href: "https://twitter.com/[username]",
+    href: "https://twitter.com/",
     label: "Memes and more",
   },
   {
@@ -51,22 +54,51 @@ const Footer: React.FC = () => {
       .then((res) => res.json())
       .then((data) => setLikes(data.count))
       .catch(console.error);
+
+    const checkLikeStatus = () => {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      
+      if (savedData) {
+        try {
+          const { timestamp } = JSON.parse(savedData);
+          const now = Date.now();
+
+          if (now - timestamp < ONE_WEEK_MS) {
+            setLiked(true);
+          } else {
+            localStorage.removeItem(STORAGE_KEY);
+            setLiked(false);
+          }
+        } catch (e) {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      }
+    };
+
+    checkLikeStatus();
   }, []);
 
   const handleLike = async () => {
     if (liked) return;
     setLiked(true);
 
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        liked: true,
+        timestamp: Date.now(),
+      })
+    );
+
     try {
       const res = await fetch("/api/like", { method: "POST" });
       const data = await res.json();
       setLikes(data.count);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to post like:", err);
     }
   };
 
-  // heading animation
   const words = [
     "Connect.",
     "Collaborate.",
@@ -149,14 +181,17 @@ const Footer: React.FC = () => {
               <button
                 onClick={handleLike}
                 aria-label="Like portfolio"
-                className={`transition-transform duration-200 ${
-                  liked ? "scale-110" : "hover:scale-110"
+                disabled={liked}
+                className={`transition-all duration-200 ${
+                  liked ? "scale-110 cursor-default" : "hover:scale-110 cursor-pointer"
                 }`}
               >
                 <Heart
                   size={24}
                   className={
-                    liked ? "text-red-500 fill-red-500" : "text-gray-400"
+                    liked
+                      ? "text-red-500 fill-red-500" // Filled red if liked
+                      : "text-gray-400 hover:text-red-400"
                   }
                 />
               </button>

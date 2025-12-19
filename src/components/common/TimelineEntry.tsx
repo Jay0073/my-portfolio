@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles.css";
 
 interface TimelineEntryProps {
   logo?: string;
@@ -91,7 +92,9 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
             <span
               className={[
                 "pointer-events-none absolute top-1/2 -translate-y-1/2 block h-[2.5px] rounded-sm bg-[#BBBBBB]",
-                isLeft ? "right-full mr-8 w-16" : "left-full ml-8 w-16",
+                isLeft
+                  ? "right-full mr-8 w-16"
+                  : "left-full responsive-ml w-16",
               ].join(" ")}
               style={{
                 filter: "drop-shadow(rgb(97, 218, 251) 0px 0px 6px)",
