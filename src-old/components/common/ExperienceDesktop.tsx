@@ -1,5 +1,5 @@
 import React from "react";
-import TimelineEntry from "../common/TimelineEntry";
+import TimelineEntry from "./TimelineEntry";
 
 interface ExperienceDesktopProps {
   data: any[];

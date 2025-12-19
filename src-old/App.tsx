@@ -15,7 +15,7 @@ import Certificates, { CertificateType } from "./components/sections/Certificate
 import ClickSpark from "./components/items/ClickSpark";
 // Backgrounds
 import Snowfall from "react-snowfall";
-import { BackgroundLines } from "./components/items/Backgroundlines";
+import { BackgroundLines } from "./components/items/BackgroundLines";
 import { BackgroundBeamsWithCollision } from "./components/items/BackgroundBeams";
 
 const getInitialBackground = () => {
