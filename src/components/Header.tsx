@@ -24,7 +24,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className="transition-all duration-300 bg-transparent"
+      className="transition-all duration-300 bg-transparent relative z-2"
     >
       <div className="flex justify-center md:justify-end items-center h-16 px-4 md:px-8">
         <IconList icons={socialIcons} />
