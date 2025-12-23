@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
 
     const checkLikeStatus = () => {
       const savedData = localStorage.getItem(STORAGE_KEY);
-      
+
       if (savedData) {
         try {
           const { timestamp } = JSON.parse(savedData);
@@ -109,7 +109,9 @@ const Footer: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const quotefontsize = useMediaQuery("(min-width: 768px)") ? "text-4xl" : "text-2xl";
+  const quotefontsize = useMediaQuery("(min-width: 768px)")
+    ? "text-4xl"
+    : "text-2xl";
 
   useEffect(() => {
     const currentWord = words[index];
@@ -134,11 +136,11 @@ const Footer: React.FC = () => {
   }, [displayText, isDeleting, index, words]);
 
   return (
-    <footer className="bg-[rgb(26,26,26)] pt-12 pb-3 md:pb-6">
+    <footer className="bg-[rgb(26,26,26)] pt-12 pb-6 md:pb-6">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-28 justify-between">
-          {/* Contact */}
-          <div>
+        <div className="grid md:grid-cols-2 gap-8 md:gap-28 justify-between">
+          {/* Added text-center for mobile, md:text-left for desktop */}
+          <div className="flex flex-col text-center md:text-left">
             <h2 className="text-white font-poppins text-3xl font-semibold mb-4">
               Let’s{" "}
               <span
@@ -154,9 +156,14 @@ const Footer: React.FC = () => {
               away.
             </p>
 
-            <IconList icons={socialIcons} className="justify-start gap-6" />
+            {/* Icons: Centered on mobile, Start on Desktop */}
+            <IconList
+              icons={socialIcons}
+              className="justify-center md:justify-start gap-6"
+            />
 
-            <div className="mt-4">
+            {/* hidden on mobile, block on desktop */}
+            <div className="hidden md:block mt-4">
               <Button
                 text="Say Hello"
                 onClick={() =>
@@ -165,25 +172,30 @@ const Footer: React.FC = () => {
                 style="primary"
                 className="px-7 pt-3 text-base"
               />
-              <p className="text-[10px] pt-[1px]">
+              <p className="text-[#999] text-[10px] pt-[1px]">
                 I reply faster than your Wi-Fi reconnects ;)
               </p>
             </div>
           </div>
 
-          {/* Quote + Like */}
-          <div className="flex flex-col items-start">
-            <p className={`text-white font-poppins ${quotefontsize} italic leading-relaxed`}>
-              “Behind every great UI is a sleepless night and a stubborn
-              developer.”
+          {/* Centered items on mobile, Start on desktop */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
+            <p
+              className={`text-white font-poppins -mt-3 ${quotefontsize} italic leading-relaxed`}
+            >
+              “Behind every interface I build is a developer still learning, still growing.”
             </p>
-            <div className="flex items-center gap-2 mt-4 ml-1">
+
+            {/* hidden on mobile, flex on desktop */}
+            <div className="hidden md:flex items-center gap-2 mt-4 ml-1">
               <button
                 onClick={handleLike}
                 aria-label="Like portfolio"
                 disabled={liked}
                 className={`transition-all duration-200 ${
-                  liked ? "scale-110 cursor-default" : "hover:scale-110 cursor-pointer"
+                  liked
+                    ? "scale-110 cursor-default"
+                    : "hover:scale-110 cursor-pointer"
                 }`}
               >
                 <Heart
@@ -211,11 +223,50 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
+        {/* Visible on mobile, Hidden on desktop */}
+        <div className="md:hidden mt-8 px-3 flex flex-col">
+          {/* The Button Row */}
+          <div className="flex items-center gap-3">
+            {/* Like Button (Styled as a pill for better visibility) */}
+            <div
+              onClick={handleLike}
+              className={`flex items-center gap-2 bg-white/5 px-4 py-3.5 rounded-lg border border-white/5 transition-all duration-200 ${
+                liked ? "opacity-80" : "active:scale-95"
+              }`}
+            >
+              <Heart
+                size={20}
+                className={
+                  liked ? "text-red-500 fill-red-500" : "text-gray-400"
+                }
+              />
+              <span className="text-[#BBBBBB] font-inter text-sm whitespace-nowrap">
+                <CountUp from={0} to={likes} separator="," duration={1} />
+              </span>
+            </div>
+
+            {/* Say Hello Button (Full width for easy tapping) */}
+            <div className="flex-1">
+              <Button
+                text="Say Hello"
+                onClick={() =>
+                  (window.location.href = "mailto:voutlajay8765@gmail.com")
+                }
+                style="primary"
+                className="w-full py-3 text-base shadow-lg"
+              />
+            </div>
+          </div>
+          <p className="text-[#999] text-end text-[10px] mt-[1px]">
+            I reply faster than your Wi-Fi reconnects ;)
+          </p>
+        </div>
+
         {/* Copyright */}
-        <div className="mt-4 pt-2 md:mt-10 md:pt-6 border-t border-white/10 w-full text-center">
+        <div className="mt-4 pt-3 md:pt-6 border-t border-white/10 w-full text-center">
           <p className="text-[#999] font-inter text-[9px] md:text-sm">
-            © 2025 Voutla Jayendra <br className="md:hidden"/>· Designed to impress 👀 Debugged to
-            perfection ✨
+            © 2025 Voutla Jayendra <br className="md:hidden" />· Designed to
+            impress 👀 Debugged to perfection ✨
           </p>
         </div>
       </div>

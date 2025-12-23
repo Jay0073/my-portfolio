@@ -195,7 +195,7 @@ const ProjectContent = ({
           {project.tags.slice(0, isMobile ? 3 : 6).map((tag, index) => (
             <span
               key={index}
-              className="px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-sm bg-white/5 text-white rounded-full whitespace-nowrap"
+              className="px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-sm bg-white/5 text-white rounded-md whitespace-nowrap"
             >
               {tag}
             </span>
@@ -438,6 +438,47 @@ const ProjectsBook: React.FC = () => {
     }, mobileAnimDuration);
   };
 
+  // --- Swipe Detection for Mobile ---
+  const mobileSwipeRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!mobileSwipeRef.current) return;
+    let startX: number | null = null;
+    let startY: number | null = null;
+    const threshold = 50; // px required for swipe
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (startX === null || startY === null) return;
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+      // Only horizontal swipe, ignore vertical
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > threshold) {
+        if (dx < 0) {
+          // Right-to-left swipe: go to next page
+          handleMobileRight();
+        }
+        // Optionally, left-to-right swipe: go to prev page
+        // if (dx > 0) handleMobileLeft();
+      }
+      startX = null;
+      startY = null;
+    };
+
+    const el = mobileSwipeRef.current;
+    el.addEventListener("touchstart", handleTouchStart, { passive: true });
+    el.addEventListener("touchend", handleTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isAnimating, currentIndex]);
+
   return (
     <SectionWrapper
       id="projects"
@@ -450,7 +491,10 @@ const ProjectsBook: React.FC = () => {
         {/* ==============================================
             MOBILE VIEW (Text Page Only: Flip Behind)
            ============================================== */}
-        <div className="flex md:hidden w-full max-w-md mx-auto h-[550px] relative z-10 pl-8 pr-2">
+        <div
+          className="flex md:hidden w-full max-w-md mx-auto h-[550px] relative z-10 pl-8 pr-2"
+          ref={mobileSwipeRef}
+        >
           {/* Container with Perspective for 3D Page Turn */}
           <div className="relative w-full h-full perspective-[2000px] overflow-visible">
             {/* Mobile Spiral OUTSIDE page layers */}

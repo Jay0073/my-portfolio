@@ -49,7 +49,7 @@ const About: React.FC = () => {
         {/* Content */}
         <div className="space-y-6 md:space-y-8">
           <div>
-            <p className="font-inter text-lg text-[#EEEEEE] leading-relaxed">
+            <p className="font-inter md:text-left text-justify text-lg text-[#EEEEEE] leading-relaxed">
               I’m Voutla Jayendra, a full‑stack developer passionate about engineering scalable web applications and exploring AI solutions. My focus is on building efficient systems with clean design and lasting impact.
             </p>
           </div>
@@ -73,18 +73,18 @@ const About: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 md:hidden py-4 border-y border-[#333] border-dashed">
+          <div className="flex flex-col gap-3 md:hidden">
              <div className="flex items-center gap-3">
-                <Code size={18} className="text-white min-w-[20px]" />
-                <span className="text-[#BBBBBB] text-sm"><span className="text-white font-semibold">2+ Years</span> in Development</span>
+                <Code size={32} className="bg-white/10 p-2 rounded-lg" />
+                <span className="text-[#BBBBBB] text-sm"><span className="text-white text-[17px] font-semibold">2+ Years</span> in Development</span>
              </div>
              <div className="flex items-center gap-3">
-                <Award size={18} className="text-white min-w-[20px]" />
-                <span className="text-[#BBBBBB] text-sm"><span className="text-white font-semibold">10+ Projects</span> Delivered</span>
+                <Award size={32} className="bg-white/10 p-2 rounded-lg" />
+                <span className="text-[#BBBBBB] text-sm"><span className="text-white text-[17px] font-semibold">10+ Projects</span> Delivered</span>
              </div>
              <div className="flex items-center gap-3">
-                <Users size={18} className="text-white min-w-[20px]" />
-                <span className="text-[#BBBBBB] text-sm"><span className="text-white font-semibold">5+ Certifications</span> Achieved</span>
+                <Users size={32} className="bg-white/10 p-2 rounded-lg" />
+                <span className="text-[#BBBBBB] text-sm"><span className="text-white text-[17px] font-semibold">5+ Certifications</span> Achieved</span>
              </div>
           </div>
 
@@ -100,7 +100,7 @@ const About: React.FC = () => {
               ].map((value, index) => (
                 <li key={index} className="flex items-center gap-3 ml-2">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-[#BBBBBB] font-inter">{value}</span>
+                  <span className="text-[#EEEEEE] font-inter">{value}</span>
                 </li>
               ))}
             </ul>

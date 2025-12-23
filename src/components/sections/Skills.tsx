@@ -28,7 +28,8 @@ import {
 const SkillsBubbles: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  // Use only width in state, height is fixed
+  const [width, setWidth] = useState(0);
   const [nodes, setNodes] = useState<any[]>([]);
 
   // Ref to store positions between re-renders to prevent "reset"
@@ -43,25 +44,120 @@ const SkillsBubbles: React.FC = () => {
 
   const skills = useMemo(
     () => [
-      { name: "React", icon: FaReact, percent: 95, desc: ["Hooks", "Context", "SPA"] },
-      { name: "JavaScript", icon: SiJavascript, percent: 90, desc: ["ES6+", "Async", "Event loop"] },
-      { name: "TypeScript", icon: SiTypescript, percent: 75, desc: ["Interfaces", "Generics", "Types"] },
-      { name: "TailwindCSS", icon: SiTailwindcss, percent: 80, desc: ["Rapid UI"] },
-      { name: "Redux", icon: SiRedux, percent: 75, desc: ["Thunk", "Slices", "State Mgmt"] },
-      { name: "Node.js", icon: FaNodeJs, percent: 90, desc: ["High Perf APIs"] },
-      { name: "Python", icon: FaPython, percent: 95, desc: ["Data & ML Workflows", "Automation"] },
-      { name: "Express.js", icon: SiExpress, percent: 85, desc: ["REST APIs", "Middleware"] },
-      { name: "MongoDB", icon: SiMongodb, percent: 80, desc: ["Aggregation", "Indexing"] },
-      { name: "Relational DBs", icon: SiPostgresql, percent: 75, desc: ["Postgres", "MySQL"] },
-      { name: "Caching", icon: SiRedis, percent: 60, desc: ["Redis", "Memcached", "Session Store"] },
-      { name: "Data Science", icon: SiPandas, percent: 80, desc: ["ETL", "Feature Eng", "ML Pipelines"] },
-      { name: "Deep Learning", icon: SiTensorflow, percent: 75, desc: ["CNNs", "Transformers", "LLMs"] },
-      { name: "Cloud", icon: FaCloud, percent: 65, desc: ["AWS S3", "Firebase", "Oracle Cloud"] },
-      { name: "Docker", icon: FaDocker, percent: 65, desc: ["Containerization"] },
-      { name: "CI-CD", icon: SiGithubactions, percent: 50, desc: ["GitHub Actions", "Jenkins"] },
-      { name: "OS - Server", icon: FaLinux, percent: 70, desc: ["Linux", "Nginx"] },
-      { name: "Security", icon: FaLock, percent: 65, desc: ["JWT", "Bcrypt", "CORS"] },
-      { name: "Git", icon: SiGit, percent: 80, desc: ["Branching", "Code Reviews", "Collab"] },
+      {
+        name: "React",
+        icon: FaReact,
+        percent: 95,
+        desc: ["Hooks", "Context", "SPA"],
+      },
+      {
+        name: "JavaScript",
+        icon: SiJavascript,
+        percent: 90,
+        desc: ["ES6+", "Async", "Event loop"],
+      },
+      {
+        name: "TypeScript",
+        icon: SiTypescript,
+        percent: 75,
+        desc: ["Interfaces", "Generics", "Types"],
+      },
+      {
+        name: "TailwindCSS",
+        icon: SiTailwindcss,
+        percent: 80,
+        desc: ["Rapid UI"],
+      },
+      {
+        name: "Redux",
+        icon: SiRedux,
+        percent: 75,
+        desc: ["Thunk", "Slices", "State Mgmt"],
+      },
+      {
+        name: "Node.js",
+        icon: FaNodeJs,
+        percent: 90,
+        desc: ["High Perf APIs"],
+      },
+      {
+        name: "Python",
+        icon: FaPython,
+        percent: 95,
+        desc: ["Data & ML Workflows", "Automation"],
+      },
+      {
+        name: "Express.js",
+        icon: SiExpress,
+        percent: 85,
+        desc: ["REST APIs", "Middleware"],
+      },
+      {
+        name: "MongoDB",
+        icon: SiMongodb,
+        percent: 80,
+        desc: ["Aggregation", "Indexing"],
+      },
+      {
+        name: "Relational DBs",
+        icon: SiPostgresql,
+        percent: 75,
+        desc: ["Postgres", "MySQL"],
+      },
+      {
+        name: "Caching",
+        icon: SiRedis,
+        percent: 60,
+        desc: ["Redis", "Memcached", "Session Store"],
+      },
+      {
+        name: "Data Science",
+        icon: SiPandas,
+        percent: 80,
+        desc: ["ETL", "Feature Eng", "ML Pipelines"],
+      },
+      {
+        name: "Deep Learning",
+        icon: SiTensorflow,
+        percent: 75,
+        desc: ["CNNs", "Transformers", "LLMs"],
+      },
+      {
+        name: "Cloud",
+        icon: FaCloud,
+        percent: 65,
+        desc: ["AWS S3", "Firebase", "Oracle Cloud"],
+      },
+      {
+        name: "Docker",
+        icon: FaDocker,
+        percent: 65,
+        desc: ["Containerization"],
+      },
+      {
+        name: "CI-CD",
+        icon: SiGithubactions,
+        percent: 50,
+        desc: ["GitHub Actions", "Jenkins"],
+      },
+      {
+        name: "OS - Server",
+        icon: FaLinux,
+        percent: 70,
+        desc: ["Linux", "Nginx"],
+      },
+      {
+        name: "Security",
+        icon: FaLock,
+        percent: 65,
+        desc: ["JWT", "Bcrypt", "CORS"],
+      },
+      {
+        name: "Git",
+        icon: SiGit,
+        percent: 80,
+        desc: ["Branching", "Code Reviews", "Collab"],
+      },
     ],
     []
   );
@@ -69,10 +165,7 @@ const SkillsBubbles: React.FC = () => {
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
-        setDimensions({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight || 600,
-        });
+        setWidth(containerRef.current.offsetWidth);
       }
     };
     handleResize();
@@ -101,10 +194,11 @@ const SkillsBubbles: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const { width, height } = dimensions;
-    if (width === 0 || height === 0) return;
-
+    // Set fixed height based on width (mobile/desktop)
     const isMobile = width < 640;
+    const height = isMobile ? 600 : 720;
+    if (width === 0) return;
+
     const minRadius = isMobile ? 25 : 35;
     const maxRadius = isMobile ? 60 : 100;
 
@@ -166,7 +260,7 @@ const SkillsBubbles: React.FC = () => {
     return () => {
       simulation.stop();
     };
-  }, [dimensions, drag, skills]);
+  }, [width, drag, skills]);
 
   const handleMouseEnter = (node: any) => {
     setHoveredNode(node);
@@ -189,13 +283,13 @@ const SkillsBubbles: React.FC = () => {
         ref={containerRef}
         className="relative flex justify-center w-full h-[600px] md:h-[720px]"
       >
-        {dimensions.width > 0 && (
+        {width > 0 && (
           <svg
             ref={svgRef}
-            width={dimensions.width}
-            height={dimensions.height}
+            width={width}
+            height={width < 640 ? 600 : 720}
             style={{ cursor: "grab" }}
-            className="touch-pan-y" 
+            className="touch-pan-y"
           >
             {nodes.map((node, i) => {
               const Icon = node.icon;
@@ -211,7 +305,7 @@ const SkillsBubbles: React.FC = () => {
                       s.call(drag);
                     }
                   }}
-                  className="bubble-node touch-none" 
+                  className="bubble-node touch-none"
                   transform={`translate(${node.x},${node.y})`}
                   style={{ cursor: "pointer" }}
                   onMouseEnter={() => handleMouseEnter(node)}

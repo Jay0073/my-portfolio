@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { DivideIcon as LucideIcon } from "lucide-react"; // Note: DivideIcon was likely a placeholder in your types
-import tippy, { animateFill, Instance } from "tippy.js";
+import tippy, { animateFill } from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/animations/scale.css";
 
@@ -32,6 +31,7 @@ const IconList: React.FC<IconListProps> = ({ icons, className = "" }) => {
       animateFill: true,
       plugins: [animateFill],
       arrow: false,
+      touch: false,
     });
 
     // 3. CLEANUP: Destroy instances when component unmounts to prevent memory leaks
@@ -53,7 +53,7 @@ const IconList: React.FC<IconListProps> = ({ icons, className = "" }) => {
           href={item.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="tippy-target text-white hover:text-[#AAAAAA] transition-all duration-300 hover:scale-105 p-2"
+          className="tippy-target text-white md:hover:text-[#AAAAAA] transition-all duration-300 md:hover:scale-105 active:scale-95 p-2"
           aria-label={item.label}
         >
           <item.icon size={24} />

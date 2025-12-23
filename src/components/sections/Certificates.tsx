@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
 import SectionWrapper from "../common/SectionWrapper";
-import cybersecurity from "../assets/cisco-cybersecurity.jpg";
-import ethicalHack from "../assets/cisco-ethicalHack.jpg";
-import iirs from "../assets/iirs.jpg";
-import jetking from "../assets/jetking-python.jpg";
-import diffusion from "../assets/nvidia-diffusion.png";
-import dp from "../assets/nvidia-dp.png";
-import transformer from "../assets/nvidia-transformer.png";
+import cybersecurity from "/assets/cisco-cybersecurity.jpg";
+import ethicalHack from "/assets/cisco-ethicalHack.jpg";
+import iirs from "/assets/iirs.jpg";
+import jetking from "/assets/jetking-python.jpg";
+import diffusion from "/assets/nvidia-diffusion.png";
+import dp from "/assets/nvidia-dp.png";
+import transformer from "/assets/nvidia-transformer.png";
 
 export type CertificateType = {
   src: string;
@@ -323,5 +323,5 @@ const Certificates: React.FC<CertificatesProps> = ({ onCertClick }) => {
   );
 };
 
-export { certificates };
+;
 export default Certificates;

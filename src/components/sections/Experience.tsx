@@ -36,22 +36,6 @@ const experiences = [
       skills: ["React", "TailwindCSS", "Express", "Node.js", "MySQL", "MongoDB", "CI/CD", "Postman"],
       stickyTop: 270,
     },
-    {
-      company: "Motion Cut",
-      logo: "https://motioncut.in/wp-content/uploads/2023/05/MOTION-CUT1-e1751999514735.png",
-      role: "Frontend Intern",
-      dates: "Nov 2024 – Dec 2024",
-      description:
-        "Transformed static designs into interactive, responsive UIs using TailwindCSS and Figma, boosting UX metrics by 30%. Coordinated with backend teams to integrate APIs and improve performance across applications. Delivered mobile‑friendly layouts that aligned with Motion Cut’s project‑based learning ethos, ensuring accessibility and consistency across platforms.",
-      skills: [
-        "React",
-        "Bootstrap",
-        "TailwindCSS",
-        "Figma",
-        "UI/UX Optimization",
-      ],
-      stickyTop: 270,
-    },
   ];
 
 const Experience: React.FC = () => {
@@ -75,7 +59,7 @@ const Experience: React.FC = () => {
       )}
 
       {/* Shared Bottom CTA */}
-      <div className="text-center mt-16 relative z-20">
+      <div className="text-center md:mt-16 relative z-20">
         <Button
           text="View LinkedIn Profile"
           onClick={handleLinkedInClick}

@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface ExperienceData {
   company: string;
@@ -18,94 +18,78 @@ const Card: React.FC<{
   experience: ExperienceData;
   index: number;
   total: number;
-  scrollPos: MotionValue<number>;
-}> = ({ experience, index, total, scrollPos }) => {
-  // Calculate distance from current card
-  const distance = useTransform(scrollPos, (pos) => {
-    return Math.abs(pos - index);
+}> = ({ experience }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Track the scroll position of THIS specific card relative to the viewport
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"], // Triggers as card enters/leaves viewport
   });
 
-  // Y-axis rotation - only spin when transitioning
-  const rotateY = useTransform(
-    scrollPos,
-    [index - 0.5, index, index + 0.5],
-    [-180, 0, 180]
-  );
-
-  // Vertical position - snap behavior
-  const y = useTransform(
-    scrollPos,
-    [index - 0.5, index, index + 0.5],
-    ["100%", "0%", "-100%"]
-  );
-
-  // Opacity - only show when very close to active index
-  const opacity = useTransform(distance, [0, 0.3, 0.5], [1, 1, 0]);
-
-  // Scale - only full size when active
-  const scale = useTransform(distance, [0, 0.3, 0.5], [1, 0.95, 0.7]);
-
-  // Z-index - only active card visible
-  const zIndex = useTransform(distance, [0, 0.5, 1], [10, 1, 0]);
+  // --- PARALLAX & STACK EFFECTS ---
+  const scale = useTransform(scrollYProgress, [0.8, 1], [1, 0.9]);
+  const opacity = useTransform(scrollYProgress, [0.8, 1], [1, 0.5]);
 
   return (
     <motion.div
-      style={{
-        y,
-        rotateY,
-        scale,
-        opacity,
-        zIndex,
-        transformStyle: "preserve-3d",
-      }}
-      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      ref={cardRef}
+      style={{ scale, opacity }}
+      className="mb-12 w-full flex flex-col items-center"
     >
-      {/* THE CARD "SLAB" */}
-      <motion.div className="relative w-full max-w-md bg-[#1A1A1A] rounded-lg pointer-events-auto backface-hidden">
-        {/* 3D Slab Thickness - Enhanced with gradient and depth */}
-        <div className="absolute inset-0 rounded-lg">
-          <div className="absolute inset-0 rounded-lg border border-white/5 bg-gradient-to-br from-white/5 to-transparent" />
-          <div className="absolute -bottom-2 -right-2 inset-0 rounded-lg bg-gradient-to-tl from-black/60 to-transparent pointer-events-none" />
-          <div className="absolute inset-0 rounded-lg border-b-4 border-r-4 border-black/50 pointer-events-none" />
-        </div>
-
-        {/* Original Content Structure Requested */}
-        <div className="p-6 rounded-lg border border-white/5">
-          <div className="flex items-center gap-3 mb-3">
-            {experience.logo && (
-              <img
-                src={experience.logo}
-                alt={`${experience.company} logo`}
-                className="w-8 h-8 rounded-full object-cover"
-              />
-            )}
-            <div>
-              <h3 className="font-poppins font-semibold text-white">
-                {experience.role}
-              </h3>
-              <p className="text-[#BBBBBB]">{experience.company}</p>
+      <div className="w-full max-w-sm relative rounded-xl bg-[#1a1a1a] backdrop-blur-md overflow-hidden">
+        <div className="p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              {experience.logo ? (
+                <img
+                  src={experience.logo}
+                  alt={experience.company}
+                  className="w-10 h-10 rounded-full object-cover border border-white/10"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <span className="text-xs text-white">{experience.company[0]}</span>
+                </div>
+              )}
+              <div>
+                <h3 className="text-white font-poppins font-semibold text-lg leading-tight">
+                  {experience.role}
+                </h3>
+                <p className="text-[rgb(97,218,251)] text-sm font-medium">
+                  {experience.company}
+                </p>
+              </div>
             </div>
-            <span className="ml-auto text-sm text-[#BBBBBB] font-inter">
-              {experience.dates}
-            </span>
+          </div>
+          
+          <div className="mb-4">
+             <span className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/5 text-xs text-[#BBBBBB] font-inter">
+                {experience.dates}
+             </span>
           </div>
 
-          <p className="text-[#BBBBBB] font-inter leading-relaxed mb-4">
+          <p className="text-[#EEEEEE] font-inter text-sm leading-relaxed mb-6">
             {experience.description}
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {experience.skills.map((skill, i) => (
+            {experience.skills.slice(0, 4).map((skill, i) => (
               <span
                 key={i}
-                className="px-3 py-1 text-sm bg-white/10 text-white rounded-full"
+                className="px-2.5 py-1 text-xs font-medium bg-white/5 text-white/80 rounded-md border border-white/5"
               >
                 {skill}
               </span>
             ))}
+             {experience.skills.length > 4 && (
+                <span className="px-2.5 py-1 text-xs font-medium bg-white/5 text-white/50 rounded-md border border-white/5">
+                    +{experience.skills.length - 4}
+                </span>
+             )}
           </div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
@@ -113,58 +97,65 @@ const Card: React.FC<{
 const ExperienceMobile: React.FC<ExperienceMobileProps> = ({ data }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Track scroll progress
+  // Track scroll of the entire container for the timeline
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start center", "end center"],
   });
 
-  // Snap scroll position to nearest card index
-  const scrollPos = useTransform(scrollYProgress, [0, 1], [0, data.length - 1]);
-
-  // Meteor Line - synced with scroll
+  // Height of the "Tail" (fills up as you scroll)
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full"
-      // Each card gets 100vh for snapping behavior
-      style={{ height: `${data.length * 100}vh` }}
+      className="relative w-full pl-4 pr-2 py-10 flex gap-4"
     >
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-row">
-        {/* LEFT COLUMN: Meteor Trail */}
-        <div className="w-10 flex-shrink-0 relative h-full flex justify-center ml-2">
-          <div className="absolute top-1/2 -translate-y-1/2 h-[70vh] w-[2px] bg-white/10 rounded-full">
-            <motion.div
-              style={{ height: lineHeight }}
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-transparent via-[rgb(97,218,251)] to-[rgb(97,218,251)]"
-            >
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
-                <div className="w-2 h-2 bg-[rgb(97,218,251)] rounded-full shadow-[0_0_15px_2px_rgba(97,218,251,0.8)] animate-pulse" />
-              </div>
-            </motion.div>
-          </div>
+      {/* --- REALISTIC COMET TIMELINE --- */}
+      {/* Fixed to the left side */}
+      <div className="w-6 flex-shrink-0 relative">
+        
+        {/* The Track (Invisible container for the tail) */}
+        {/* Removed bg-white/10 to hide the gray line */}
+        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] rounded-full overflow-hidden">
+          
+          {/* The Tail (Gradient Trail) */}
+          {/* Modified gradient to look like a fading comet tail */}
+          <motion.div 
+             style={{ height: lineHeight }}
+             className="w-full bg-gradient-to-b from-transparent via-[rgba(97,218,251,0.4)] to-[rgb(97,218,251)]"
+          />
         </div>
 
-        {/* RIGHT COLUMN: 3D Stage */}
-        <div className="flex-1 relative h-full flex items-center justify-center p-4">
-          {/* Perspective Container */}
-          <div
-            className="relative w-full h-full flex items-center justify-center"
-            style={{ perspective: "1500px" }}
-          >
-            {data.map((experience, i) => (
-              <Card
-                key={i}
-                experience={experience}
-                index={i}
-                total={data.length}
-                scrollPos={scrollPos}
-              />
-            ))}
-          </div>
+        {/* The Head (Realistic Glowing Comet) */}
+        <div className="absolute top-0 bottom-0 left-0 right-0 pointer-events-none">
+            <motion.div 
+                style={{ top: lineHeight }}
+                className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
+            >
+                {/* <div className="relative flex items-center justify-center">
+                    <div className="w-1 h-1 bg-white rounded-full z-20 shadow-[0_0_10px_2px_rgba(255,255,255,0.8)]" />
+                    
+                    <div className="absolute w-4 h-4 bg-[rgb(97,218,251)] rounded-full blur-[4px] opacity-80 z-10" />
+                    
+                    <div className="absolute w-10 h-10 bg-[rgb(97,218,251)] rounded-full blur-[10px] opacity-40" />
+                    
+                    <div className="absolute w-16 h-16 bg-[rgb(97,218,251)] rounded-full blur-[20px] opacity-20" />
+                </div> */}
+            </motion.div>
         </div>
+      </div>
+
+      {/* --- CARDS LIST --- */}
+      <div className="flex-1 min-w-0">
+         {data.map((experience, i) => (
+            <Card
+              key={i}
+              experience={experience}
+              index={i}
+              total={data.length}
+            />
+         ))}
       </div>
     </div>
   );

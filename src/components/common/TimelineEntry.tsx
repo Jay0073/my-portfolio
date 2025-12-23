@@ -52,7 +52,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
           {skills.map((skill, index) => (
             <span
               key={index}
-              className="px-3 py-1 text-sm bg-white/10 text-white rounded-full"
+              className="px-3 py-1 text-sm bg-white/5 text-white rounded-md"
             >
               {skill}
             </span>
