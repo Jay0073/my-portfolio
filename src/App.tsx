@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 // Components
@@ -11,7 +12,9 @@ import Skills from "./components/sections/Skills";
 import Footer from "./components/Footer";
 import QuoteCard from "./components/QuoteCard";
 import Education from "./components/sections/Education";
-import Certificates, { CertificateType } from "./components/sections/Certificates";
+import Certificates, {
+  CertificateType,
+} from "./components/sections/Certificates";
 import ClickSpark from "./components/items/ClickSpark";
 
 const CertificateModal: React.FC<{
@@ -38,7 +41,9 @@ const CertificateModal: React.FC<{
           <p className="text-xl md:text-3xl font-bold text-white mb-2 drop-shadow-lg">
             {cert.name}
           </p>
-          <p className="text-sm md:text-lg text-white/80 font-medium">{cert.issuer}</p>
+          <p className="text-sm md:text-lg text-white/80 font-medium">
+            {cert.issuer}
+          </p>
         </div>
       </div>
     </div>
@@ -83,8 +88,27 @@ function App() {
       sparkCount={8}
       duration={400}
     >
+      <Helmet>
+        {/* Standard Metadata */}
+        <title>Voutla Jayendra | Full Stack Developer & AI Engineer</title>
+        <meta name="description" content="Portfolio of Voutla Jayendra. Expert in MERN Stack, Python, and AI/ML solutions. View my projects and resume." />
+        <link rel="canonical" href="https://voutla-jayendra.vercel.app/" />
+
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://voutla-jayendra.vercel.app/" />
+        <meta property="og:title" content="Voutla Jayendra - Full Stack Dev" />
+        <meta property="og:description" content="Check out my projects in AI and Web Development." />
+        <meta property="og:image" content="https://voutla-jayendra.vercel.app/og-image.png" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://voutla-jayendra.vercel.app/" />
+        <meta name="twitter:title" content="Voutla Jayendra - Full Stack Dev" />
+        <meta name="twitter:description" content="Check out my projects in AI and Web Development." />
+        <meta name="twitter:image" content="https://voutla-jayendra.vercel.app/og-image.png" />
+      </Helmet>
       <div className="relative min-h-screen text-white font-inter">
-        
         <div className="matrix-bg">
           <div className="matrix-overlay"></div>
         </div>
@@ -101,11 +125,11 @@ function App() {
         </main>
 
         <QuoteCard />
-        
+
         <div className="relative z-50">
           <Footer />
         </div>
-        
+
         <CertificateModal
           open={modalOpen}
           cert={modalCert}

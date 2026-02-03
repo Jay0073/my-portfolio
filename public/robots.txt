@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://voutla-jayendra.vercel.app/sitemap.xml
