@@ -170,6 +170,7 @@ const Footer: React.FC = () => {
                   (window.location.href = "mailto:voutlajay8765@gmail.com")
                 }
                 style="primary"
+                aria-label="Say Hello via Email"
                 className="px-7 pt-3 text-base"
               />
               <p className="text-[#999] text-[10px] pt-[1px]">
@@ -253,6 +254,7 @@ const Footer: React.FC = () => {
                   (window.location.href = "mailto:voutlajay8765@gmail.com")
                 }
                 style="primary"
+                aria-label="Say Hello via Email"
                 className="w-full py-3 text-base shadow-lg"
               />
             </div>

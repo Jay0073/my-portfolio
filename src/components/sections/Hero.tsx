@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "../common/Button";
 import "./commonCss.css";
-import AnimatedContent from "../items/AnimatedContent";
 
 const Hero: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -79,52 +78,40 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative">
+    <section className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto mb-16 md:mb-32">
-        <AnimatedContent
-          distance={200}
-          direction="vertical"
-          reverse={false}
-          duration={0.8}
-          ease="power3.out"
-          initialOpacity={0}
-          animateOpacity
-          scale={1}
-          threshold={0.1}
+        
+        {/* LCP ELEMENT: Using CSS Animation instead of JS/GSAP */}
+        {/* This renders INSTANTLY with the animation */}
+        <h1
+          className="animate-hero-entry mytitle-cursor text-4xl md:text-7xl font-poppins font-bold text-white mb-4"
+          style={{
+            // Keep the parallax effect, it's cheap
+            transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
+            willChange: "transform, opacity" 
+          }}
         >
-          <h1
-            className={`mytitle-cursor text-4xl md:text-7xl font-poppins font-bold text-white mb-4 transition-all duration-100 animate-fade-in ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
-            style={{
-              transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
-            }}
-          >
-            Hi!&nbsp; I'm <br className="md:hidden"/> Voutla Jayendra
-          </h1>
+          Hi!&nbsp; I'm <br className="md:hidden"/> Voutla Jayendra
+        </h1>
 
-          <div className="text-[#BBBBBB] mb-3 text-lg md:text-xl font-semibold min-h-[5rem] md:min-h-[3rem] flex items-start justify-center">
-            <span className="w-full">
-              <span className="typing-text mytitle-cursor">{displayText}</span>
-              <span className={`cursor ${isTyping ? "blink" : ""}`}>|</span>
-            </span>
-          </div>
+        {/* Subtext can wait slightly, that's fine */}
+        <div className="text-[#BBBBBB] mb-3 text-lg md:text-xl font-semibold min-h-[5rem] md:min-h-[3rem] flex items-start justify-center animate-hero-entry" style={{ animationDelay: "0.2s" }}>
+          <span className="w-full">
+            <span className="typing-text mytitle-cursor">{displayText}</span>
+            <span className={`cursor ${isTyping ? "blink" : ""}`}>|</span>
+          </span>
+        </div>
 
-          <div
-            className={`transition-all duration-800 delay-400 ${isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-4"
-              }`}
-          >
-            <Button
-              text="Explore My Work"
-              onClick={handleExploreClick}
-              style="secondary"
-            />
-          </div>
-        </AnimatedContent>
+        {/* Button appears last */}
+        <div className="animate-hero-entry" style={{ animationDelay: "0.4s" }}>
+          <Button
+            text="Explore My Work"
+            onClick={handleExploreClick}
+            style="secondary"
+            aria-label="Explore My Work"
+          />
+        </div>
+          
       </div>
 
       <div className="down-indicator" onClick={handleExploreClick}>

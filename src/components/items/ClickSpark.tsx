@@ -39,7 +39,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    let resizeTimeout: NodeJS.Timeout;
+    let resizeTimeout: ReturnType<typeof setTimeout>;
 
     const resizeCanvas = () => {
       const { width, height } = parent.getBoundingClientRect();
@@ -153,7 +153,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   return (
     <div className="relative w-full min-h-screen" onClick={handleClick}>
       {children}
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[9999]" />
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[110]" />
     </div>
   );
 };

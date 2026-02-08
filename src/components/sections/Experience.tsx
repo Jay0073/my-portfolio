@@ -64,6 +64,7 @@ const Experience: React.FC = () => {
           text="View LinkedIn Profile"
           onClick={handleLinkedInClick}
           style="secondary"
+          aria-label="View LinkedIn Profile"
         />
       </div>
     </SectionWrapper>

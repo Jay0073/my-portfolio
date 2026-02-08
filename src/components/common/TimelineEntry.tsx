@@ -32,6 +32,9 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
             <img
               src={logo}
               alt={`${company} logo`}
+              width="100"
+              height="100"
+              loading="lazy"
               className="w-8 h-8 rounded-full"
             />
           )}
@@ -87,6 +90,9 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
             <img
               src={logo}
               alt={logoAlt}
+              width="100"
+              height="100"
+              loading="lazy"
               className="w-[14rem] object-contain rounded-lg shadow-lg"
             />
             <span
@@ -129,6 +135,9 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({
           <img
             src={logo}
             alt={logoAlt}
+            width="100"
+            height="100"
+            loading="lazy"
             className="w-24 h-24 object-cover rounded-lg shadow"
           />
         )}

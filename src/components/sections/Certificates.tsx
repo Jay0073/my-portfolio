@@ -86,6 +86,9 @@ const CertCard = ({
     <img
       src={cert.src}
       alt={cert.name}
+      width="1920"
+      height="1080"
+      loading="lazy"
       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
       draggable={false}
     />

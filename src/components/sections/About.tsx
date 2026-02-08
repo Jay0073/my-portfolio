@@ -112,6 +112,7 @@ const About: React.FC = () => {
                 text="Download Resume"
                 onClick={handleResumeDownload}
                 style="secondary"
+                aria-label="Download Resume"
               />
             </div>
 

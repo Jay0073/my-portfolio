@@ -72,6 +72,17 @@ html {
   100% { transform: translateY(100px); }
 }
 
+/* --- NEW: Skeleton Pulse Animation --- */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+}
+
+.animate-skeleton {
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  @apply bg-white/10 rounded-xl; /* Shared styles for all skeletons */
+}
+
 /* Custom animations */
 @keyframes fadeInUp {
   from {

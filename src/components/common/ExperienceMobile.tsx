@@ -45,6 +45,9 @@ const Card: React.FC<{
                 <img
                   src={experience.logo}
                   alt={experience.company}
+                  width="100"
+                  height="100"
+                  loading="lazy"
                   className="w-10 h-10 rounded-full object-cover border border-white/10"
                 />
               ) : (

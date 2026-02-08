@@ -16,3 +16,20 @@
   border-left: none;
   transform: rotate(45deg);
 }
+
+/* Add this to index.css */
+@keyframes hero-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-entry {
+  animation: hero-slide-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}

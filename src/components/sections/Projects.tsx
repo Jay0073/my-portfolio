@@ -225,6 +225,7 @@ const ProjectContent = ({
                 project.links?.demo && window.open(project.links.demo, "_blank")
               }
               style="primary"
+              aria-label={`View demo for ${project.title}`}
               className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
             />
           )}
@@ -239,6 +240,7 @@ const ProjectContent = ({
                 project.links?.repo && window.open(project.links.repo, "_blank")
               }
               style="secondary"
+              aria-label={`View code repository for ${project.title}`}
               className="!px-4 !py-2 !text-xs md:!px-5 md:!py-2.5 md:!text-sm"
             />
           )}
@@ -268,6 +270,9 @@ const ImageContent = ({ project }: { project: Project }) => (
       <img
         src={project.image}
         alt={project.title}
+        width="600"
+        height="800"
+        loading="lazy"
         className="w-full h-full object-cover opacity-90"
       />
     )}
@@ -739,6 +744,7 @@ const ProjectsBook: React.FC = () => {
             text={<ChevronLeft size={24} />}
             onClick={isMd ? handlePrev : handleMobileLeft}
             style="secondary"
+            aria-label="Previous project"
             className={
               isMd
                 ? "!p-3 md:!p-4 !rounded-full !border !border-white/10 !text-white !bg-transparent hover:!bg-white hover:!text-[#1A1A1A] hover:!scale-110 active:!bg-white active:!text-[#1A1A1A] active:!scale-110 transition-all disabled:opacity-30"
@@ -756,6 +762,7 @@ const ProjectsBook: React.FC = () => {
             text={<ChevronRight size={24} />}
             onClick={isMd ? handleNext : handleMobileRight}
             style="secondary"
+            aria-label="Next project"
             className={
               isMd
                 ? "!p-3 md:!p-4 !rounded-full !border !border-white/10 !text-white !bg-transparent hover:!bg-white hover:!text-[#1A1A1A] hover:!scale-110 active:!bg-white active:!text-[#1A1A1A] active:!scale-110 transition-all disabled:opacity-30"
