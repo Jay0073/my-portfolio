@@ -80,19 +80,21 @@ const Hero: React.FC = () => {
   return (
     <section className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto mb-16 md:mb-32">
-        
+
         {/* LCP ELEMENT: Using CSS Animation instead of JS/GSAP */}
         {/* This renders INSTANTLY with the animation */}
-        <h1
-          className="animate-hero-entry mytitle-cursor text-4xl md:text-7xl font-poppins font-bold text-white mb-4"
-          style={{
-            // Keep the parallax effect, it's cheap
-            transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
-            willChange: "transform, opacity" 
-          }}
-        >
-          Hi!&nbsp; I'm <br className="md:hidden"/> Voutla Jayendra
-        </h1>
+        <div className="animate-hero-entry">
+          <h1
+            className="mytitle-cursor text-4xl md:text-7xl font-poppins font-bold text-white mb-4"
+            style={{
+              // Keep the parallax effect, it's cheap
+              transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
+              willChange: "transform, opacity"
+            }}
+          >
+            Hi!&nbsp; I'm <br className="md:hidden" /> Voutla Jayendra
+          </h1>
+        </div>
 
         {/* Subtext can wait slightly, that's fine */}
         <div className="text-[#BBBBBB] mb-3 text-lg md:text-xl font-semibold min-h-[5rem] md:min-h-[3rem] flex items-start justify-center animate-hero-entry" style={{ animationDelay: "0.2s" }}>
@@ -111,7 +113,7 @@ const Hero: React.FC = () => {
             aria-label="Explore My Work"
           />
         </div>
-          
+
       </div>
 
       <div className="down-indicator" onClick={handleExploreClick}>
