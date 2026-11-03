@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getLikeCount, incrementLikeCount } from "./admin/_lib/kv";
+import { getLikeCount, incrementLikeCount } from "./admin/_lib/kv.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
