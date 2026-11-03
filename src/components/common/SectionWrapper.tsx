@@ -22,6 +22,9 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  // Audit frames measure the complete layout without depending on scroll reveals.
+  const audit = window.location.pathname === "/preview" && new URLSearchParams(window.location.search).get("audit") === "1";
+  const visible = audit || isVisible;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,7 +54,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
         {(title || subtitle) && (
           <div
             className={`text-center ${headingClass} ${
-              isVisible ? "animate-fade-in-up" : "opacity-0"
+              visible ? "animate-fade-in-up" : "opacity-0"
             }`}
           >
             {title && (
@@ -61,17 +64,17 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
                 </h2>
                 <div
                   className={`rounded mx-auto h-2 bg-white transition-all duration-500 ease-out ${
-                    isVisible ? "w-[80%]" : "w-0"
+                    visible ? "w-[80%]" : "w-0"
                   }`}
                   style={{
-                    transitionDelay: isVisible ? "0.3s" : "0s",
+                    transitionDelay: visible ? "0.3s" : "0s",
                   }}
                 />
               </div>
             )}
           </div>
         )}
-        <div className={isVisible ? "animate-fade-in-up" : "opacity-0"}>
+        <div className={visible ? "animate-fade-in-up" : "opacity-0"}>
           {children}
         </div>
       </div>

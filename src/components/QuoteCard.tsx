@@ -1,37 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
+import { useContent } from '../lib/contentContext';
 import './styles.css';
-
-const quotes = [
-  {
-    text: "Code is like humor. If you have to explain it, it's bad.",
-    author: "Cory House"
-  },
-  {
-    text: "First, solve the problem. Then, write the code.",
-    author: "John Johnson"
-  },
-  {
-    text: "Experience is the name everyone gives to their mistakes.",
-    author: "Oscar Wilde"
-  },
-  {
-    text: "In order to be irreplaceable, one must always be different.",
-    author: "Coco Chanel"
-  },
-  {
-    text: "Java is to JavaScript what car is to Carpet.",
-    author: "Chris Heilmann"
-  },
-  {
-    text: "The best way to get a project done faster is to start sooner.",
-    author: "Jim Highsmith"
-  },
-  {
-    text: "Perfection is achieved not when there is nothing more to add, but rather when there is nothing more to take away.",
-    author: "Antoine de Saint-Exupery"
-  }
-];
 
 interface Quote {
   text: string;
@@ -39,19 +9,20 @@ interface Quote {
 }
 
 export default function QuoteCard() {
+  const { content } = useContent();
   const [isVisible, setIsVisible] = useState(false);
   const [currentQuote, setCurrentQuote] = useState<Quote | null>(null);
 
   useEffect(() => {
     // Show quote card only on first launch
     const hasSeenQuote = localStorage.getItem('hasSeenQuote');
-    if (!hasSeenQuote) {
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    if (!hasSeenQuote && content.quotes.length > 0) {
+      const randomQuote = content.quotes[Math.floor(Math.random() * content.quotes.length)];
       setCurrentQuote(randomQuote);
       setIsVisible(true);
       localStorage.setItem('hasSeenQuote', 'true');
     }
-  }, []);
+  }, [content.quotes]);
 
   const handleClose = () => {
     setIsVisible(false);

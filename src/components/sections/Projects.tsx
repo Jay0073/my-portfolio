@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SectionWrapper from "../common/SectionWrapper";
 import { ChevronLeft, ChevronRight, Github, ExternalLink } from "lucide-react";
 import Button from "../common/Button";
+import { useContent } from "../../lib/contentContext";
 // --- TYPES ---
 interface Project {
   title: string;
@@ -145,7 +146,7 @@ const PunchHoles: React.FC<{
   );
 };
 // --- COMPONENT: CONTENT DISPLAY ---
-const ProjectContent = ({
+export const ProjectContent = ({
   project,
   projectNumber,
   totalProjects,
@@ -156,7 +157,7 @@ const ProjectContent = ({
   totalProjects: number;
   isMobile?: boolean;
 }) => (
-  <div className="w-full h-full flex flex-col justify-center bg-[#1a1a1a] relative z-10">
+  <div data-fit="project-page" className="w-full h-full flex flex-col justify-center bg-[#1a1a1a] relative z-10">
     {isMobile && (
       <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/40 to-transparent z-10 pointer-events-none" />
     )}
@@ -294,84 +295,10 @@ function useMediaQuery(query: string): boolean {
   return matches;
 }
 // --- MAIN COMPONENT ---
-const ProjectsBook: React.FC = () => {
-  const projects: Project[] = [
-    {
-      title: "CrowdFund",
-      description:
-        "A secure, full-stack crowdfunding platform where fundraisers launch campaigns and receive donations via Stripe. Built with React, Node.js, and JWT authentication, it ensures smooth user flows and robust security. Real-time dashboards track donations and campaign progress. Designed for scalability and optimized load times, it handles 500+ concurrent API requests, supports 1,000+ active sessions, and processes 200+ transactions per hour with modular architecture.",
-      image:
-        "https://images.pexels.com/photos/1591060/pexels-photo-1591060.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      tags: ["React", "Node.js", "Stripe", "JWT", "MongoDB"],
-      links: {
-        demo: "https://crowdfund-eo0d.onrender.com",
-        repo: "https://github.com/Jay0073/CrowdFund",
-      },
-    },
-    {
-      title: "Waste Classifier",
-      description:
-        "An AI-powered image classification tool that identifies recyclable vs non-recyclable waste. Trained on 22,000+ images using 3 layer Convolutional Neural Networks, it achieves 92% accuracy. The training pipeline included regularization, early stopping, and learning rate scheduling to ensure robust performance under noisy environments. Built to support sustainability efforts through smart waste sorting.",
-      image:
-        "https://images.pexels.com/photos/590020/pexels-photo-590020.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      tags: [
-        "Python",
-        "CNN",
-        "TensorFlow",
-        "OpenCV",
-        "Transfer Learning",
-        "AI",
-      ],
-      links: {
-        demo: "https://github.com/Jay0073/Waste-Classifier",
-        repo: "https://github.com/Jay0073/Waste-Classifier",
-      },
-    },
-    {
-      title: "QuickBill",
-      description:
-        "A lightning-fast billing system tailored for business owners and cashiers. Users input items and prices, and the app instantly generates bills with all necessary details. Sales data and customer orders are visualized in a unified dashboard for easy analysis. Built for speed and efficiency, it streamlines billing and decision-making in real time.",
-      image:
-        "https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      tags: ["React", "Express", "MongoDB", "Chart.js", "Automation"],
-      links: {
-        demo: "https://github.com/Jay0073/Quick-Bill",
-        repo: "https://github.com/Jay0073/Quick-Bill",
-      },
-    },
-    {
-      title: "Lifease",
-      description:
-        "An accessibility suite designed for differently abled users including the blind, deaf, and speech-impaired. Offers voice, gesture, and text-based interactions to support daily tasks and communication. Built with inclusive design principles and modular onboarding flows. The app aims to bridge digital gaps and empower users with adaptive tech.",
-      image:
-        "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      tags: ["React Native", "Accessibility", "Firebase", "UX Design"],
-      links: {
-        repo: "https://github.com/Jay0073/Lifease",
-      },
-    },
-    {
-      title: "Pigeon Feed",
-      description:
-        "A Telegram-based job and tech digest engine that fetches high-quality listings from multiple platforms and delivers them within hours of posting. Users receive personalized job alerts and curated tech news digests, helping them stay ahead without the noise of traditional platforms. The system processes and dispatches updates in under 30 minutes, ensuring relevance and speed.",
-      image:
-        "https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      tags: [
-        "Python",
-        "Telegram Bot",
-        "Job Aggregation",
-        "Scheduling",
-        "Automation",
-      ],
-      links: {
-        demo: "https://t.me/P_gieon_bot",
-      },
-    },
-  ];
+const ProjectsBookView: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
   const total = projects.length;
   const animDuration = 800; // ms for desktop
   const mobileAnimDuration = 700; // slightly slower for clean swing
@@ -836,4 +763,11 @@ const ProjectsBook: React.FC = () => {
     </SectionWrapper>
   );
 };
+
+const ProjectsBook: React.FC = () => {
+  const { content } = useContent();
+  if (content.projects.length === 0) return null;
+  return <ProjectsBookView projects={content.projects} />;
+};
+
 export default ProjectsBook;

@@ -6,6 +6,7 @@ interface ButtonProps {
   style?: "primary" | "secondary";
   className?: string;
   disabled?: boolean;
+  "aria-label"?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -14,6 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   style = "primary",
   className = "",
   disabled = false,
+  "aria-label": ariaLabel,
 }) => {
   const baseStyles =
     "px-6 py-3 rounded-md font-inter font-medium transition-all duration-300 border focus:outline-none focus:ring-2 focus:ring-white/50";
@@ -29,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       onClick={onClick}
       className={`${baseStyles} ${styles[style]} ${className}`}
-      aria-label={typeof text === "string" ? text : undefined}
+      aria-label={ariaLabel ?? (typeof text === "string" ? text : undefined)}
       disabled={disabled}
       type="button"
     >

@@ -1,12 +1,6 @@
 import React, { useRef } from "react";
 import SectionWrapper from "../common/SectionWrapper";
-import cybersecurity from "/assets/cisco-cybersecurity.jpg";
-import ethicalHack from "/assets/cisco-ethicalHack.jpg";
-import iirs from "/assets/iirs.jpg";
-import jetking from "/assets/jetking-python.jpg";
-import diffusion from "/assets/nvidia-diffusion.png";
-import dp from "/assets/nvidia-dp.png";
-import transformer from "/assets/nvidia-transformer.png";
+import { useContent } from "../../lib/contentContext";
 
 export type CertificateType = {
   src: string;
@@ -14,51 +8,6 @@ export type CertificateType = {
   issuer: string;
   year?: string;
 };
-
-const certificates: CertificateType[] = [
-  {
-    src: dp,
-    name: "Getting Started with Deep Learning",
-    issuer: "NVIDIA",
-    year: "2024",
-  },
-  {
-    src: cybersecurity,
-    name: "Introduction to Cybersecurity",
-    issuer: "Cisco Networking Academy",
-    year: "2024",
-  },
-  {
-    src: ethicalHack,
-    name: "Ethical Hacker",
-    issuer: "Cisco Networking Academy",
-    year: "2025",
-  },
-  {
-    src: iirs,
-    name: "Geo-Data Sharing and Cyber Security",
-    issuer: "IIRS",
-    year: "2025",
-  },
-  {
-    src: jetking,
-    name: "Python Workshop",
-    issuer: "Jetking ECIL",
-    year: "2023",
-  },
-  {
-    src: diffusion,
-    name: "Generative AI with Diffusion Models",
-    issuer: "NVIDIA",
-    year: "2025",
-  },
-  {
-    src: transformer,
-    name: "Introduction to Transformer-Based Natural Language Processing",
-    issuer: "NVIDIA",
-    year: "2024",
-  },
-];
 
 // --- Reusable Card Component (Original Design) ---
 const CertCard = ({
@@ -73,7 +22,7 @@ const CertCard = ({
   wasDragged?: boolean;
 }) => (
   <div
-    onClick={(e) => {
+    onClick={() => {
       if (!isDragging && !wasDragged) onClick(cert);
     }}
     id="certificate-card"
@@ -118,6 +67,7 @@ function getInfiniteCertificates(
   certificates: CertificateType[],
   minCards: number
 ) {
+  if (certificates.length === 0) return [];
   const arr = [];
   while (arr.length < minCards) {
     arr.push(...certificates);
@@ -138,13 +88,10 @@ function useDragScroll() {
     const container = containerRef.current;
     if (!container) return;
 
-    let moved = false;
-
     const onMouseDown = (e: MouseEvent | TouchEvent) => {
       isDragging.current = true;
       setDragging(true);
       setWasDragged(false);
-      moved = false;
       startX.current =
         "touches" in e ? e.touches[0].pageX : (e as MouseEvent).pageX;
       scrollLeft.current = container.scrollLeft;
@@ -158,7 +105,6 @@ function useDragScroll() {
       const x = "touches" in e ? e.touches[0].pageX : (e as MouseEvent).pageX;
       const walk = startX.current - x;
       if (Math.abs(walk) > 5) {
-        moved = true;
         setWasDragged(true);
       }
       container.scrollLeft = scrollLeft.current + walk;
@@ -172,22 +118,22 @@ function useDragScroll() {
       document.body.style.userSelect = "";
     };
 
-    container.addEventListener("mousedown", onMouseDown as any);
-    container.addEventListener("touchstart", onMouseDown as any, {
+    container.addEventListener("mousedown", onMouseDown);
+    container.addEventListener("touchstart", onMouseDown, {
       passive: false,
     });
-    window.addEventListener("mousemove", onMouseMove as any);
-    window.addEventListener("touchmove", onMouseMove as any, {
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onMouseMove, {
       passive: false,
     });
     window.addEventListener("mouseup", onMouseUp);
     window.addEventListener("touchend", onMouseUp);
 
     return () => {
-      container.removeEventListener("mousedown", onMouseDown as any);
-      container.removeEventListener("touchstart", onMouseDown as any);
-      window.removeEventListener("mousemove", onMouseMove as any);
-      window.removeEventListener("touchmove", onMouseMove as any);
+      container.removeEventListener("mousedown", onMouseDown);
+      container.removeEventListener("touchstart", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("touchend", onMouseUp);
       document.body.style.userSelect = "";
@@ -198,6 +144,9 @@ function useDragScroll() {
 }
 
 const Certificates: React.FC<CertificatesProps> = ({ onCertClick }) => {
+  const { content } = useContent();
+  const certificates: CertificateType[] = content.certificates;
+
   // Estimate how many cards to fill the row (for infinite effect)
   const minCardsDesktop = 16;
   const minCardsMobile = 16;
@@ -326,5 +275,4 @@ const Certificates: React.FC<CertificatesProps> = ({ onCertClick }) => {
   );
 };
 
-;
 export default Certificates;

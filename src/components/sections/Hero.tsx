@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Button from "../common/Button";
+import { useContent } from "../../lib/contentContext";
 import "./commonCss.css";
 
 const Hero: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const { content } = useContent();
   const [currentPhrase, setCurrentPhrase] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
-  const [showIndicator, setShowIndicator] = useState(true);
 
-  const phrases = [
-    "Full-Stack Developer & AI Innovator.",
-    "From Code to Experience, End-to-End.",
-    "Engineering Complex Ideas into Scalable Solutions."
-  ];
+  const phrases = content.hero.phrases;
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -25,29 +20,15 @@ const Hero: React.FC = () => {
       const dy = (e.clientY - cy) / cy;
       setParallax({ x: dx * 10, y: dy * 10 });
     };
-    const onScroll = () => setShowIndicator(window.scrollY < 40);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!mq.matches) window.addEventListener("mousemove", onMove);
-    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
   useEffect(() => {
-    setIsVisible(true);
-
-    const handleScroll = () => {
-      setShowScrollIndicator(window.scrollY < 100);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const currentPhraseText = phrases[currentPhrase];
+    const currentPhraseText = phrases[currentPhrase % phrases.length] ?? "";
     let index = 0;
 
     const typeInterval = setInterval(() => {
@@ -68,7 +49,7 @@ const Hero: React.FC = () => {
     }, 100);
 
     return () => clearInterval(typeInterval);
-  }, [currentPhrase]);
+  }, [currentPhrase, phrases]);
 
   const handleExploreClick = () => {
     const aboutSection = document.getElementById("about");
@@ -78,7 +59,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative z-10">
+    <section id="hero" className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto mb-16 md:mb-32">
 
         {/* LCP ELEMENT: Using CSS Animation instead of JS/GSAP */}
@@ -92,7 +73,7 @@ const Hero: React.FC = () => {
               willChange: "transform, opacity"
             }}
           >
-            Hi!&nbsp; I'm <br className="md:hidden" /> Voutla Jayendra
+            Hi!&nbsp; I'm <br className="md:hidden" /> {content.hero.name}
           </h1>
         </div>
 
@@ -107,10 +88,10 @@ const Hero: React.FC = () => {
         {/* Button appears last */}
         <div className="animate-hero-entry" style={{ animationDelay: "0.4s" }}>
           <Button
-            text="Explore My Work"
+            text={content.hero.buttonText}
             onClick={handleExploreClick}
             style="secondary"
-            aria-label="Explore My Work"
+            aria-label={content.hero.buttonText}
           />
         </div>
 

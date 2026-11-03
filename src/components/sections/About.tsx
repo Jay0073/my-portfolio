@@ -4,28 +4,28 @@ import Button from "../common/Button";
 import IconList from "../common/IconList";
 import useMediaQuery from "../items/useMediaQuery";
 import {
-  Github,
-  Linkedin,
-  Mail,
-  Twitter,
-  Instagram,
   Award,
   Code,
   Users,
 } from "lucide-react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import AboutAnimation from "./AboutAnimation";
+import { useContent } from "../../lib/contentContext";
+import { getIconComponent } from "../../lib/iconMap";
+
+const statIcons = [Code, Award, Users];
 
 const About: React.FC = () => {
-  const socialIcons = [
-      { icon: Github, href: 'https://github.com/Jay0073', label: 'My code vault' },
-      { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: "Let's get Professional" },
-      { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Inbox open 24/7' },
-      { icon: Twitter, href: 'https://twitter.com/', label: 'Memes and more' },
-      { icon: Instagram, href: 'https://instagram.com/__nameisjay_', label: 'Nothing to look here!' },
-    ];
+  const { content } = useContent();
+  const about = content.about;
+
+  const socialIcons = about.socialLinks.map((link) => ({
+    icon: getIconComponent(link.icon),
+    href: link.href,
+    label: link.label,
+  }));
 
   const handleResumeDownload = () => {
-    window.open("https://drive.google.com/file/d/1xld6QHhyoDQxZqKAnfFqL2Kk1xgGrnmx/view?usp=drive_link", "_blank");
+    window.open(about.resumeUrl, "_blank");
   };
 
   const isMd = useMediaQuery("(min-width: 768px)");
@@ -37,55 +37,46 @@ const About: React.FC = () => {
       subtitle="Professional Background and Expertise"
       className="pb-0 md:py-16"
     >
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        {isMd && (
-          <DotLottieReact
-            src="https://lottie.host/ec4e92c1-e225-456f-baf2-4c22c8e3744e/7l9Gqmco8d.lottie"
-            loop
-            autoplay
-          />
+      <div className={`grid gap-8 md:gap-12 items-center ${about.lottieUrl ? "md:grid-cols-2 md:-mt-8" : "max-w-3xl mx-auto"}`}>
+        {isMd && about.lottieUrl && (
+          <AboutAnimation key={about.lottieUrl} src={about.lottieUrl} />
         )}
-        
+
         {/* Content */}
-        <div className="space-y-6 md:space-y-8">
+        <div className="space-y-6 md:space-y-8 min-w-0">
           <div>
-            <p className="font-inter md:text-left text-justify text-lg text-[#EEEEEE] leading-relaxed">
-              I’m Voutla Jayendra, a full‑stack developer passionate about engineering scalable web applications and exploring AI solutions. My focus is on building efficient systems with clean design and lasting impact.
+            <p className="font-inter text-left text-lg text-[#EEEEEE] leading-relaxed break-words">
+              {about.bio}
             </p>
           </div>
 
-          
+
           <div className="hidden md:grid grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
-              <Code className="mx-auto mb-2 text-white" size={24} />
-              <p className="text-white font-semibold">2+ Years</p>
-              <p className="text-[#BBBBBB] text-sm">in Development</p>
-            </div>
-            <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
-              <Award className="mx-auto mb-2 text-white" size={24} />
-              <p className="text-white font-semibold">10+ Projects</p>
-              <p className="text-[#BBBBBB] text-sm">Full‑Stack Delivered</p>
-            </div>
-            <div className="text-center p-4 bg-[#1A1A1A] rounded-lg">
-              <Users className="mx-auto mb-2 text-white" size={24} />
-              <p className="text-white font-semibold">5+ Certifications</p>
-              <p className="text-[#BBBBBB] text-sm">Across AI & Cloud</p>
-            </div>
+            {about.stats.map((stat, i) => {
+              const Icon = statIcons[i % statIcons.length];
+              return (
+                <div key={i} className="min-w-0 text-center p-3 bg-[#1A1A1A] rounded-lg break-words" data-fit="about-stat">
+                  <Icon className="mx-auto mb-2 text-white" size={24} />
+                  <p className="text-white font-semibold">{stat.value}</p>
+                  <p className="text-[#BBBBBB] text-sm">{stat.label}</p>
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex flex-col gap-3 md:hidden">
-             <div className="flex items-center gap-3">
-                <Code size={32} className="bg-white/10 p-2 rounded-lg" />
-                <span className="text-[#BBBBBB] text-sm"><span className="text-white text-[17px] font-semibold">2+ Years</span> in Development</span>
-             </div>
-             <div className="flex items-center gap-3">
-                <Award size={32} className="bg-white/10 p-2 rounded-lg" />
-                <span className="text-[#BBBBBB] text-sm"><span className="text-white text-[17px] font-semibold">10+ Projects</span> Delivered</span>
-             </div>
-             <div className="flex items-center gap-3">
-                <Users size={32} className="bg-white/10 p-2 rounded-lg" />
-                <span className="text-[#BBBBBB] text-sm"><span className="text-white text-[17px] font-semibold">5+ Certifications</span> Achieved</span>
-             </div>
+            {about.stats.map((stat, i) => {
+              const Icon = statIcons[i % statIcons.length];
+              return (
+                <div key={i} className="flex items-center gap-3 min-w-0" data-fit="about-stat">
+                  <Icon size={32} className="bg-white/10 p-2 rounded-lg shrink-0" />
+                  <span className="text-[#BBBBBB] text-sm break-words min-w-0">
+                    <span className="text-white text-[17px] font-semibold">{stat.value}</span>{" "}
+                    {stat.label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <div>
@@ -93,14 +84,10 @@ const About: React.FC = () => {
               Professional Values
             </h3>
             <ul className="space-y-2">
-              {[
-                "Skilled in full‑stack engineering",
-                "Dedicated to clean, reliable code", 
-                "Collaborative and growth‑oriented",
-              ].map((value, index) => (
-                <li key={index} className="flex items-center gap-3 ml-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-[#EEEEEE] font-inter">{value}</span>
+              {about.values.map((value, index) => (
+                <li key={index} className="flex items-start gap-3 ml-2">
+                  <div className="w-2 h-2 mt-2 shrink-0 bg-white rounded-full"></div>
+                  <span className="text-[#EEEEEE] font-inter break-words min-w-0">{value}</span>
                 </li>
               ))}
             </ul>

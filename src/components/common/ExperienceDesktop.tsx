@@ -1,8 +1,9 @@
 import React from "react";
 import TimelineEntry from "./TimelineEntry";
+import type { ExperienceEntry } from "../../lib/contentSchema";
 
 interface ExperienceDesktopProps {
-  data: any[];
+  data: ExperienceEntry[];
 }
 
 const ExperienceDesktop: React.FC<ExperienceDesktopProps> = ({ data }) => {

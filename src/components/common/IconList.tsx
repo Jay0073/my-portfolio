@@ -5,7 +5,7 @@ import "tippy.js/animations/scale.css";
 
 interface IconListProps {
   icons: {
-    icon: LucideIcon;
+    icon: React.ComponentType<{ size?: number; className?: string }>;
     href: string;
     label: string;
   }[];

@@ -1,7 +1,7 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> { }
+type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
 
 const Skeleton: React.FC<SkeletonProps> = ({ className, ...props }) => {
     return (

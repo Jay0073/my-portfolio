@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Twitter, Instagram } from 'lucide-react';
+import React from 'react';
 import IconList from './common/IconList';
+import { useContent } from '../lib/contentContext';
+import { getIconComponent } from '../lib/iconMap';
 
 const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { content } = useContent();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > window.innerHeight * 0.5);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const socialIcons = [
-    { icon: Github, href: 'https://github.com/Jay0073', label: 'My code vault' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/voutla-jayendra', label: "Let's get Professional" },
-    { icon: Mail, href: 'mailto:voutlajay8765@gmail.com', label: 'Inbox open 24/7' },
-    { icon: Twitter, href: 'https://twitter.com/', label: 'Memes and more' },
-    { icon: Instagram, href: 'https://instagram.com/__nameisjay_', label: 'Nothing to look here!' },
-  ];
+  const socialIcons = content.header.socialLinks.map((link) => ({
+    icon: getIconComponent(link.icon),
+    href: link.href,
+    label: link.label,
+  }));
 
   return (
     <header

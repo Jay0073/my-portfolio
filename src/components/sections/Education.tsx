@@ -1,31 +1,16 @@
 import React from "react";
 import SectionWrapper from "../common/SectionWrapper";
 import useMediaQuery from "../items/useMediaQuery";
-import { FaUserTie, FaUserGraduate } from "react-icons/fa6";
-import { MdEngineering, MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
-
-const educationData = [
-  {
-    year: "2026",
-    institution: "Siddartha Institute of Technology and Sciences",
-    course: "Bachelor of Technology in Computer Science Engineering",
-    icon: MdEngineering,
-  },
-  {
-    year: "2023",
-    institution: "Mahaveer Institute of Science and Technology",
-    course: "Diploma in Electrical and Electronic Engineering",
-    icon: FaUserGraduate,
-  },
-  {
-    year: "2020",
-    institution: "St. Mary's High School",
-    course: "10th standard",
-    icon: FaUserTie,
-  },
-];
+import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
+import { useContent } from "../../lib/contentContext";
+import { getIconComponent } from "../../lib/iconMap";
 
 const EducationWatermarkInCard: React.FC = () => {
+  const { content } = useContent();
+  const educationData = content.education.map((edu) => ({
+    ...edu,
+    icon: getIconComponent(edu.icon),
+  }));
   const isMd = useMediaQuery("(min-width: 768px)");
   return (
     <SectionWrapper

@@ -15,8 +15,8 @@ interface CountUpProps {
 }
 
 export default function CountUp({
-  to,
-  from = 0,
+  to: toProp,
+  from: fromProp = 0,
   direction = 'up',
   delay = 0,
   duration = 2,
@@ -26,6 +26,8 @@ export default function CountUp({
   onStart,
   onEnd
 }: CountUpProps) {
+  const to = typeof toProp === "number" && Number.isFinite(toProp) ? toProp : 0;
+  const from = typeof fromProp === "number" && Number.isFinite(fromProp) ? fromProp : 0;
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === 'down' ? to : from);
 
