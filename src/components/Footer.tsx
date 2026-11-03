@@ -1,53 +1,31 @@
 import React, { useState, useEffect } from "react";
-import {
-  Github,
-  Linkedin,
-  Mail,
-  Twitter,
-  Instagram,
-  Heart,
-} from "lucide-react";
+import { Heart } from "lucide-react";
 import IconList from "./common/IconList";
 import Button from "./common/Button";
 import CountUp from "./items/CountUp";
 import useMediaQuery from "./items/useMediaQuery";
+import { useContent } from "../lib/contentContext";
+import { getIconComponent } from "../lib/iconMap";
 
 // Configuration for Storage
 const STORAGE_KEY = "portfolio_like_status";
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
-// Social Icons Data
-const socialIcons = [
-  {
-    icon: Github,
-    href: "https://github.com/Jay0073",
-    label: "My code vault",
-  },
-  {
-    icon: Linkedin,
-    href: "https://linkedin.com/in/voutla-jayendra",
-    label: "Let's get Professional",
-  },
-  {
-    icon: Mail,
-    href: "mailto:voutlajay8765@gmail.com",
-    label: "Inbox open 24/7",
-  },
-  {
-    icon: Twitter,
-    href: "https://twitter.com/",
-    label: "Memes and more",
-  },
-  {
-    icon: Instagram,
-    href: "https://instagram.com/__nameisjay_",
-    label: "Nothing to look here!",
-  },
-];
-
 const Footer: React.FC = () => {
+  const { content } = useContent();
+  const footer = content.footer;
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
+
+  const socialIcons = footer.socialLinks.map((link) => ({
+    icon: getIconComponent(link.icon),
+    href: link.href,
+    label: link.label,
+  }));
+
+  const mailtoHref =
+    footer.socialLinks.find((l) => l.href.startsWith("mailto:"))?.href ??
+    "mailto:voutlajay8765@gmail.com";
 
   useEffect(() => {
     fetch("/api/like")
@@ -69,7 +47,7 @@ const Footer: React.FC = () => {
             localStorage.removeItem(STORAGE_KEY);
             setLiked(false);
           }
-        } catch (e) {
+        } catch {
           localStorage.removeItem(STORAGE_KEY);
         }
       }
@@ -99,13 +77,7 @@ const Footer: React.FC = () => {
     }
   };
 
-  const words = [
-    "Connect.",
-    "Collaborate.",
-    "Code.",
-    "Build.",
-    "Grow Together.",
-  ];
+  const words = footer.words;
   const [index, setIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -114,8 +86,10 @@ const Footer: React.FC = () => {
     : "text-2xl";
 
   useEffect(() => {
-    const currentWord = words[index];
-    let typingSpeed = isDeleting ? 80 : 150;
+    if (words.length === 0) return;
+    const safeIndex = index % words.length;
+    const currentWord = words[safeIndex];
+    const typingSpeed = isDeleting ? 80 : 150;
 
     const timer = setTimeout(() => {
       if (!isDeleting) {
@@ -152,8 +126,7 @@ const Footer: React.FC = () => {
               <span className={`cursor`}>|</span>
             </h2>
             <p className="text-[#BBBBBB] font-inter mb-4 text-base leading-relaxed">
-              Whether it’s code, coffee, or conversation - I’m just one click
-              away.
+              {footer.tagline}
             </p>
 
             {/* Icons: Centered on mobile, Start on Desktop */}
@@ -167,7 +140,7 @@ const Footer: React.FC = () => {
               <Button
                 text="Say Hello"
                 onClick={() =>
-                  (window.location.href = "mailto:voutlajay8765@gmail.com")
+                  (window.location.href = mailtoHref)
                 }
                 style="primary"
                 aria-label="Say Hello via Email"
@@ -184,7 +157,7 @@ const Footer: React.FC = () => {
             <p
               className={`text-white font-poppins -mt-3 ${quotefontsize} italic leading-relaxed`}
             >
-              “Behind every interface I build is a developer still learning, still growing.”
+              “{footer.quote}”
             </p>
 
             {/* hidden on mobile, flex on desktop */}
@@ -251,7 +224,7 @@ const Footer: React.FC = () => {
               <Button
                 text="Say Hello"
                 onClick={() =>
-                  (window.location.href = "mailto:voutlajay8765@gmail.com")
+                  (window.location.href = mailtoHref)
                 }
                 style="primary"
                 aria-label="Say Hello via Email"
@@ -267,8 +240,7 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="mt-4 pt-3 md:pt-6 border-t border-white/10 w-full text-center">
           <p className="text-[#999] font-inter text-[9px] md:text-sm">
-            © 2025 Voutla Jayendra <br className="md:hidden" />· Designed to
-            impress 👀 Debugged to perfection ✨
+            {footer.copyright}
           </p>
         </div>
       </div>

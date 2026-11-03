@@ -37,7 +37,10 @@ const Card: React.FC<{
       style={{ scale, opacity }}
       className="mb-12 w-full flex flex-col items-center"
     >
-      <div className="w-full max-w-sm relative rounded-xl bg-[#1a1a1a] backdrop-blur-md overflow-hidden">
+      <div
+        className="w-full max-w-sm relative rounded-xl bg-[#1a1a1a] backdrop-blur-md overflow-hidden"
+        data-fit="exp-card"
+      >
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">

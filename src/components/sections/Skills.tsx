@@ -1,165 +1,46 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import * as d3 from "d3";
 import SectionWrapper from "../common/SectionWrapper";
-import {
-  FaReact,
-  FaNodeJs,
-  FaPython,
-  FaDocker,
-  FaCloud,
-  FaLinux,
-  FaLock,
-} from "react-icons/fa";
-import {
-  SiMongodb,
-  SiTensorflow,
-  SiTailwindcss,
-  SiExpress,
-  SiPostgresql,
-  SiRedux,
-  SiGithubactions,
-  SiJavascript,
-  SiGit,
-  SiTypescript,
-  SiRedis,
-  SiPandas,
-} from "react-icons/si";
+import { useContent } from "../../lib/contentContext";
+import { getIconComponent } from "../../lib/iconMap";
+
+type IconComponent = React.ComponentType<{ size?: number; className?: string }>;
+
+interface SkillNode extends d3.SimulationNodeDatum {
+  name: string;
+  icon: IconComponent;
+  percent: number;
+  desc: string;
+  radius: number;
+}
 
 const SkillsBubbles: React.FC = () => {
+  const { content } = useContent();
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   // Use only width in state, height is fixed
   const [width, setWidth] = useState(0);
-  const [nodes, setNodes] = useState<any[]>([]);
+  const [nodes, setNodes] = useState<SkillNode[]>([]);
 
   // Ref to store positions between re-renders to prevent "reset"
-  const nodesRef = useRef<any[]>([]);
+  const nodesRef = useRef<SkillNode[]>([]);
 
   const simulationRef = useRef<d3.Simulation<
     d3.SimulationNodeDatum,
     undefined
   > | null>(null);
 
-  const [hoveredNode, setHoveredNode] = useState<any | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<SkillNode | null>(null);
 
   const skills = useMemo(
-    () => [
-      {
-        name: "React",
-        icon: FaReact,
-        percent: 95,
-        desc: ["Hooks", "Context", "SPA"],
-      },
-      {
-        name: "JavaScript",
-        icon: SiJavascript,
-        percent: 90,
-        desc: ["ES6+", "Async", "Event loop"],
-      },
-      {
-        name: "TypeScript",
-        icon: SiTypescript,
-        percent: 75,
-        desc: ["Interfaces", "Generics", "Types"],
-      },
-      {
-        name: "TailwindCSS",
-        icon: SiTailwindcss,
-        percent: 80,
-        desc: ["Rapid UI"],
-      },
-      {
-        name: "Redux",
-        icon: SiRedux,
-        percent: 75,
-        desc: ["Thunk", "Slices", "State Mgmt"],
-      },
-      {
-        name: "Node.js",
-        icon: FaNodeJs,
-        percent: 90,
-        desc: ["High Perf APIs"],
-      },
-      {
-        name: "Python",
-        icon: FaPython,
-        percent: 95,
-        desc: ["Data & ML Workflows", "Automation"],
-      },
-      {
-        name: "Express.js",
-        icon: SiExpress,
-        percent: 85,
-        desc: ["REST APIs", "Middleware"],
-      },
-      {
-        name: "MongoDB",
-        icon: SiMongodb,
-        percent: 80,
-        desc: ["Aggregation", "Indexing"],
-      },
-      {
-        name: "Relational DBs",
-        icon: SiPostgresql,
-        percent: 75,
-        desc: ["Postgres", "MySQL"],
-      },
-      {
-        name: "Caching",
-        icon: SiRedis,
-        percent: 60,
-        desc: ["Redis", "Memcached", "Session Store"],
-      },
-      {
-        name: "Data Science",
-        icon: SiPandas,
-        percent: 80,
-        desc: ["ETL", "Feature Eng", "ML Pipelines"],
-      },
-      {
-        name: "Deep Learning",
-        icon: SiTensorflow,
-        percent: 75,
-        desc: ["CNNs", "Transformers", "LLMs"],
-      },
-      {
-        name: "Cloud",
-        icon: FaCloud,
-        percent: 65,
-        desc: ["AWS S3", "Firebase", "Oracle Cloud"],
-      },
-      {
-        name: "Docker",
-        icon: FaDocker,
-        percent: 65,
-        desc: ["Containerization"],
-      },
-      {
-        name: "CI-CD",
-        icon: SiGithubactions,
-        percent: 50,
-        desc: ["GitHub Actions", "Jenkins"],
-      },
-      {
-        name: "OS - Server",
-        icon: FaLinux,
-        percent: 70,
-        desc: ["Linux", "Nginx"],
-      },
-      {
-        name: "Security",
-        icon: FaLock,
-        percent: 65,
-        desc: ["JWT", "Bcrypt", "CORS"],
-      },
-      {
-        name: "Git",
-        icon: SiGit,
-        percent: 80,
-        desc: ["Branching", "Code Reviews", "Collab"],
-      },
-    ],
-    []
+    () =>
+      content.skills.map((s) => ({
+        name: s.name,
+        icon: getIconComponent(s.icon),
+        percent: s.percent,
+        desc: s.desc,
+      })),
+    [content.skills]
   );
 
   useEffect(() => {
@@ -175,7 +56,7 @@ const SkillsBubbles: React.FC = () => {
 
   const drag = useMemo(() => {
     return d3
-      .drag<SVGGElement, any>()
+      .drag<SVGGElement, SkillNode>()
       .on("start", (event, d) => {
         if (!event.active) simulationRef.current?.alphaTarget(0.3).restart();
         d.fx = d.x;
@@ -207,7 +88,7 @@ const SkillsBubbles: React.FC = () => {
       .domain([50, 100])
       .range([minRadius, maxRadius]);
 
-    let currentNodes: any[] = [];
+    let currentNodes: SkillNode[] = [];
 
     if (nodesRef.current.length === skills.length) {
       currentNodes = skills.map((s, i) => {
@@ -233,7 +114,7 @@ const SkillsBubbles: React.FC = () => {
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force(
         "collision",
-        d3.forceCollide().radius((d: any) => d.radius + 6)
+        d3.forceCollide<SkillNode>().radius((d) => d.radius + 6)
       )
       .alpha(1)
       .alphaDecay(0.03);
@@ -262,7 +143,7 @@ const SkillsBubbles: React.FC = () => {
     };
   }, [width, drag, skills]);
 
-  const handleMouseEnter = (node: any) => {
+  const handleMouseEnter = (node: SkillNode) => {
     setHoveredNode(node);
   };
 
