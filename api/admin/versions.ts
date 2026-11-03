@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { requireAdmin } from "./_lib/auth";
-import { listVersions, getVersionContent } from "./_lib/kv";
+import { requireAdmin } from "./_lib/auth.js";
+import { listVersions, getVersionContent } from "./_lib/kv.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const session = await requireAdmin(req);

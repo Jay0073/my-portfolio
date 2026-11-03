@@ -49,7 +49,7 @@ async function storeDel(keys: string | string[]): Promise<void> {
     writeLocal(data);
     return;
   }
-  await kv.del(keys);
+  await kv.del(...(Array.isArray(keys) ? keys : [keys]));
 }
 
 const DRAFT_KEY = "portfolio:content:draft";

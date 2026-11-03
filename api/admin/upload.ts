@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { put } from "@vercel/blob";
-import { requireAdmin, rejectMutation } from "./_lib/auth";
+import { requireAdmin, rejectMutation } from "./_lib/auth.js";
 
 const MAX_BYTES = 2 * 1024 * 1024;
 

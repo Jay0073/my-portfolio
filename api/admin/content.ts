@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { requireAdmin, rejectMutation } from "./_lib/auth";
-import { getDraftContent, saveDraftContent, getPublishedContent } from "./_lib/kv";
-import { PortfolioContentSchema } from "../../src/lib/contentSchema";
+import { requireAdmin, rejectMutation } from "./_lib/auth.js";
+import { getDraftContent, saveDraftContent, getPublishedContent } from "./_lib/kv.js";
+import { PortfolioContentSchema } from "../../src/lib/contentSchema.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const session = await requireAdmin(req);
