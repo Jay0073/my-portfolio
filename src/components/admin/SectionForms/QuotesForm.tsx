@@ -1,6 +1,7 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus } from "lucide-react";
+import { ListActions } from "../EditorFields";
 import { useSectionForm } from "../useSectionForm";
 
 interface QuoteEntry {
@@ -24,7 +25,7 @@ export const QuotesForm: React.FC<QuotesFormProps> = ({ content, revision, onCha
     revision,
     (data) => onChange(data.quotes)
   );
-  const { fields, append, remove } = useFieldArray({ control, name: "quotes" });
+  const { fields, append, remove, move } = useFieldArray({ control, name: "quotes" });
 
   return (
     <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
@@ -49,10 +50,7 @@ export const QuotesForm: React.FC<QuotesFormProps> = ({ content, revision, onCha
             <div className="flex items-center justify-between">
               <h4 className="font-medium">Quote #{index + 1}</h4>
               <div className="flex items-center gap-2">
-                <GripVertical className="w-5 h-5 text-[#666] cursor-grab" />
-                <button type="button" onClick={() => remove(index)} className="p-1 text-[#666] hover:text-red-400">
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <ListActions index={index} count={fields.length} label={"quote " + (index + 1)} onMove={move} onRemove={() => remove(index)} />
               </div>
             </div>
 

@@ -157,7 +157,7 @@ export const ProjectContent = ({
   totalProjects: number;
   isMobile?: boolean;
 }) => (
-  <div className="w-full h-full flex flex-col justify-center bg-[#1a1a1a] relative z-10">
+  <div data-fit="project-page" className="w-full h-full flex flex-col justify-center bg-[#1a1a1a] relative z-10">
     {isMobile && (
       <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/40 to-transparent z-10 pointer-events-none" />
     )}

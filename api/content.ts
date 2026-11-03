@@ -1,7 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { kv } from "@vercel/kv";
-
-const PUBLISHED_KEY = "portfolio:content:published";
+import { getPublishedContent } from "./admin/_lib/kv";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
@@ -11,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Cache-Control", "no-store");
 
   try {
-    const content = await kv.get(PUBLISHED_KEY);
+    const content = await getPublishedContent();
     return res.status(200).json({ content: content ?? null });
   } catch (err) {
     console.error("Failed to read published content:", err);

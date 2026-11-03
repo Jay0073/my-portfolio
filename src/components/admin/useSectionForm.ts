@@ -4,7 +4,7 @@ import { FieldValues, UseFormReturn, useForm } from "react-hook-form";
 /**
  * Form helper for the admin editor.
  *
- * - Propagates changes to the parent (debounced) while the user types.
+ * - Propagates changes immediately; preview and autosave debounce independently.
  * - Resets the form only on EXTERNAL content changes (signaled by `revision`),
  *   so typing never fights the parent state.
  * - Optional `transform` converts form values (e.g. comma-separated strings)
@@ -24,20 +24,14 @@ export function useSectionForm<T extends FieldValues>(
   const transformRef = useRef(transform);
   transformRef.current = transform;
 
-  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
   useEffect(() => {
     const subscription = form.watch((values) => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        const raw = (values ?? form.getValues()) as T;
-        const output = transformRef.current ? transformRef.current(raw) : raw;
-        onChangeRef.current(output);
-      }, 250);
+      const raw = (values ?? form.getValues()) as T;
+      const output = transformRef.current ? transformRef.current(raw) : raw;
+      onChangeRef.current(output);
     });
     return () => {
       subscription.unsubscribe();
-      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [form]);
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useFieldArray, Controller } from "react-hook-form";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus } from "lucide-react";
+import { ListActions } from "../EditorFields";
 import { useSectionForm } from "../useSectionForm";
 import { ImageField } from "../ImageField";
 
@@ -27,7 +28,7 @@ export const CertificatesForm: React.FC<CertificatesFormProps> = ({ content, rev
     revision,
     (data) => onChange(data.certificates)
   );
-  const { fields, append, remove } = useFieldArray({ control, name: "certificates" });
+  const { fields, append, remove, move } = useFieldArray({ control, name: "certificates" });
 
   return (
     <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
@@ -42,8 +43,7 @@ export const CertificatesForm: React.FC<CertificatesFormProps> = ({ content, rev
             <div className="flex items-center justify-between">
               <h4 className="font-medium">Certificate #{index + 1}</h4>
               <div className="flex items-center gap-2">
-                <GripVertical className="w-5 h-5 text-[#666] cursor-grab" />
-                <button type="button" onClick={() => remove(index)} className="p-1 text-[#666] hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
+                <ListActions index={index} count={fields.length} label={"certificate " + (index + 1)} onMove={move} onRemove={() => remove(index)} />
               </div>
             </div>
 

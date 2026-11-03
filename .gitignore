@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 .env
 .bolt
+.local-kv.json
+graphify-out/

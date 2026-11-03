@@ -59,7 +59,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative z-10">
+    <section id="hero" className="min-h-[100svh] flex items-center justify-center text-center px-4 md:px-8 relative z-10">
       <div className="max-w-4xl mx-auto mb-16 md:mb-32">
 
         {/* LCP ELEMENT: Using CSS Animation instead of JS/GSAP */}

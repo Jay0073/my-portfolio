@@ -1,6 +1,7 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus } from "lucide-react";
+import { ListActions } from "../EditorFields";
 import { getIconOptions } from "../../../lib/iconMap";
 import { useSectionForm } from "../useSectionForm";
 
@@ -23,7 +24,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ content, revision,
     revision,
     (data) => onChange(data.education)
   );
-  const { fields, append, remove } = useFieldArray({ control, name: "education" });
+  const { fields, append, remove, move } = useFieldArray({ control, name: "education" });
   const iconOptions = getIconOptions("education");
 
   return (
@@ -39,8 +40,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ content, revision,
             <div className="flex items-center justify-between">
               <h4 className="font-medium">Education #{index + 1}</h4>
               <div className="flex items-center gap-2">
-                <GripVertical className="w-5 h-5 text-[#666] cursor-grab" />
-                <button type="button" onClick={() => remove(index)} className="p-1 text-[#666] hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
+                <ListActions index={index} count={fields.length} label={"education " + (index + 1)} onMove={move} onRemove={() => remove(index)} />
               </div>
             </div>
 

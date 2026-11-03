@@ -8,12 +8,11 @@ import {
   Code,
   Users,
 } from "lucide-react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import AboutAnimation from "./AboutAnimation";
 import { useContent } from "../../lib/contentContext";
 import { getIconComponent } from "../../lib/iconMap";
 
 const statIcons = [Code, Award, Users];
-const statMobileSuffix = ["in Development", "Delivered", "Achieved"];
 
 const About: React.FC = () => {
   const { content } = useContent();
@@ -38,19 +37,15 @@ const About: React.FC = () => {
       subtitle="Professional Background and Expertise"
       className="pb-0 md:py-16"
     >
-      <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div className={`grid gap-8 md:gap-12 items-center ${about.lottieUrl ? "md:grid-cols-2 md:-mt-8" : "max-w-3xl mx-auto"}`}>
         {isMd && about.lottieUrl && (
-          <DotLottieReact
-            src={about.lottieUrl}
-            loop
-            autoplay
-          />
+          <AboutAnimation key={about.lottieUrl} src={about.lottieUrl} />
         )}
 
         {/* Content */}
-        <div className="space-y-6 md:space-y-8">
+        <div className="space-y-6 md:space-y-8 min-w-0">
           <div>
-            <p className="font-inter md:text-left text-justify text-lg text-[#EEEEEE] leading-relaxed">
+            <p className="font-inter text-left text-lg text-[#EEEEEE] leading-relaxed break-words">
               {about.bio}
             </p>
           </div>
@@ -60,7 +55,7 @@ const About: React.FC = () => {
             {about.stats.map((stat, i) => {
               const Icon = statIcons[i % statIcons.length];
               return (
-                <div key={i} className="text-center p-4 bg-[#1A1A1A] rounded-lg">
+                <div key={i} className="min-w-0 text-center p-3 bg-[#1A1A1A] rounded-lg break-words" data-fit="about-stat">
                   <Icon className="mx-auto mb-2 text-white" size={24} />
                   <p className="text-white font-semibold">{stat.value}</p>
                   <p className="text-[#BBBBBB] text-sm">{stat.label}</p>
@@ -73,11 +68,11 @@ const About: React.FC = () => {
             {about.stats.map((stat, i) => {
               const Icon = statIcons[i % statIcons.length];
               return (
-                <div key={i} className="flex items-center gap-3">
-                  <Icon size={32} className="bg-white/10 p-2 rounded-lg" />
-                  <span className="text-[#BBBBBB] text-sm">
+                <div key={i} className="flex items-center gap-3 min-w-0" data-fit="about-stat">
+                  <Icon size={32} className="bg-white/10 p-2 rounded-lg shrink-0" />
+                  <span className="text-[#BBBBBB] text-sm break-words min-w-0">
                     <span className="text-white text-[17px] font-semibold">{stat.value}</span>{" "}
-                    {statMobileSuffix[i % statMobileSuffix.length]}
+                    {stat.label}
                   </span>
                 </div>
               );
@@ -90,9 +85,9 @@ const About: React.FC = () => {
             </h3>
             <ul className="space-y-2">
               {about.values.map((value, index) => (
-                <li key={index} className="flex items-center gap-3 ml-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-[#EEEEEE] font-inter">{value}</span>
+                <li key={index} className="flex items-start gap-3 ml-2">
+                  <div className="w-2 h-2 mt-2 shrink-0 bg-white rounded-full"></div>
+                  <span className="text-[#EEEEEE] font-inter break-words min-w-0">{value}</span>
                 </li>
               ))}
             </ul>

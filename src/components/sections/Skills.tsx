@@ -267,7 +267,7 @@ const SkillsBubbles: React.FC = () => {
                       >
                         <div
                           style={{
-                            fontSize: Math.max(11, node.radius * 0.25),
+                            fontSize: Math.max(8, node.radius * 0.2),
                             fontWeight: "bold",
                             wordWrap: "break-word",
                             lineHeight: 1.2,
@@ -279,7 +279,7 @@ const SkillsBubbles: React.FC = () => {
                         >
                           {Array.isArray(node.desc) &&
                             node.desc.map((line: string, idx: number) => (
-                              <span key={idx} style={{ marginBottom: 2 }}>
+                              <span key={idx} style={{ marginBottom: 2, maxWidth: "100%", overflowWrap: "anywhere" }}>
                                 {line}
                               </span>
                             ))}

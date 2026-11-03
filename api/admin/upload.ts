@@ -24,12 +24,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (rejectMutation(req, res)) return;
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return res.status(500).json({
-      message: "Blob storage is not configured (BLOB_READ_WRITE_TOKEN missing)",
-    });
-  }
-
   const { name, type, data } = req.body as {
     name?: string;
     type?: string;

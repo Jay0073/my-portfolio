@@ -7,6 +7,7 @@ import useMediaQuery from "./items/useMediaQuery";
 import { useContent } from "../lib/contentContext";
 import { getIconComponent } from "../lib/iconMap";
 
+function toSafeCount(value: unknown): number { return typeof value === "number" && Number.isFinite(value) ? value : 0; }
 // Configuration for Storage
 const STORAGE_KEY = "portfolio_like_status";
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
@@ -30,7 +31,7 @@ const Footer: React.FC = () => {
   useEffect(() => {
     fetch("/api/like")
       .then((res) => res.json())
-      .then((data) => setLikes(data.count))
+      .then((data) => setLikes(toSafeCount(data?.count)))
       .catch(console.error);
 
     const checkLikeStatus = () => {
@@ -71,7 +72,7 @@ const Footer: React.FC = () => {
     try {
       const res = await fetch("/api/like", { method: "POST" });
       const data = await res.json();
-      setLikes(data.count);
+      setLikes(toSafeCount(data?.count));
     } catch (err) {
       console.error("Failed to post like:", err);
     }
@@ -110,7 +111,7 @@ const Footer: React.FC = () => {
   }, [displayText, isDeleting, index, words]);
 
   return (
-    <footer className="bg-[rgb(26,26,26)] pt-12 pb-6 md:pb-6">
+    <footer id="footer" className="bg-[rgb(26,26,26)] pt-12 pb-6 md:pb-6">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 md:gap-28 justify-between">
           {/* Added text-center for mobile, md:text-left for desktop */}

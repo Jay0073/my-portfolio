@@ -96,7 +96,7 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({ children, over
   }, [override, load]);
 
   return (
-    <ContentContext.Provider value={{ content, isLoading, source }}>
+    <ContentContext.Provider value={{ content: override ?? content, isLoading: override ? false : isLoading, source: override ? "network" : source }}>
       {children}
     </ContentContext.Provider>
   );

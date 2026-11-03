@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Loader2, Lock, X, History, RotateCcw, CheckCircle2, XCircle, ChevronRight } from "lucide-react";
+import { Loader2, Lock, X, History, RotateCcw, ChevronRight } from "lucide-react";
 import { adminFetch } from "../../lib/adminApi";
 import { useAdminAuth } from "../../hooks/useAdminAuth";
 import type { VersionMeta } from "../../../api/admin/_lib/kv";
-import type { FitCheck } from "../../lib/fitChecks";
 
 /* ---------- Session re-auth modal (shown on 401) ---------- */
 
@@ -226,61 +225,6 @@ export const HistoryPanel: React.FC<{ open: boolean; onClose: () => void; onRest
             <p className="text-sm text-[#666]">No published versions yet.</p>
           )}
         </div>
-      </div>
-    </div>
-  );
-};
-
-/* ---------- Fit check results modal ---------- */
-
-export const FitResultsModal: React.FC<{ open: boolean; onClose: () => void; results: FitCheck[] | null }> = ({
-  open,
-  onClose,
-  results,
-}) => {
-  if (!open) return null;
-
-  const groups = results
-    ? Array.from(new Set(results.map((r) => r.group)))
-    : [];
-  const failed = results?.filter((r) => !r.pass).length ?? 0;
-
-  return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label="Fit check results">
-      <div
-        className="w-full max-w-2xl max-h-[80vh] overflow-y-auto bg-[#1A1A1A] border border-white/10 rounded-xl p-6 space-y-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="font-poppins font-semibold text-lg flex items-center gap-2">
-            {failed === 0 ? <CheckCircle2 className="w-5 h-5 text-[#61DAB3]" /> : <XCircle className="w-5 h-5 text-yellow-400" />}
-            Fit check {results ? `— ${failed === 0 ? "all passed" : `${failed} failed`}` : ""}
-          </h2>
-          <button onClick={onClose} aria-label="Close results" className="p-1 text-[#666] hover:text-white">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {!results && <p className="text-sm text-[#888]">Running checks in the preview... scroll may move while it runs.</p>}
-
-        {groups.map((group) => (
-          <div key={group}>
-            <h3 className="text-sm font-medium text-[#61DAB3] mb-2">{group}</h3>
-            <div className="space-y-2">
-              {results
-                ?.filter((r) => r.group === group)
-                .map((r, i) => (
-                  <div key={i} className={`border rounded-lg p-3 ${r.pass ? "border-white/10 bg-[#121212]" : "border-yellow-500/40 bg-yellow-500/5"}`}>
-                    <p className="text-sm text-white flex items-center gap-2">
-                      {r.pass ? <CheckCircle2 className="w-4 h-4 text-[#61DAB3] shrink-0" /> : <XCircle className="w-4 h-4 text-yellow-400 shrink-0" />}
-                      {r.name}
-                    </p>
-                    <p className="text-xs text-[#888] mt-1 pl-6">{r.detail}</p>
-                  </div>
-                ))}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );

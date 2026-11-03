@@ -1,17 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { kv } from "@vercel/kv";
-
-const KEY = "footer-likes";
+import { getLikeCount, incrementLikeCount } from "./admin/_lib/kv";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method === "GET") {
-      const count = (await kv.get(KEY)) ?? 0;
+      const count = await getLikeCount();
       return res.status(200).json({ count });
     }
 
     if (req.method === "POST") {
-      const newCount = await kv.incr(KEY);
+      const newCount = await incrementLikeCount();
       return res.status(200).json({ count: newCount });
     }
 
