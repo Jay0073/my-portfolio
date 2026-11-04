@@ -351,7 +351,11 @@ const AdminEditor: React.FC = () => {
         const saved = await saveDraft(true);
         if (!saved) return;
       }
-      const res = await adminFetch("/api/admin/publish", { method: "POST" });
+      const res = await adminFetch("/api/admin/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Failed to publish");
